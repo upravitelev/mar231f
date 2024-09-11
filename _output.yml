@@ -1,9 +1,9 @@
 bookdown::gitbook:
-  # includes:
-  #   in_header: [google_analytics.html]
   number_sections: false
   config:
-    # toc_depth: 0
+    # toc_depth: 1
+    # toc_float:
+    #   collapsed: false
     toc:
       scroll_highlight: yes
       collapse: section
