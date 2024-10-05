@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ru-RU" xml:lang="ru-RU">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Метрики монетизации pt1 | Методы анализа больших данных</title>
+  <meta name="description" content="Метрики монетизации pt1 | Методы анализа больших данных" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Метрики монетизации pt1 | Методы анализа больших данных" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Метрики монетизации pt1 | Методы анализа больших данных" />
+  
+  
+  
+
+<meta name="author" content="Ph.A.Upravitelev" />
+
+
+<meta name="date" content="2024-10-05" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="метрики-вовлечения-pt2.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">mar 231f</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Intro</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html"><i class="fa fa-check"></i>О курсе и аналитиках</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#запись-занятия"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#обо-мне"><i class="fa fa-check"></i>Обо мне</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#contacts"><i class="fa fa-check"></i>Contacts</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#о-курсе"><i class="fa fa-check"></i>О курсе</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#основные-темы"><i class="fa fa-check"></i>основные темы</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#дополнительные-темы"><i class="fa fa-check"></i>дополнительные темы</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#формы-контроля"><i class="fa fa-check"></i>формы контроля</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#виды-аналитиков"><i class="fa fa-check"></i>Виды аналитиков</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#data-scientists"><i class="fa fa-check"></i>data scientists</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#web-аналитика"><i class="fa fa-check"></i>web-аналитика</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#маркетинговая-аналитика"><i class="fa fa-check"></i>маркетинговая аналитика</a></li>
+<li><a href="c1_intro.html#section" id="toc-section"></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#продуктовая-аналитика"><i class="fa fa-check"></i>Продуктовая аналитика</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#что-такое-продукт"><i class="fa fa-check"></i>что такое продукт</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#cxux-исследователи"><i class="fa fa-check"></i>CX/UX-исследователи</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#структура-команды-разработки"><i class="fa fa-check"></i>структура команды разработки</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#роли-продуктовых-аналитиков"><i class="fa fa-check"></i>роли продуктовых аналитиков</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#стадии-развития-продукта"><i class="fa fa-check"></i>Стадии развития продукта</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#этапы-жизни"><i class="fa fa-check"></i>этапы жизни</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#технические-этапы"><i class="fa fa-check"></i>технические этапы</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#бизнес-модели"><i class="fa fa-check"></i>Бизнес-модели</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#компоненты"><i class="fa fa-check"></i>компоненты</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#варианты"><i class="fa fa-check"></i>варианты</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#полезные-материалы"><i class="fa fa-check"></i>Полезные материалы</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#домашнее-задание"><i class="fa fa-check"></i>Домашнее задание</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html"><i class="fa fa-check"></i>Метрики вовлечения pt1</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#запись-занятия-1"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#aarrr-фреймворк"><i class="fa fa-check"></i>AARRR фреймворк</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#user-aquisition"><i class="fa fa-check"></i>User Aquisition</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#процесс-привлечения-пользователей"><i class="fa fa-check"></i>Процесс привлечения пользователей</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#маркетинговая-воронка-в-мобильных-приложениях"><i class="fa fa-check"></i>Маркетинговая воронка в мобильных приложениях</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#новый-пользователь"><i class="fa fa-check"></i>Новый пользователь</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#активность-и-вовлечение"><i class="fa fa-check"></i>Активность и вовлечение</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#dau-wau-mau"><i class="fa fa-check"></i>DAU, WAU, MAU</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#stickness-sticky-factor"><i class="fa fa-check"></i>Stickness / Sticky factor</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#retention-rate"><i class="fa fa-check"></i>Retention rate</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#churn-rate"><i class="fa fa-check"></i>Churn rate</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#sessions-per-day"><i class="fa fa-check"></i>Sessions per day</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#полезные-материалы-1"><i class="fa fa-check"></i>Полезные материалы</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#домашнее-задание-1"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-1-iatytd"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-2-hntr"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-3-hmp"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-4-uv"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-5-n"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html"><i class="fa fa-check"></i>Метрики вовлечения pt2</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#запись-занятия-2"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#код-занятия-на-python"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#разбор-домашнего-задания"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-2-hntr-1"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-4-uv-1"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-5-n-1"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#расчет-retention"><i class="fa fa-check"></i>Расчет retention</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#домашнее-задание-2"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-1-iatytd-1"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-2-hntr-2"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-3-hmp-1"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-4-uv-2"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-5-n-2"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html"><i class="fa fa-check"></i>Метрики монетизации pt1</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#запись-занятия-3"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#код-занятия-на-python-1"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#разбор-домашнего-задания-1"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-2-hntr-3"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-3-hmp-2"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-5-n-3"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#метрики-монетизации"><i class="fa fa-check"></i>Метрики монетизации</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#gross-net"><i class="fa fa-check"></i>Gross / Net</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#конверсия"><i class="fa fa-check"></i>Конверсия</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#практикум"><i class="fa fa-check"></i>Практикум</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#домашнее-задание-3"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-1-iatytd-2"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-2-hntr-4"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-3-hmp-3"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-4-uv-3"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-5-n-4"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Методы анализа больших данных</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="метрики-монетизации-pt1" class="section level1 unnumbered hasAnchor">
+<h1>Метрики монетизации pt1<a href="метрики-монетизации-pt1.html#метрики-монетизации-pt1" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="запись-занятия-3" class="section level2 hasAnchor">
+<h2>Запись занятия<a href="метрики-монетизации-pt1.html#запись-занятия-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8xL2bHOe3pA?si=7xmpZ_4sGFOhWEW4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+</div>
+<div id="код-занятия-на-python-1" class="section level2 hasAnchor">
+<h2>Код занятия на Python<a href="метрики-монетизации-pt1.html#код-занятия-на-python-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://colab.research.google.com/drive/1gdtpFd3LjzRSsFwPrKP-OARjDXDU3F1v?usp=sharing" class="uri">https://colab.research.google.com/drive/1gdtpFd3LjzRSsFwPrKP-OARjDXDU3F1v?usp=sharing</a></p>
+</div>
+<div id="разбор-домашнего-задания-1" class="section level2 hasAnchor">
+<h2>Разбор домашнего задания<a href="метрики-монетизации-pt1.html#разбор-домашнего-задания-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="level-2-hntr-3" class="section level3 hasAnchor">
+<h3>level 2 (HNTR)<a href="метрики-монетизации-pt1.html#level-2-hntr-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Постройте график ретеншена для когорты пользователей, пришедшей в июне, с разбивкой по источникам привлечения (media_source). Для этого вам потребуются следующие датасеты:</p>
+<ul>
+<li>Инсталлы: <a href="https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv" class="uri">https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv</a></li>
+<li>Логины: <a href="https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv" class="uri">https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv</a></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="метрики-монетизации-pt1.html#cb7-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb7-2"><a href="метрики-монетизации-pt1.html#cb7-2" tabindex="-1"></a><span class="fu">library</span>(plotly)</span></code></pre></div>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;plotly&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     last_plot</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     filter</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     layout</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="метрики-монетизации-pt1.html#cb13-1" tabindex="-1"></a><span class="co"># чтобы загрузка не обрывалась по таймауту, если слабый интернет</span></span>
+<span id="cb13-2"><a href="метрики-монетизации-pt1.html#cb13-2" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout=</span><span class="dv">360</span>)</span>
+<span id="cb13-3"><a href="метрики-монетизации-pt1.html#cb13-3" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="метрики-монетизации-pt1.html#cb13-4" tabindex="-1"></a>installs <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv&#39;</span>)</span>
+<span id="cb13-5"><a href="метрики-монетизации-pt1.html#cb13-5" tabindex="-1"></a>logins <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv&#39;</span>)</span>
+<span id="cb13-6"><a href="метрики-монетизации-pt1.html#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="метрики-монетизации-pt1.html#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="метрики-монетизации-pt1.html#cb13-8" tabindex="-1"></a><span class="co"># выделяем инсталлы в июне</span></span>
+<span id="cb13-9"><a href="метрики-монетизации-pt1.html#cb13-9" tabindex="-1"></a>installs_june <span class="ot">&lt;-</span> installs[dt <span class="sc">&gt;=</span> <span class="st">&#39;2022-06-01&#39;</span> <span class="sc">&amp;</span> dt <span class="sc">&lt;</span> <span class="st">&#39;2022-07-01&#39;</span>]</span>
+<span id="cb13-10"><a href="метрики-монетизации-pt1.html#cb13-10" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="метрики-монетизации-pt1.html#cb13-11" tabindex="-1"></a><span class="co"># считаем количество пользователей по платформам</span></span>
+<span id="cb13-12"><a href="метрики-монетизации-pt1.html#cb13-12" tabindex="-1"></a>installs_june[, <span class="fu">uniqueN</span>(user_pseudo_id), keyby <span class="ot">=</span> media_source]</span></code></pre></div>
+<pre><code>## Key: &lt;media_source&gt;
+##         media_source    V1
+##               &lt;char&gt; &lt;int&gt;
+## 1:              &lt;NA&gt; 36169
+## 2:      Facebook Ads  1297
+## 3:      applovin_int 36714
+## 4: googleadwords_int  7767
+## 5:           organic    32
+## 6:             other  6869
+## 7:      unityads_int 21932</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="метрики-монетизации-pt1.html#cb15-1" tabindex="-1"></a><span class="co"># при необходимости укрупняем</span></span>
+<span id="cb15-2"><a href="метрики-монетизации-pt1.html#cb15-2" tabindex="-1"></a>installs_june[media_source <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;organic&#39;</span>, <span class="st">&#39;other&#39;</span>) <span class="sc">|</span> <span class="fu">is.na</span>(media_source), media_source <span class="sc">:=</span> <span class="st">&#39;organic&#39;</span>]</span>
+<span id="cb15-3"><a href="метрики-монетизации-pt1.html#cb15-3" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="метрики-монетизации-pt1.html#cb15-4" tabindex="-1"></a><span class="co"># смотрим, нет ли тех, кто два раза устанавливал приложение</span></span>
+<span id="cb15-5"><a href="метрики-монетизации-pt1.html#cb15-5" tabindex="-1"></a>installs_june[, <span class="fu">list</span>(<span class="at">n_install_dates =</span> <span class="fu">length</span>(dt)), user_pseudo_id][n_install_dates <span class="sc">&gt;</span> <span class="dv">1</span>]</span></code></pre></div>
+<pre><code>##                       user_pseudo_id n_install_dates
+##                               &lt;char&gt;           &lt;int&gt;
+##  1: 000ee53a25d9b57b29a8513070325bba               2
+##  2: 0114C14103154E4B8202B09684ECBC1F               2
+##  3: 01958D392F90428AA0DAF9D94CC699DE               2
+##  4: 09B886173CAF46E7B99C2927CE954E9B               2
+##  5: 0DA2A73360594B5D94C77489A563C9C9               2
+##  6: 1A041DCE27EC4DE984379C91778615E1               2
+##  7: 1CB08A3B991A41848CF193759534A8E3               2
+##  8: 1FC5CCB7EAA34A1CA4D4FB9731AAD6B4               2
+##  9: 2488537605DD48DC89CB9AE2A7F056DC               2
+## 10: 2585F39E330445CCB04D86C8874E04AE               2
+## 11: 2E7FE3A85A434C19AE66C5F5A9909488               3
+## 12: 30B149EB924045D7B710BB0ECCD3E3C8               2
+## 13: 330704BC3B27431B910C5EFF17F7E224               2
+## 14: 34cd9bf8909ccd8ff7845e57374284d1               2
+## 15: 369FD7EBC865452CB1B33E5E98AC447C               2
+## 16: 36D082CC8AB7447683877B1AFED0EDDB               2
+## 17: 382548ABD43A4CC3956408AA15065DD5               2
+## 18: 3B22021A23624273B976BB68F7BC133E               2
+## 19: 3B41BA33DDCA463180F1288B1FDAB9E5               2
+## 20: 3CFDCBE58131436483C5DB672E0C8BA5               2
+## 21: 3E5DBDEB38FE408FA281C75B5B33D08A               2
+## 22: 41E59CD840224F4286041CF23454D1A5               2
+## 23: 42F53713F7B04EF8ADA81A51EDFAA0FC               2
+## 24: 453D178E341A45409852BFBEF7668FCA               2
+## 25: 4df8d48b980fb52e7143b8f4f6a86eec               2
+## 26: 53d5883b315f11beb96e759eeb6c6946               2
+## 27: 541291B4FC0A472C8A18F33FCBB578E7               2
+## 28: 55734100B47F414CBB3575028EC0E887               2
+## 29: 58E14628B03046219960479EA035BAC4               2
+## 30: 5f86721f15e1fe055162a1251f2f8b01               2
+## 31: 67A5140641B44E26B9F9699A767EAA1B               2
+## 32: 696f7a53d58e73d2a1b9c5ff841741d6               2
+## 33: 6F22E223CB3D4DEF9CE5F64073099A8C               3
+## 34: 7044781DFEC247C79D9641EFB09CDF79               2
+## 35: 78264f9fd5ab87d279dc8f7c98279f55               2
+## 36: 79f6234ccd8fc0ccfcd4058a9d4173f6               2
+## 37: 7F25AD2C389542048506DF670BD714BD               2
+## 38: 8159da026a6e5393b11783bb56df4c14               2
+## 39: 822abdbc7bef93fbe985f4e89651dd75               2
+## 40: 83F7F0494B2F4D49B934C12A92B4B299               2
+## 41: 84e435c0c8689635cf96ceeabf52c534               2
+## 42: 854366FB9D794A83B85B666A808DF8C2               2
+## 43: 8C03EE3FBBFC472BB26DB331567DAA6A               2
+## 44: 8FD70E7743B74FDA8B398B8E59B6D393               2
+## 45: 908C0586AFD14790A2FEAD8380D5E5AC               2
+## 46: 9655A5286F2D4782BB95B97C4443AB19               2
+## 47: 98AAE0DB60B44B649FB45DAFF50E5756               2
+## 48: 9B1CAF9AB0B2438A92D7FB377BDF1CD5               2
+## 49: 9DC9EC1BE76D48AD9161A8FDA1AD8F5D               2
+## 50: 9EBF8F8182D84FBD99DE634AC3467F7E               2
+## 51: A1084F73187648EFAAD54B3FC01A25EF               2
+## 52: A3DD0C1CACA4442085DBFFC493DBEFDE               2
+## 53: A7072DB51E414373B45AF4495BE5E30D               2
+## 54: ABD07667D3124C969E098EED5FFD25B2               2
+## 55: AE7CF2B145C94D94A2782A4986A56C7A               2
+## 56: BA8BE90B36464ED48B1F6596C8B9218A               2
+## 57: BCF666CE7D004703B1C7A998E0029B3D               2
+## 58: BD2FC2B3E09441AAA0C8DAAF079DFEE7               2
+## 59: BEE44FD3EB6B464FB19E89B3DD18C1D8               2
+## 60: CB97620A41514DD6A572406AC15DA962               3
+## 61: CEB5B07C3DE244B4B042D7663C4957F2               2
+## 62: D367DC87B0AF47CEB44219CB5C16B136               2
+## 63: D8DD91C418E644E6BD3A2A46DE12DD86               3
+## 64: DF4612D16A6C49A08C1C7F64B43ADCF0               2
+## 65: E5E18D1017294B0992C09A454C9519A8               2
+## 66: ECDC46825D71492794912D761A78A71F               2
+## 67: EF4084E36ABA4A889CC21272B1791355               2
+## 68: F2FB00FFF2C74EA4B8BC87992CED3B6A               2
+## 69: F559AD32A74E411C9B60873CCC3614A1               2
+## 70: F73BD84C3713442187AF3289DA2D2172               2
+## 71: FEE12ECCA2E94760909C8F64EFEF066B               2
+## 72: FFFD930C3F9F4AB7B9786983044292FE               2
+## 73: a43d9e6b9741ccb23d0138d3d7ba325a               2
+## 74: a92b088adfb0f9374dcfec4f884c76d9               2
+## 75: add417438334536d4e41fee42cecbeac               2
+## 76: b35107c77a6c0a3e5e55dc980c0c435c               2
+## 77: b8b9848ce34f9661eae6b471522d5265               2
+## 78: b929015e9c4eeee3e1d4a7e6a22b39d2               2
+## 79: cf38d8f4f997cc7a2bde1cf6b9636a51               2
+## 80: d101bd547e90e2a43ffbe29cdc0d7c6a               2
+## 81: de47c1adf204ee72a6745901052a26ae               2
+## 82: df7e04c01ef23152ce370e6655de6133               2
+## 83: ee01a31f793d9200e110ba607747d2d2               2
+## 84: f0d4270e629a31d5f73ba47d6fb8de07               2
+## 85: f2cd8d5642834168fa5dcfeb42a4b5d6               2
+## 86: f43c58ff000c5ba637bb622848c2597b               2
+## 87: fa6827f8ebd2805fe69ac2fcdafbe18a               2
+## 88: fd72559f6d926b4e770290d48fb422e5               2
+##                       user_pseudo_id n_install_dates</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="метрики-монетизации-pt1.html#cb17-1" tabindex="-1"></a>users_reinstalls <span class="ot">&lt;-</span> installs_june[, <span class="fu">list</span>(<span class="at">n_install_dates =</span> <span class="fu">length</span>(dt)), user_pseudo_id][n_install_dates <span class="sc">&gt;</span> <span class="dv">1</span>, <span class="fu">unique</span>(user_pseudo_id)]</span>
+<span id="cb17-2"><a href="метрики-монетизации-pt1.html#cb17-2" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="метрики-монетизации-pt1.html#cb17-3" tabindex="-1"></a><span class="co"># чистим таких пользователей</span></span>
+<span id="cb17-4"><a href="метрики-монетизации-pt1.html#cb17-4" tabindex="-1"></a><span class="co"># installs_june &lt;- installs_june[!user_pseudo_id %in% users_reinstalls]</span></span>
+<span id="cb17-5"><a href="метрики-монетизации-pt1.html#cb17-5" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="метрики-монетизации-pt1.html#cb17-6" tabindex="-1"></a><span class="co"># можно удалить, можно взять первый инсталл</span></span>
+<span id="cb17-7"><a href="метрики-монетизации-pt1.html#cb17-7" tabindex="-1"></a><span class="co"># installs_june &lt;- installs_june[order(user_pseudo_id, dt)]</span></span>
+<span id="cb17-8"><a href="метрики-монетизации-pt1.html#cb17-8" tabindex="-1"></a><span class="co"># installs_june &lt;- installs_june[, .SD[1], by = user_pseudo_id]</span></span>
+<span id="cb17-9"><a href="метрики-монетизации-pt1.html#cb17-9" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="метрики-монетизации-pt1.html#cb17-10" tabindex="-1"></a><span class="co"># присоединяем к установкам логины</span></span>
+<span id="cb17-11"><a href="метрики-монетизации-pt1.html#cb17-11" tabindex="-1"></a>installs_june <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb17-12"><a href="метрики-монетизации-pt1.html#cb17-12" tabindex="-1"></a>  installs_june,</span>
+<span id="cb17-13"><a href="метрики-монетизации-pt1.html#cb17-13" tabindex="-1"></a>  logins,</span>
+<span id="cb17-14"><a href="метрики-монетизации-pt1.html#cb17-14" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&#39;user_pseudo_id&#39;</span>, <span class="st">&#39;platform&#39;</span>), <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb17-15"><a href="метрики-монетизации-pt1.html#cb17-15" tabindex="-1"></a>)</span>
+<span id="cb17-16"><a href="метрики-монетизации-pt1.html#cb17-16" tabindex="-1"></a><span class="co"># вычисляем лайфтайм</span></span>
+<span id="cb17-17"><a href="метрики-монетизации-pt1.html#cb17-17" tabindex="-1"></a>installs_june[, lifetime <span class="sc">:=</span> login_dt <span class="sc">-</span> dt]</span>
+<span id="cb17-18"><a href="метрики-монетизации-pt1.html#cb17-18" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="метрики-монетизации-pt1.html#cb17-19" tabindex="-1"></a><span class="co"># ищем пользователей, у которых логин был раньше даты инсталла</span></span>
+<span id="cb17-20"><a href="метрики-монетизации-pt1.html#cb17-20" tabindex="-1"></a>installs_june[login_dt <span class="sc">&lt;</span> dt, <span class="fu">uniqueN</span>(user_pseudo_id)]</span></code></pre></div>
+<pre><code>## [1] 204</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="метрики-монетизации-pt1.html#cb19-1" tabindex="-1"></a><span class="co"># чистим таких пользователей</span></span>
+<span id="cb19-2"><a href="метрики-монетизации-pt1.html#cb19-2" tabindex="-1"></a>installs_june <span class="ot">&lt;-</span> installs_june[<span class="sc">!</span>user_pseudo_id <span class="sc">%in%</span> installs_june[login_dt <span class="sc">&lt;</span> dt, <span class="fu">unique</span>(user_pseudo_id)]]</span>
+<span id="cb19-3"><a href="метрики-монетизации-pt1.html#cb19-3" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="метрики-монетизации-pt1.html#cb19-4" tabindex="-1"></a><span class="co"># еще одна чистка, для красоты -- берем только тех пользователей, у которых есть lifetime = 0</span></span>
+<span id="cb19-5"><a href="метрики-монетизации-pt1.html#cb19-5" tabindex="-1"></a>installs_june <span class="ot">&lt;-</span> installs_june[user_pseudo_id <span class="sc">%in%</span> installs_june[lifetime <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">unique</span>(user_pseudo_id)]]</span>
+<span id="cb19-6"><a href="метрики-монетизации-pt1.html#cb19-6" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="метрики-монетизации-pt1.html#cb19-7" tabindex="-1"></a><span class="co"># считаем количество вернувшихся на кайждый день лайфтайма</span></span>
+<span id="cb19-8"><a href="метрики-монетизации-pt1.html#cb19-8" tabindex="-1"></a>installs_june_stat <span class="ot">&lt;-</span> installs_june[, <span class="fu">list</span>(<span class="at">returned =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(media_source, lifetime)]</span>
+<span id="cb19-9"><a href="метрики-монетизации-pt1.html#cb19-9" tabindex="-1"></a></span>
+<span id="cb19-10"><a href="метрики-монетизации-pt1.html#cb19-10" tabindex="-1"></a><span class="co"># так как выше почистили путешественников во времени, эта фильтрация избыточна</span></span>
+<span id="cb19-11"><a href="метрики-монетизации-pt1.html#cb19-11" tabindex="-1"></a>installs_june_stat <span class="ot">&lt;-</span> installs_june_stat[lifetime <span class="sc">&gt;=</span> <span class="dv">0</span>]</span>
+<span id="cb19-12"><a href="метрики-монетизации-pt1.html#cb19-12" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="метрики-монетизации-pt1.html#cb19-13" tabindex="-1"></a><span class="co"># считаем количество инсталлов, data.table-way</span></span>
+<span id="cb19-14"><a href="метрики-монетизации-pt1.html#cb19-14" tabindex="-1"></a>installs_june_stat[, total_users <span class="sc">:=</span> returned[lifetime <span class="sc">==</span> <span class="dv">0</span>], by <span class="ot">=</span> media_source]</span>
+<span id="cb19-15"><a href="метрики-монетизации-pt1.html#cb19-15" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="метрики-монетизации-pt1.html#cb19-16" tabindex="-1"></a><span class="co"># # тоже количество инсталлов, староверы/python-way</span></span>
+<span id="cb19-17"><a href="метрики-монетизации-pt1.html#cb19-17" tabindex="-1"></a><span class="co"># installs_june_stat &lt;- merge(</span></span>
+<span id="cb19-18"><a href="метрики-монетизации-pt1.html#cb19-18" tabindex="-1"></a><span class="co">#   installs_june_stat,</span></span>
+<span id="cb19-19"><a href="метрики-монетизации-pt1.html#cb19-19" tabindex="-1"></a><span class="co">#   installs_june_stat[lifetime == 0, list(media_source, total_users = returned)],</span></span>
+<span id="cb19-20"><a href="метрики-монетизации-pt1.html#cb19-20" tabindex="-1"></a><span class="co">#   by = &#39;media_source&#39;, all.x = TRUE</span></span>
+<span id="cb19-21"><a href="метрики-монетизации-pt1.html#cb19-21" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb19-22"><a href="метрики-монетизации-pt1.html#cb19-22" tabindex="-1"></a></span>
+<span id="cb19-23"><a href="метрики-монетизации-pt1.html#cb19-23" tabindex="-1"></a><span class="co"># считаем собственно ретеншен</span></span>
+<span id="cb19-24"><a href="метрики-монетизации-pt1.html#cb19-24" tabindex="-1"></a>installs_june_stat[, ret <span class="sc">:=</span> returned <span class="sc">/</span> total_users]</span>
+<span id="cb19-25"><a href="метрики-монетизации-pt1.html#cb19-25" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="метрики-монетизации-pt1.html#cb19-26" tabindex="-1"></a><span class="co"># сортируем для красоты</span></span>
+<span id="cb19-27"><a href="метрики-монетизации-pt1.html#cb19-27" tabindex="-1"></a>installs_june_stat <span class="ot">&lt;-</span> installs_june_stat[<span class="fu">order</span>(lifetime)]</span>
+<span id="cb19-28"><a href="метрики-монетизации-pt1.html#cb19-28" tabindex="-1"></a></span>
+<span id="cb19-29"><a href="метрики-монетизации-pt1.html#cb19-29" tabindex="-1"></a></span>
+<span id="cb19-30"><a href="метрики-монетизации-pt1.html#cb19-30" tabindex="-1"></a><span class="co"># рисуем график, попутно накладываем ограничение на количество дней лайтайма</span></span>
+<span id="cb19-31"><a href="метрики-монетизации-pt1.html#cb19-31" tabindex="-1"></a><span class="fu">plot_ly</span>(installs_june_stat[lifetime <span class="sc">&lt;=</span> <span class="dv">30</span>], </span>
+<span id="cb19-32"><a href="метрики-монетизации-pt1.html#cb19-32" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>lifetime, <span class="at">y =</span> <span class="sc">~</span>ret, <span class="at">color =</span> <span class="sc">~</span>media_source,</span>
+<span id="cb19-33"><a href="метрики-монетизации-pt1.html#cb19-33" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">&#39;scatter&#39;</span>, <span class="at">mode =</span> <span class="st">&#39;lines&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-34"><a href="метрики-монетизации-pt1.html#cb19-34" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb19-35"><a href="метрики-монетизации-pt1.html#cb19-35" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Ретеншен июньской когорты в зависимости от источников трафика&#39;</span>,</span>
+<span id="cb19-36"><a href="метрики-монетизации-pt1.html#cb19-36" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">rangemode =</span> <span class="st">&#39;tozero&#39;</span>)</span>
+<span id="cb19-37"><a href="метрики-монетизации-pt1.html#cb19-37" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb19-38"><a href="метрики-монетизации-pt1.html#cb19-38" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-59160256fd87261321f2" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-59160256fd87261321f2">{"x":{"visdat":{"e76e780ad18":["function () ","plotlyVisDat"]},"cur_data":"e76e780ad18","attrs":{"e76e780ad18":{"x":{},"y":{},"mode":"lines","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Ретеншен июньской когорты в зависимости от источников трафика","yaxis":{"domain":[0,1],"automargin":true,"rangemode":"tozero","title":"ret"},"xaxis":{"domain":[0,1],"automargin":true,"title":"lifetime"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.43022359290670781,0.3084040092521203,0.23824209714726291,0.19892058596761758,0.17116422513492677,0.16576715497301464,0.15034695451040864,0.12259059367771781,0.10717039321511179,0.10562837316885119,0.090979182729375482,0.077872012336160368,0.085582112567463384,0.075558982266769464,0.07632999228989977,0.067848882035466462,0.064764841942945253,0.059367771781033155,0.060138781804163453,0.048573631457208943,0.047802621434078645,0.048573631457208943,0.043176561295296838,0.042405551272166539,0.040092521202775636,0.043176561295296838,0.037008481110254433,0.036237471087124135,0.036237471087124135,0.032382420971472627],"mode":"lines","type":"scatter","name":"Facebook Ads","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.36130817058807418,0.25829247582787807,0.20959215535895259,0.17987345586019884,0.15990577665781042,0.14821003040346217,0.1355282259168972,0.12235339231422389,0.11556054671450876,0.10515215426333233,0.097975841573310685,0.093401626996083162,0.089703908625270487,0.086334876331863375,0.080692432003067735,0.076748199074200885,0.072940918677586356,0.068914514229368104,0.066915007258484205,0.064422471171491955,0.064230737626338713,0.060231723684570929,0.056095757210550823,0.054972746446081786,0.053137582513900682,0.052370648333287681,0.051001123010764468,0.05080938946561122,0.046344736914185544,0.045632583746473471],"mode":"lines","type":"scatter","name":"applovin_int","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.37508444804756114,0.27144980408052966,0.2179435211457911,0.18916362653695445,0.16781516011349817,0.15133090122956358,0.14065666801783544,0.12417240913390082,0.11701121470071613,0.11066072152411836,0.10147277394946629,0.096743683286042423,0.092419943250912046,0.088906904472368598,0.08134035941089042,0.07796243750844481,0.080529658154303477,0.07242264558843399,0.072152411836238342,0.069450074314281851,0.068234022429401436,0.064991217403053636,0.059991892987434133,0.060802594244021076,0.058235373598162408,0.055533036076205917,0.05526280232401027,0.054181867315227672,0.053236049182542898,0.053641399810836377],"mode":"lines","type":"scatter","name":"googleadwords_int","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.30906183623302547,0.2233359585690079,0.1846256652585857,0.16180998066871913,0.14698933199684971,0.13608267105796998,0.12679888308154938,0.11658432972960073,0.10952005918713158,0.10209780196176703,0.09706212262237178,0.092169637956134698,0.088470442232882265,0.086704374597264988,0.082217608171642684,0.07823202310207393,0.07637049235101788,0.074628290494260285,0.070332450299515528,0.070308584520655831,0.067778811961528365,0.06410348201713563,0.06291019307415098,0.060547480967041357,0.059401923581776088,0.056514164339753231,0.056442567003174147,0.056514164339753231,0.053793465549748218,0.052361518818166627],"mode":"lines","type":"scatter","name":"organic","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.35566548881036514,0.23392226148409895,0.17865724381625442,0.15137809187279153,0.13130742049469965,0.11976442873969376,0.10944640753828033,0.099081272084805661,0.088527679623085984,0.082402826855123679,0.076183745583038864,0.072037691401648993,0.0672791519434629,0.064263839811542989,0.059175500588928148,0.055736160188457007,0.050600706713780919,0.049045936395759715,0.045889281507656067,0.047538280329799766,0.044994110718492346,0.042073027090694937,0.04023557126030624,0.039528857479387516,0.037550058892815076,0.037267373380447583,0.03420494699646643,0.035147232037691399,0.033733804475853946,0.032273262661955245],"mode":"lines","type":"scatter","name":"unityads_int","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"line":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="level-3-hmp-2" class="section level3 hasAnchor">
+<h3>level 3 (HMP)<a href="метрики-монетизации-pt1.html#level-3-hmp-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Постройте линейный график retention 1 day (ret1) для всех дневных когорт.
+Т.е. по оси OX должна быть дата инсталла, по оси OY – значение ретеншена первого для пользователей, пришедших в этот день.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="метрики-монетизации-pt1.html#cb20-1" tabindex="-1"></a>daily_ret <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb20-2"><a href="метрики-монетизации-pt1.html#cb20-2" tabindex="-1"></a>  installs,</span>
+<span id="cb20-3"><a href="метрики-монетизации-pt1.html#cb20-3" tabindex="-1"></a>  logins,</span>
+<span id="cb20-4"><a href="метрики-монетизации-pt1.html#cb20-4" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&#39;user_pseudo_id&#39;</span>, <span class="st">&#39;platform&#39;</span>), <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb20-5"><a href="метрики-монетизации-pt1.html#cb20-5" tabindex="-1"></a>)</span>
+<span id="cb20-6"><a href="метрики-монетизации-pt1.html#cb20-6" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="метрики-монетизации-pt1.html#cb20-7" tabindex="-1"></a><span class="co"># считаем лайфтайм</span></span>
+<span id="cb20-8"><a href="метрики-монетизации-pt1.html#cb20-8" tabindex="-1"></a>daily_ret[, lifetime <span class="sc">:=</span> login_dt <span class="sc">-</span> dt]</span>
+<span id="cb20-9"><a href="метрики-монетизации-pt1.html#cb20-9" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="метрики-монетизации-pt1.html#cb20-10" tabindex="-1"></a><span class="co"># ищем пользователей, у которых логин был раньше даты инсталла</span></span>
+<span id="cb20-11"><a href="метрики-монетизации-pt1.html#cb20-11" tabindex="-1"></a>daily_ret[login_dt <span class="sc">&lt;</span> dt, <span class="fu">uniqueN</span>(user_pseudo_id)]</span></code></pre></div>
+<pre><code>## [1] 444</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="метрики-монетизации-pt1.html#cb22-1" tabindex="-1"></a><span class="co"># чистим таких пользователей</span></span>
+<span id="cb22-2"><a href="метрики-монетизации-pt1.html#cb22-2" tabindex="-1"></a>daily_ret <span class="ot">&lt;-</span> daily_ret[<span class="sc">!</span>user_pseudo_id <span class="sc">%in%</span> daily_ret[login_dt <span class="sc">&lt;</span> dt, <span class="fu">unique</span>(user_pseudo_id)]]</span>
+<span id="cb22-3"><a href="метрики-монетизации-pt1.html#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="метрики-монетизации-pt1.html#cb22-4" tabindex="-1"></a><span class="co"># еще одна чистка, для красоты -- берем только тех пользователей, у которых есть lifetime = 0</span></span>
+<span id="cb22-5"><a href="метрики-монетизации-pt1.html#cb22-5" tabindex="-1"></a>daily_ret <span class="ot">&lt;-</span> daily_ret[user_pseudo_id <span class="sc">%in%</span> daily_ret[lifetime <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">unique</span>(user_pseudo_id)]]</span>
+<span id="cb22-6"><a href="метрики-монетизации-pt1.html#cb22-6" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="метрики-монетизации-pt1.html#cb22-7" tabindex="-1"></a><span class="co"># считаем, сколько вернулось в каждой дневной когорте по дням от инсталла</span></span>
+<span id="cb22-8"><a href="метрики-монетизации-pt1.html#cb22-8" tabindex="-1"></a>daily_ret_stat <span class="ot">&lt;-</span> daily_ret[, <span class="fu">list</span>(<span class="at">returned =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(dt, login_dt, lifetime)]</span>
+<span id="cb22-9"><a href="метрики-монетизации-pt1.html#cb22-9" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="метрики-монетизации-pt1.html#cb22-10" tabindex="-1"></a><span class="co"># из-за нашей чистки странных пользователей у нас пропали некоторые даты с lifetime = 0</span></span>
+<span id="cb22-11"><a href="метрики-монетизации-pt1.html#cb22-11" tabindex="-1"></a><span class="co"># для красоты их можно восстановить, но необязательно</span></span>
+<span id="cb22-12"><a href="метрики-монетизации-pt1.html#cb22-12" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="метрики-монетизации-pt1.html#cb22-13" tabindex="-1"></a><span class="co"># считаем количество всего пользователей в когорте</span></span>
+<span id="cb22-14"><a href="метрики-монетизации-pt1.html#cb22-14" tabindex="-1"></a><span class="co"># daily_ret_stat[, total_users := returned[lifetime == 0], by = dt]</span></span>
+<span id="cb22-15"><a href="метрики-монетизации-pt1.html#cb22-15" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="метрики-монетизации-pt1.html#cb22-16" tabindex="-1"></a>daily_ret_stat <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb22-17"><a href="метрики-монетизации-pt1.html#cb22-17" tabindex="-1"></a>  daily_ret_stat[lifetime <span class="sc">==</span> <span class="dv">0</span>, <span class="fu">list</span>(dt, <span class="at">total_users =</span> returned)],  </span>
+<span id="cb22-18"><a href="метрики-монетизации-pt1.html#cb22-18" tabindex="-1"></a>  daily_ret_stat,</span>
+<span id="cb22-19"><a href="метрики-монетизации-pt1.html#cb22-19" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;dt&#39;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb22-20"><a href="метрики-монетизации-pt1.html#cb22-20" tabindex="-1"></a>)</span>
+<span id="cb22-21"><a href="метрики-монетизации-pt1.html#cb22-21" tabindex="-1"></a></span>
+<span id="cb22-22"><a href="метрики-монетизации-pt1.html#cb22-22" tabindex="-1"></a><span class="co"># считаем ретеншен</span></span>
+<span id="cb22-23"><a href="метрики-монетизации-pt1.html#cb22-23" tabindex="-1"></a>daily_ret_stat[, ret <span class="sc">:=</span> returned <span class="sc">/</span> total_users]</span>
+<span id="cb22-24"><a href="метрики-монетизации-pt1.html#cb22-24" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="метрики-монетизации-pt1.html#cb22-25" tabindex="-1"></a><span class="co"># сортируем</span></span>
+<span id="cb22-26"><a href="метрики-монетизации-pt1.html#cb22-26" tabindex="-1"></a>daily_ret_stat <span class="ot">&lt;-</span> daily_ret_stat[<span class="fu">order</span>(dt, lifetime)]</span>
+<span id="cb22-27"><a href="метрики-монетизации-pt1.html#cb22-27" tabindex="-1"></a><span class="co"># daily_ret_stat &lt;- daily_ret_stat[!dt %in% c(&#39;2022-06-25&#39;, &#39;2022-07-06&#39;, &#39;2022-07-20&#39;)]</span></span>
+<span id="cb22-28"><a href="метрики-монетизации-pt1.html#cb22-28" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="метрики-монетизации-pt1.html#cb22-29" tabindex="-1"></a><span class="co"># рисуем простой график</span></span>
+<span id="cb22-30"><a href="метрики-монетизации-pt1.html#cb22-30" tabindex="-1"></a><span class="co"># plot_ly(daily_ret_stat[lifetime == 1], </span></span>
+<span id="cb22-31"><a href="метрики-монетизации-pt1.html#cb22-31" tabindex="-1"></a><span class="co">#         x = ~dt, y = ~ret,</span></span>
+<span id="cb22-32"><a href="метрики-монетизации-pt1.html#cb22-32" tabindex="-1"></a><span class="co">#         type = &#39;scatter&#39;, mode = &#39;lines&#39;) %&gt;%</span></span>
+<span id="cb22-33"><a href="метрики-монетизации-pt1.html#cb22-33" tabindex="-1"></a><span class="co">#   layout(</span></span>
+<span id="cb22-34"><a href="метрики-монетизации-pt1.html#cb22-34" tabindex="-1"></a><span class="co">#     yaxis=list(rangemode = &#39;tozero&#39;)</span></span>
+<span id="cb22-35"><a href="метрики-монетизации-pt1.html#cb22-35" tabindex="-1"></a><span class="co">#   )</span></span>
+<span id="cb22-36"><a href="метрики-монетизации-pt1.html#cb22-36" tabindex="-1"></a></span>
+<span id="cb22-37"><a href="метрики-монетизации-pt1.html#cb22-37" tabindex="-1"></a></span>
+<span id="cb22-38"><a href="метрики-монетизации-pt1.html#cb22-38" tabindex="-1"></a><span class="co"># чтобы сортирвока линий была нормальная</span></span>
+<span id="cb22-39"><a href="метрики-монетизации-pt1.html#cb22-39" tabindex="-1"></a>ret_days <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">30</span>)</span>
+<span id="cb22-40"><a href="метрики-монетизации-pt1.html#cb22-40" tabindex="-1"></a></span>
+<span id="cb22-41"><a href="метрики-монетизации-pt1.html#cb22-41" tabindex="-1"></a>daily_ret_stat_plot <span class="ot">&lt;-</span> daily_ret_stat[lifetime <span class="sc">%in%</span> ret_days]</span>
+<span id="cb22-42"><a href="метрики-монетизации-pt1.html#cb22-42" tabindex="-1"></a>daily_ret_stat_plot[, lifetime_cat <span class="sc">:=</span> <span class="fu">factor</span>(lifetime, <span class="at">levels =</span> ret_days)]</span>
+<span id="cb22-43"><a href="метрики-монетизации-pt1.html#cb22-43" tabindex="-1"></a></span>
+<span id="cb22-44"><a href="метрики-монетизации-pt1.html#cb22-44" tabindex="-1"></a></span>
+<span id="cb22-45"><a href="метрики-монетизации-pt1.html#cb22-45" tabindex="-1"></a><span class="co"># рисуем график ретеншена дневных когорт</span></span>
+<span id="cb22-46"><a href="метрики-монетизации-pt1.html#cb22-46" tabindex="-1"></a><span class="fu">plot_ly</span>(daily_ret_stat_plot, </span>
+<span id="cb22-47"><a href="метрики-монетизации-pt1.html#cb22-47" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>dt, <span class="at">y =</span> <span class="sc">~</span>ret, <span class="at">color =</span> <span class="sc">~</span>lifetime_cat,</span>
+<span id="cb22-48"><a href="метрики-монетизации-pt1.html#cb22-48" tabindex="-1"></a>        <span class="at">type =</span> <span class="st">&#39;scatter&#39;</span>, <span class="at">mode =</span> <span class="st">&#39;lines&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-49"><a href="метрики-монетизации-pt1.html#cb22-49" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb22-50"><a href="метрики-монетизации-pt1.html#cb22-50" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Retention rate дневных когорт&#39;</span>,</span>
+<span id="cb22-51"><a href="метрики-монетизации-pt1.html#cb22-51" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">rangemode =</span> <span class="st">&#39;tozero&#39;</span>)</span>
+<span id="cb22-52"><a href="метрики-монетизации-pt1.html#cb22-52" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb22-53"><a href="метрики-монетизации-pt1.html#cb22-53" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a4144acd3eba93ac281b" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-a4144acd3eba93ac281b">{"x":{"visdat":{"e76e68334f9a":["function () ","plotlyVisDat"]},"cur_data":"e76e68334f9a","attrs":{"e76e68334f9a":{"x":{},"y":{},"mode":"lines","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Retention rate дневных когорт","yaxis":{"domain":[0,1],"automargin":true,"rangemode":"tozero","title":"ret"},"xaxis":{"domain":[0,1],"automargin":true,"title":"dt"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":["2022-06-01","2022-06-02","2022-06-03","2022-06-04","2022-06-05","2022-06-06","2022-06-07","2022-06-08","2022-06-09","2022-06-10","2022-06-11","2022-06-12","2022-06-13","2022-06-14","2022-06-15","2022-06-16","2022-06-17","2022-06-18","2022-06-19","2022-06-20","2022-06-21","2022-06-22","2022-06-23","2022-06-24","2022-06-26","2022-06-27","2022-06-28","2022-06-29","2022-06-30","2022-07-01","2022-07-02","2022-07-03","2022-07-04","2022-07-05","2022-07-07","2022-07-08","2022-07-09","2022-07-10","2022-07-11","2022-07-12","2022-07-13","2022-07-14","2022-07-15","2022-07-16","2022-07-17","2022-07-18","2022-07-19","2022-07-21","2022-07-22","2022-07-23","2022-07-24","2022-07-25","2022-07-26","2022-07-27","2022-07-28","2022-07-29","2022-07-30"],"y":[0.35145675613672861,0.36338171632289279,0.37630662020905925,0.3685413808870599,0.36818642350557246,0.35889219501029984,0.3801566579634465,0.35730698529411764,0.35748548346377179,0.34804610626932808,0.34497505345687812,0.34095405583644756,0.36141370128298234,0.34182015167930663,0.35153232037084731,0.31954523463957424,0.31920773836941502,0.32720057720057721,0.30930642319397728,0.32207168581718404,0.32194480946123522,0.34337140879196953,0.32213578500707213,0.32496914849856029,0.31026785714285715,0.29846449136276393,0.32225913621262459,0.31338818249813016,0.300561797752809,0.30319148936170215,0.32576985413290116,0.33821138211382112,0.35510887772194305,0.31568228105906315,0.35129740518962077,0.35496183206106868,0.40476190476190477,0.35384615384615387,0.3176895306859206,0.30691056910569103,0.34553775743707094,0.35805084745762711,0.32914572864321606,0.317016317016317,0.31951219512195123,0.41277641277641275,0.33410138248847926,0.3704663212435233,0.34660421545667447,0.36690647482014388,0.35909090909090907,0.375,0.38847117794486213,0.38337801608579086,0.35681818181818181,0.35670103092783506,0.36266094420600858],"mode":"lines","type":"scatter","name":"1","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2022-06-01","2022-06-02","2022-06-03","2022-06-04","2022-06-05","2022-06-06","2022-06-07","2022-06-08","2022-06-09","2022-06-10","2022-06-11","2022-06-12","2022-06-13","2022-06-14","2022-06-15","2022-06-16","2022-06-17","2022-06-18","2022-06-19","2022-06-20","2022-06-21","2022-06-22","2022-06-23","2022-06-24","2022-06-26","2022-06-27","2022-06-28","2022-06-29","2022-06-30","2022-07-01","2022-07-02","2022-07-03","2022-07-04","2022-07-05","2022-07-07","2022-07-08","2022-07-09","2022-07-10","2022-07-11","2022-07-12","2022-07-13","2022-07-14","2022-07-15","2022-07-16","2022-07-17","2022-07-18","2022-07-19","2022-07-21","2022-07-22","2022-07-23","2022-07-24","2022-07-25","2022-07-26","2022-07-27","2022-07-28"],"y":[0.1828401009405827,0.22154316271963331,0.22735191637630661,0.21604938271604937,0.21681864235055726,0.20462348363469901,0.21540469973890339,0.19715073529411764,0.2055036606917445,0.21113297722800112,0.1903064861012117,0.20641899318531545,0.20091987412248849,0.19257854821235104,0.19778521761524595,0.1833575229801645,0.18010133578995854,0.18199855699855699,0.1750760852154413,0.1939632996055565,0.17630310994305737,0.18206992038767739,0.19024045261669023,0.18140682846565198,0.16919642857142858,0.14971209213051823,0.16411960132890366,0.17352281226626776,0.19662921348314608,0.19326241134751773,0.17504051863857376,0.20813008130081301,0.22780569514237856,0.19959266802443992,0.18762475049900199,0.22328244274809161,0.26007326007326009,0.20854700854700856,0.18592057761732853,0.17073170731707318,0.20594965675057209,0.2097457627118644,0.24371859296482412,0.20279720279720279,0.19756097560975611,0.24078624078624078,0.20506912442396313,0.21761658031088082,0.20374707259953162,0.23021582733812951,0.20681818181818182,0.21354166666666666,0.22305764411027568,0.19571045576407506,0.21818181818181817],"mode":"lines","type":"scatter","name":"3","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2022-06-01","2022-06-02","2022-06-03","2022-06-04","2022-06-05","2022-06-06","2022-06-07","2022-06-08","2022-06-09","2022-06-10","2022-06-11","2022-06-12","2022-06-13","2022-06-14","2022-06-15","2022-06-16","2022-06-17","2022-06-18","2022-06-19","2022-06-20","2022-06-21","2022-06-22","2022-06-23","2022-06-24","2022-06-26","2022-06-27","2022-06-28","2022-06-29","2022-06-30","2022-07-01","2022-07-02","2022-07-03","2022-07-04","2022-07-05","2022-07-07","2022-07-08","2022-07-09","2022-07-10","2022-07-11","2022-07-12","2022-07-13","2022-07-14","2022-07-15","2022-07-16","2022-07-17","2022-07-18","2022-07-19","2022-07-21","2022-07-22","2022-07-23","2022-07-24"],"y":[0.13466391374168388,0.15457091927680164,0.13937282229965156,0.13648834019204389,0.13819655521783181,0.13069352254520486,0.13916449086161881,0.13327205882352941,0.1363292097955062,0.13972448692718584,0.13162271323354716,0.13343591998241372,0.13386589203582669,0.12242686890574214,0.13674993561679114,0.11683599419448476,0.11469368954398894,0.11562049062049062,0.11645042447541246,0.11919053335619963,0.11651335961454228,0.12564901349948079,0.12270155586987271,0.11024269847799259,0.11205357142857143,0.096449136276391553,0.099003322259136217,0.11742707554225879,0.12780898876404495,0.12056737588652482,0.1312803889789303,0.15934959349593497,0.15075376884422109,0.1384928716904277,0.1157684630738523,0.16412213740458015,0.18498168498168499,0.16923076923076924,0.11732851985559567,0.12601626016260162,0.15560640732265446,0.15254237288135594,0.20100502512562815,0.12820512820512819,0.15121951219512195,0.17444717444717445,0.14976958525345621,0.17616580310880828,0.13583138173302109,0.11750599520383694,0.13863636363636364],"mode":"lines","type":"scatter","name":"7","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2022-06-01","2022-06-02","2022-06-03","2022-06-04","2022-06-05","2022-06-06","2022-06-07","2022-06-08","2022-06-09","2022-06-10","2022-06-11","2022-06-12","2022-06-13","2022-06-14","2022-06-15","2022-06-16","2022-06-17","2022-06-18","2022-06-19","2022-06-20","2022-06-21","2022-06-22","2022-06-23","2022-06-24","2022-06-26","2022-06-27","2022-06-28","2022-06-29","2022-06-30","2022-07-01","2022-07-02","2022-07-03","2022-07-04","2022-07-05","2022-07-07","2022-07-08","2022-07-09","2022-07-10","2022-07-11","2022-07-12","2022-07-13","2022-07-14","2022-07-15","2022-07-16","2022-07-17"],"y":[0.083964211975223677,0.092946269416857658,0.090301974448315905,0.094650205761316872,0.088145896656534953,0.085145342183566036,0.095561357702349872,0.09122242647058823,0.087856601868215103,0.081529378689907228,0.081967213114754092,0.086612442295009889,0.081578310336480275,0.083694474539544955,0.087303631212979654,0.066763425253991288,0.070704744357438967,0.073593073593073599,0.078327727054300814,0.075973246441433717,0.075777485764345162,0.081343025268258914,0.081329561527581334,0.079802550390785681,0.06294642857142857,0.062859884836852203,0.067109634551495018,0.070306656694091252,0.099719101123595499,0.095744680851063829,0.11183144246353323,0.11869918699186992,0.12060301507537688,0.10183299389002037,0.083832335329341312,0.1431297709923664,0.13553113553113552,0.11452991452991453,0.090252707581227443,0.081300813008130079,0.12814645308924486,0.1059322033898305,0.15326633165829145,0.086247086247086241,0.12195121951219512],"mode":"lines","type":"scatter","name":"14","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["2022-06-01","2022-06-02","2022-06-03","2022-06-04","2022-06-05","2022-06-06","2022-06-07","2022-06-08","2022-06-09","2022-06-10","2022-06-11","2022-06-12","2022-06-13","2022-06-14","2022-06-15","2022-06-16","2022-06-17","2022-06-18","2022-06-19","2022-06-20","2022-06-21","2022-06-22","2022-06-23","2022-06-24","2022-06-26","2022-06-27","2022-06-28","2022-06-29","2022-06-30","2022-07-01"],"y":[0.042211516402844686,0.04710975299210593,0.049941927990708478,0.052812071330589849,0.053900709219858157,0.04623483634699016,0.053263707571801565,0.049172794117647058,0.045443069931835396,0.041326960922125386,0.045854122119268231,0.045504506484941747,0.048172355361897845,0.046316359696641385,0.047901107391192375,0.035800677310111273,0.042376784891754948,0.046176046176046176,0.040525388435047251,0.045446750128622877,0.047306176084099871,0.039113880235375563,0.044908062234794911,0.045660222130810363,0.041964285714285711,0.035028790786948177,0.037209302325581395,0.052356020942408377,0.050561797752808987,0.049645390070921988],"mode":"lines","type":"scatter","name":"30","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"line":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="level-5-n-3" class="section level3 hasAnchor">
+<h3>level 5 (N)<a href="метрики-монетизации-pt1.html#level-5-n-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Постройте и сравните графики rolling retention и retention rate (возьмите данные за логины и инсталлы из практикума).</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="метрики-монетизации-pt1.html#cb23-1" tabindex="-1"></a><span class="co"># сначала считаем просто ret1 по всей июньской когорте, без разбивки по каналм привлечения</span></span>
+<span id="cb23-2"><a href="метрики-монетизации-pt1.html#cb23-2" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="метрики-монетизации-pt1.html#cb23-3" tabindex="-1"></a><span class="co"># оставляем группировку только по дням лайфтайма</span></span>
+<span id="cb23-4"><a href="метрики-монетизации-pt1.html#cb23-4" tabindex="-1"></a>retention_type <span class="ot">&lt;-</span> installs_june[, <span class="fu">list</span>(<span class="at">returned =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(lifetime)]</span>
+<span id="cb23-5"><a href="метрики-монетизации-pt1.html#cb23-5" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="метрики-монетизации-pt1.html#cb23-6" tabindex="-1"></a><span class="co"># считаем количество инсталлов, data.table-way</span></span>
+<span id="cb23-7"><a href="метрики-монетизации-pt1.html#cb23-7" tabindex="-1"></a>retention_type[, total_users <span class="sc">:=</span> returned[lifetime <span class="sc">==</span> <span class="dv">0</span>]]</span>
+<span id="cb23-8"><a href="метрики-монетизации-pt1.html#cb23-8" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="метрики-монетизации-pt1.html#cb23-9" tabindex="-1"></a><span class="co"># считаем собственно ретеншен</span></span>
+<span id="cb23-10"><a href="метрики-монетизации-pt1.html#cb23-10" tabindex="-1"></a>retention_type[, ret_rate <span class="sc">:=</span> returned <span class="sc">/</span> total_users]</span></code></pre></div>
+<p>Для rolling retention необходимо:</p>
+<ul>
+<li>посчитать максимальный лайфтайм пользователя</li>
+<li>посчитать количество пользователей по лайфтайму</li>
+<li>cделать обратную кумулятивную сумму</li>
+<li>cумму поделить на количество установок (для lifetime == 0 значения количества инсталлов и обратная кумсумма должны совпадать)</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="метрики-монетизации-pt1.html#cb24-1" tabindex="-1"></a><span class="co"># считаем rolling retention</span></span>
+<span id="cb24-2"><a href="метрики-монетизации-pt1.html#cb24-2" tabindex="-1"></a><span class="co"># считаем количество пользователей, в зависимости от того, на какой максимальный день от логина они вернулись</span></span>
+<span id="cb24-3"><a href="метрики-монетизации-pt1.html#cb24-3" tabindex="-1"></a>rrolling <span class="ot">&lt;-</span> installs_june[, <span class="fu">list</span>(<span class="at">lifetime =</span> <span class="fu">max</span>(lifetime)), by <span class="ot">=</span> <span class="fu">list</span>(user_pseudo_id, dt)]</span>
+<span id="cb24-4"><a href="метрики-монетизации-pt1.html#cb24-4" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="метрики-монетизации-pt1.html#cb24-5" tabindex="-1"></a><span class="co"># считаем количество дней от инсталла до последнего логина</span></span>
+<span id="cb24-6"><a href="метрики-монетизации-pt1.html#cb24-6" tabindex="-1"></a>rrolling_stat <span class="ot">&lt;-</span> rrolling[, <span class="fu">list</span>(<span class="at">n_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), keyby <span class="ot">=</span> lifetime]</span>
+<span id="cb24-7"><a href="метрики-монетизации-pt1.html#cb24-7" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="метрики-монетизации-pt1.html#cb24-8" tabindex="-1"></a><span class="co"># нужна обратная кумулята, так как мы считаем &quot;сколько пришло после дня x&quot;</span></span>
+<span id="cb24-9"><a href="метрики-монетизации-pt1.html#cb24-9" tabindex="-1"></a><span class="co"># а в статистике у нас &quot;сколько пришло в день x&quot; - то есть, для каждого дня надо получить,</span></span>
+<span id="cb24-10"><a href="метрики-монетизации-pt1.html#cb24-10" tabindex="-1"></a><span class="co"># накопительную сумму этого и всех следующих дней. а это делается с помощью обратной кумуляты</span></span>
+<span id="cb24-11"><a href="метрики-монетизации-pt1.html#cb24-11" tabindex="-1"></a><span class="co"># для этого мы переворачиваем значения колонки с помощью rev(), считаем обычную кумуляту</span></span>
+<span id="cb24-12"><a href="метрики-монетизации-pt1.html#cb24-12" tabindex="-1"></a><span class="co"># а потом результат переворачиваем обратно</span></span>
+<span id="cb24-13"><a href="метрики-монетизации-pt1.html#cb24-13" tabindex="-1"></a><span class="co"># чтобы понять результат, попробуйте выражения: 1:5; rev(1:5), cumsum(1:5), cumsum(rev(1:5)), rev(cumsum(rev(1:5)))</span></span>
+<span id="cb24-14"><a href="метрики-монетизации-pt1.html#cb24-14" tabindex="-1"></a>rrolling_stat[, returned_after <span class="sc">:=</span> <span class="fu">rev</span>(<span class="fu">cumsum</span>(<span class="fu">rev</span>(n_users)))]</span>
+<span id="cb24-15"><a href="метрики-монетизации-pt1.html#cb24-15" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="метрики-монетизации-pt1.html#cb24-16" tabindex="-1"></a><span class="co"># или более простой вариант</span></span>
+<span id="cb24-17"><a href="метрики-монетизации-pt1.html#cb24-17" tabindex="-1"></a>rrolling_stat <span class="ot">=</span> rrolling_stat[<span class="fu">order</span>(<span class="sc">-</span>lifetime)]</span>
+<span id="cb24-18"><a href="метрики-монетизации-pt1.html#cb24-18" tabindex="-1"></a>rrolling_stat[, returned_after_2 <span class="sc">:=</span> <span class="fu">cumsum</span>(n_users)]</span>
+<span id="cb24-19"><a href="метрики-монетизации-pt1.html#cb24-19" tabindex="-1"></a>rrolling_stat <span class="ot">=</span> rrolling_stat[<span class="fu">order</span>(<span class="sc">-</span>lifetime)]</span>
+<span id="cb24-20"><a href="метрики-монетизации-pt1.html#cb24-20" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="метрики-монетизации-pt1.html#cb24-21" tabindex="-1"></a><span class="co"># проверяем</span></span>
+<span id="cb24-22"><a href="метрики-монетизации-pt1.html#cb24-22" tabindex="-1"></a>rrolling_stat[, <span class="fu">all.equal</span>(returned_after, returned_after_2)]</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="метрики-монетизации-pt1.html#cb26-1" tabindex="-1"></a><span class="co"># объединяем</span></span>
+<span id="cb26-2"><a href="метрики-монетизации-pt1.html#cb26-2" tabindex="-1"></a>retention_type <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb26-3"><a href="метрики-монетизации-pt1.html#cb26-3" tabindex="-1"></a>  retention_type,</span>
+<span id="cb26-4"><a href="метрики-монетизации-pt1.html#cb26-4" tabindex="-1"></a>  rrolling_stat,</span>
+<span id="cb26-5"><a href="метрики-монетизации-pt1.html#cb26-5" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;lifetime&#39;</span>,</span>
+<span id="cb26-6"><a href="метрики-монетизации-pt1.html#cb26-6" tabindex="-1"></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb26-7"><a href="метрики-монетизации-pt1.html#cb26-7" tabindex="-1"></a>)</span>
+<span id="cb26-8"><a href="метрики-монетизации-pt1.html#cb26-8" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="метрики-монетизации-pt1.html#cb26-9" tabindex="-1"></a>retention_type[, ret_rolling <span class="sc">:=</span> returned_after <span class="sc">/</span> total_users]</span>
+<span id="cb26-10"><a href="метрики-монетизации-pt1.html#cb26-10" tabindex="-1"></a>retention_type <span class="ot">&lt;-</span> retention_type[lifetime <span class="sc">&lt;=</span> <span class="dv">30</span>]</span>
+<span id="cb26-11"><a href="метрики-монетизации-pt1.html#cb26-11" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="метрики-монетизации-pt1.html#cb26-12" tabindex="-1"></a><span class="co"># и рисуем</span></span>
+<span id="cb26-13"><a href="метрики-монетизации-pt1.html#cb26-13" tabindex="-1"></a><span class="fu">plot_ly</span>(retention_type, <span class="at">x =</span> <span class="sc">~</span>lifetime, <span class="at">y =</span> <span class="sc">~</span>ret_rate, <span class="at">type =</span> <span class="st">&#39;scatter&#39;</span>, <span class="at">mode =</span> <span class="st">&#39;lines&#39;</span>, <span class="at">name =</span> <span class="st">&#39;Retention rate&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-14"><a href="метрики-монетизации-pt1.html#cb26-14" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">y =</span> <span class="sc">~</span>ret_rolling, <span class="at">name =</span> <span class="st">&#39;Rolling retention&#39;</span>)  <span class="sc">%&gt;%</span></span>
+<span id="cb26-15"><a href="метрики-монетизации-pt1.html#cb26-15" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb26-16"><a href="метрики-монетизации-pt1.html#cb26-16" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Retention rate vs Rolling retention, июньская когорта&#39;</span>,</span>
+<span id="cb26-17"><a href="метрики-монетизации-pt1.html#cb26-17" tabindex="-1"></a>    <span class="at">yaxis =</span> <span class="fu">list</span>(<span class="at">rangemode =</span> <span class="st">&#39;tozero&#39;</span>)</span>
+<span id="cb26-18"><a href="метрики-монетизации-pt1.html#cb26-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb26-19"><a href="метрики-монетизации-pt1.html#cb26-19" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-6d07b68003af3d9fe0e5" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-6d07b68003af3d9fe0e5">{"x":{"visdat":{"e76e1b321679":["function () ","plotlyVisDat"]},"cur_data":"e76e1b321679","attrs":{"e76e1b321679":{"x":{},"y":{},"mode":"lines","name":"Retention rate","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"},"e76e1b321679.1":{"x":{},"y":{},"mode":"lines","name":"Rolling retention","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Retention rate vs Rolling retention, июньская когорта","yaxis":{"domain":[0,1],"automargin":true,"rangemode":"tozero","title":"ret_rate"},"xaxis":{"domain":[0,1],"automargin":true,"title":"lifetime"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.34176105157246639,0.24149612768039286,0.19478829165628203,0.16816667128206547,0.14998199994461522,0.13836965652202007,0.1275696232911486,0.11568958673718996,0.107926485927649,0.09989569198674457,0.093507980024553919,0.088781811636343494,0.08496949221382219,0.082200252923855147,0.077058698642149662,0.073181763636195801,0.070310985572263299,0.067357130329631781,0.064394044289367042,0.063544810907110477,0.061910959726029925,0.058357102637238881,0.055735556109403415,0.054350936464419894,0.052698623688072883,0.051120157292791672,0.049938615195739063,0.050003230779171626,0.047104760322339456,0.046006295403985861],"mode":"lines","name":"Retention rate","type":"scatter","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],"y":[1,0.48396148911227421,0.3933796719374521,0.34646875836541036,0.31436404419705904,0.29019781599327998,0.2699639075812541,0.25171462066037126,0.23585611032649331,0.2227206852944163,0.21153295856294943,0.20133292717823748,0.19224982230714557,0.18372056529404707,0.1754866938052117,0.16772359299567074,0.16076357158022025,0.15439432121329605,0.1482835331801021,0.14282813177886702,0.1376773466995283,0.13214809891722742,0.12698808304025549,0.12233576103311088,0.118458826027157,0.11433265948510611,0.11022495453832165,0.10641263511580036,0.10297877839624121,0.098871073449456767,0.095095677217468366],"mode":"lines","name":"Rolling retention","type":"scatter","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"line":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="метрики-монетизации" class="section level2 hasAnchor">
+<h2>Метрики монетизации<a href="метрики-монетизации-pt1.html#метрики-монетизации" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="gross-net" class="section level3 hasAnchor">
+<h3>Gross / Net<a href="метрики-монетизации-pt1.html#gross-net" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Gross - общая сумма всех платежей. Обычно полезно для финансистов и прочей отчетности.</p>
+<p>Net (revenue) - сумма платежей после вычета налогов и комиссии магазина приложений. Полезно для вычисления метрик ARPU/ARPPU и их сравнения со стоимостью закупки пользователей (т. е. для оценки юнит-экономики и окупаемости проекта).</p>
+</div>
+<div id="конверсия" class="section level3 hasAnchor">
+<h3>Конверсия<a href="метрики-монетизации-pt1.html#конверсия" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Обычно под конверсией понимают ситуацию, когда пользователь меняет один статус на другой. Например, становится из неплатящего платящим пользователем (совершает платеж). Нередко говорят “конверсия в корзину” и подобно – то есть, какая доля пользователей после просмотра товаров перешла в корзину (готова сделать платеж).</p>
+<p>Конверсия в платящих (здесь и далее мы говорим про это) считается по такой формуле:
+Conversion = N Paying Users / N Users</p>
+</div>
+<div id="практикум" class="section level3 hasAnchor">
+<h3>Практикум<a href="метрики-монетизации-pt1.html#практикум" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Посчитать, какая доля пользователей стала платящими в интервале 7 дней о инсталла, должно получиться 1 число.
+Игнорируйте install_dt в табличке payments, используйте dt из installs</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="метрики-монетизации-pt1.html#cb27-1" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv&#39;</span>)</span>
+<span id="cb27-2"><a href="метрики-монетизации-pt1.html#cb27-2" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="метрики-монетизации-pt1.html#cb27-3" tabindex="-1"></a><span class="co"># рисоединяем к инсталлам платежи</span></span>
+<span id="cb27-4"><a href="метрики-монетизации-pt1.html#cb27-4" tabindex="-1"></a>conversion <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb27-5"><a href="метрики-монетизации-pt1.html#cb27-5" tabindex="-1"></a>  installs,</span>
+<span id="cb27-6"><a href="метрики-монетизации-pt1.html#cb27-6" tabindex="-1"></a>  payments,</span>
+<span id="cb27-7"><a href="метрики-монетизации-pt1.html#cb27-7" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&#39;user_pseudo_id&#39;</span>, <span class="st">&#39;platform&#39;</span>), <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb27-8"><a href="метрики-монетизации-pt1.html#cb27-8" tabindex="-1"></a>)</span>
+<span id="cb27-9"><a href="метрики-монетизации-pt1.html#cb27-9" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="метрики-монетизации-pt1.html#cb27-10" tabindex="-1"></a><span class="co"># считаем лайфтайм</span></span>
+<span id="cb27-11"><a href="метрики-монетизации-pt1.html#cb27-11" tabindex="-1"></a>conversion[, lifetime <span class="sc">:=</span> pay_dt <span class="sc">-</span> dt]</span>
+<span id="cb27-12"><a href="метрики-монетизации-pt1.html#cb27-12" tabindex="-1"></a></span>
+<span id="cb27-13"><a href="метрики-монетизации-pt1.html#cb27-13" tabindex="-1"></a><span class="co"># так как хотим считать метрику на 7 день от инсталла, то мы должны проконтролировать</span></span>
+<span id="cb27-14"><a href="метрики-монетизации-pt1.html#cb27-14" tabindex="-1"></a><span class="co"># что все пользователи могли прожить столько дней в приложении</span></span>
+<span id="cb27-15"><a href="метрики-монетизации-pt1.html#cb27-15" tabindex="-1"></a><span class="co"># поэтому оставляем инсталлы только по 2022-07-24</span></span>
+<span id="cb27-16"><a href="метрики-монетизации-pt1.html#cb27-16" tabindex="-1"></a>conversion <span class="ot">&lt;-</span> conversion[dt <span class="sc">&lt;=</span> <span class="st">&#39;2022-07-24&#39;</span>]</span>
+<span id="cb27-17"><a href="метрики-монетизации-pt1.html#cb27-17" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="метрики-монетизации-pt1.html#cb27-18" tabindex="-1"></a></span>
+<span id="cb27-19"><a href="метрики-монетизации-pt1.html#cb27-19" tabindex="-1"></a><span class="co"># совершенно примитивным способом считаем, сколько было пользователей, кто сделал платеж</span></span>
+<span id="cb27-20"><a href="метрики-монетизации-pt1.html#cb27-20" tabindex="-1"></a><span class="co"># до седьмого дня от инсталла включительно</span></span>
+<span id="cb27-21"><a href="метрики-монетизации-pt1.html#cb27-21" tabindex="-1"></a><span class="co"># при этом сюда не попадут пользователи, которые не делали платежей, так как сравнение lifetime &lt;= 7</span></span>
+<span id="cb27-22"><a href="метрики-монетизации-pt1.html#cb27-22" tabindex="-1"></a><span class="co"># отсекает значения, когда lifetime is null (нет значений, так как не платил и нет дату платежа)</span></span>
+<span id="cb27-23"><a href="метрики-монетизации-pt1.html#cb27-23" tabindex="-1"></a>conversion[lifetime <span class="sc">&lt;=</span> <span class="dv">7</span>, <span class="fu">uniqueN</span>(user_pseudo_id)] <span class="sc">/</span> conversion[, <span class="fu">uniqueN</span>(user_pseudo_id)]</span></code></pre></div>
+<pre><code>## [1] 0.01866886</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="метрики-монетизации-pt1.html#cb29-1" tabindex="-1"></a><span class="co"># синтаксически другой способ расчета цифры, более data.table-way</span></span>
+<span id="cb29-2"><a href="метрики-монетизации-pt1.html#cb29-2" tabindex="-1"></a>conversion[, <span class="fu">uniqueN</span>(user_pseudo_id[lifetime <span class="sc">&lt;=</span> <span class="dv">7</span>]) <span class="sc">/</span> <span class="fu">uniqueN</span>(user_pseudo_id)]</span></code></pre></div>
+<pre><code>## [1] 0.01867702</code></pre>
+</div>
+</div>
+<div id="домашнее-задание-3" class="section level2 hasAnchor">
+<h2>Домашнее задание<a href="метрики-монетизации-pt1.html#домашнее-задание-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="level-1-iatytd-2" class="section level3 hasAnchor">
+<h3>level 1 (IATYTD)<a href="метрики-монетизации-pt1.html#level-1-iatytd-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Внимательно разберите решения заданий (материалы конспекта).</p>
+<!-- ### level 2 (HNTR) -->
+<!-- ### level 3 (HMP) -->
+<!-- ### level 4 (UV) -->
+<!-- ### level 5 (N) -->
+</div>
+<div id="level-2-hntr-4" class="section level3 hasAnchor">
+<h3>level 2 (HNTR)<a href="метрики-монетизации-pt1.html#level-2-hntr-4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>На основе данных по <a href="https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv">платежам</a> нарисуйте <a href="https://en.wikipedia.org/wiki/Area_chart">area plot</a> подневную структуру гросса проекта, в котором цветами выделите группы пользователей по количеству дней с момента инсталла:</p>
+<ul>
+<li><p>группа 1: 0 дней с инсталла</p></li>
+<li><p>группа 2: 1-7 дней с момента инсталла</p></li>
+<li><p>группа 3: 8-28 дней с инсталла</p></li>
+<li><p>группа 4: более 28 дней с инсталла</p></li>
+</ul>
+<p>Решение аналогично такому же заданию на расчет структуры DAU.</p>
+</div>
+<div id="level-3-hmp-3" class="section level3 hasAnchor">
+<h3>level 3 (HMP)<a href="метрики-монетизации-pt1.html#level-3-hmp-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Посчитайте по каждой платформе конверсию в платящих в день инсталла. Когорта – пришедшие в июне.</p>
+<p>Делать аналогично динамике ретеншена первого дня.</p>
+</div>
+<div id="level-4-uv-3" class="section level3 hasAnchor">
+<h3>level 4 (UV)<a href="метрики-монетизации-pt1.html#level-4-uv-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Постройте график накопительной конверсии для пользователей, кто пришел в июне.
+Для этого надо сначала посчитать, в какой день от инсталла пользователь сделал платеж (lifetime.
+Потом посчитать, сколько пользователей сделало первый платеж в 0-30 дни от инсталла (new payers).
+Посчитать накопительную сумму по количеству пользователей (cumulative new payers).
+Посчитать отношение cumulative new users / total users
+Нарисовать график.</p>
+</div>
+<div id="level-5-n-4" class="section level3 hasAnchor">
+<h3>level 5 (N)<a href="метрики-монетизации-pt1.html#level-5-n-4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Постройте график накопительной конверсии в когорте июньскийх пользователей с разбивкой по источнику пользователей.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="метрики-вовлечения-pt2.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

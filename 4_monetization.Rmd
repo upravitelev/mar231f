@@ -1,0 +1,354 @@
+# Метрики монетизации pt1 {-}
+
+## Запись занятия
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/8xL2bHOe3pA?si=7xmpZ_4sGFOhWEW4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Код занятия на Python
+
+https://colab.research.google.com/drive/1gdtpFd3LjzRSsFwPrKP-OARjDXDU3F1v?usp=sharing
+
+## Разбор домашнего задания
+
+### level 2 (HNTR)
+
+Постройте график ретеншена для когорты пользователей, пришедшей в июне, с разбивкой по источникам привлечения (media_source). Для этого вам потребуются следующие датасеты:
+
+- Инсталлы: https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv
+- Логины: https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv
+
+```{r}
+library(data.table)
+library(plotly)
+
+# чтобы загрузка не обрывалась по таймауту, если слабый интернет
+options(timeout=360)
+
+installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+logins <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv')
+
+
+# выделяем инсталлы в июне
+installs_june <- installs[dt >= '2022-06-01' & dt < '2022-07-01']
+
+# считаем количество пользователей по платформам
+installs_june[, uniqueN(user_pseudo_id), keyby = media_source]
+
+# при необходимости укрупняем
+installs_june[media_source %in% c('organic', 'other') | is.na(media_source), media_source := 'organic']
+
+# смотрим, нет ли тех, кто два раза устанавливал приложение
+installs_june[, list(n_install_dates = length(dt)), user_pseudo_id][n_install_dates > 1]
+users_reinstalls <- installs_june[, list(n_install_dates = length(dt)), user_pseudo_id][n_install_dates > 1, unique(user_pseudo_id)]
+
+# чистим таких пользователей
+# installs_june <- installs_june[!user_pseudo_id %in% users_reinstalls]
+
+# можно удалить, можно взять первый инсталл
+# installs_june <- installs_june[order(user_pseudo_id, dt)]
+# installs_june <- installs_june[, .SD[1], by = user_pseudo_id]
+
+# присоединяем к установкам логины
+installs_june <- merge(
+  installs_june,
+  logins,
+  by = c('user_pseudo_id', 'platform'), all.x = TRUE
+)
+# вычисляем лайфтайм
+installs_june[, lifetime := login_dt - dt]
+
+# ищем пользователей, у которых логин был раньше даты инсталла
+installs_june[login_dt < dt, uniqueN(user_pseudo_id)]
+
+# чистим таких пользователей
+installs_june <- installs_june[!user_pseudo_id %in% installs_june[login_dt < dt, unique(user_pseudo_id)]]
+
+# еще одна чистка, для красоты -- берем только тех пользователей, у которых есть lifetime = 0
+installs_june <- installs_june[user_pseudo_id %in% installs_june[lifetime == 0, unique(user_pseudo_id)]]
+
+# считаем количество вернувшихся на кайждый день лайфтайма
+installs_june_stat <- installs_june[, list(returned = uniqueN(user_pseudo_id)), by = list(media_source, lifetime)]
+
+# так как выше почистили путешественников во времени, эта фильтрация избыточна
+installs_june_stat <- installs_june_stat[lifetime >= 0]
+
+# считаем количество инсталлов, data.table-way
+installs_june_stat[, total_users := returned[lifetime == 0], by = media_source]
+
+# # тоже количество инсталлов, староверы/python-way
+# installs_june_stat <- merge(
+#   installs_june_stat,
+#   installs_june_stat[lifetime == 0, list(media_source, total_users = returned)],
+#   by = 'media_source', all.x = TRUE
+# )
+
+# считаем собственно ретеншен
+installs_june_stat[, ret := returned / total_users]
+
+# сортируем для красоты
+installs_june_stat <- installs_june_stat[order(lifetime)]
+
+
+# рисуем график, попутно накладываем ограничение на количество дней лайтайма
+plot_ly(installs_june_stat[lifetime <= 30], 
+        x = ~lifetime, y = ~ret, color = ~media_source,
+        type = 'scatter', mode = 'lines') %>%
+  layout(
+    title = 'Ретеншен июньской когорты в зависимости от источников трафика',
+    yaxis = list(rangemode = 'tozero')
+    ) %>%
+  config(displayModeBar = FALSE)  
+
+```
+
+
+
+### level 3 (HMP)
+Постройте линейный график retention 1 day (ret1) для всех дневных когорт.
+Т.е. по оси OX должна быть дата инсталла, по оси OY -- значение ретеншена первого для пользователей, пришедших в этот день.
+
+```{r}
+daily_ret <- merge(
+  installs,
+  logins,
+  by = c('user_pseudo_id', 'platform'), all.x = TRUE
+)
+
+# считаем лайфтайм
+daily_ret[, lifetime := login_dt - dt]
+
+# ищем пользователей, у которых логин был раньше даты инсталла
+daily_ret[login_dt < dt, uniqueN(user_pseudo_id)]
+
+# чистим таких пользователей
+daily_ret <- daily_ret[!user_pseudo_id %in% daily_ret[login_dt < dt, unique(user_pseudo_id)]]
+
+# еще одна чистка, для красоты -- берем только тех пользователей, у которых есть lifetime = 0
+daily_ret <- daily_ret[user_pseudo_id %in% daily_ret[lifetime == 0, unique(user_pseudo_id)]]
+
+# считаем, сколько вернулось в каждой дневной когорте по дням от инсталла
+daily_ret_stat <- daily_ret[, list(returned = uniqueN(user_pseudo_id)), by = list(dt, login_dt, lifetime)]
+
+# из-за нашей чистки странных пользователей у нас пропали некоторые даты с lifetime = 0
+# для красоты их можно восстановить, но необязательно
+
+# считаем количество всего пользователей в когорте
+# daily_ret_stat[, total_users := returned[lifetime == 0], by = dt]
+
+daily_ret_stat <- merge(
+  daily_ret_stat[lifetime == 0, list(dt, total_users = returned)],  
+  daily_ret_stat,
+  by = 'dt', all.x = TRUE
+)
+
+# считаем ретеншен
+daily_ret_stat[, ret := returned / total_users]
+
+# сортируем
+daily_ret_stat <- daily_ret_stat[order(dt, lifetime)]
+# daily_ret_stat <- daily_ret_stat[!dt %in% c('2022-06-25', '2022-07-06', '2022-07-20')]
+
+# рисуем простой график
+# plot_ly(daily_ret_stat[lifetime == 1], 
+#         x = ~dt, y = ~ret,
+#         type = 'scatter', mode = 'lines') %>%
+#   layout(
+#     yaxis=list(rangemode = 'tozero')
+#   )
+
+
+# чтобы сортирвока линий была нормальная
+ret_days <- c(1, 3, 7, 14, 30)
+
+daily_ret_stat_plot <- daily_ret_stat[lifetime %in% ret_days]
+daily_ret_stat_plot[, lifetime_cat := factor(lifetime, levels = ret_days)]
+
+
+# рисуем график ретеншена дневных когорт
+plot_ly(daily_ret_stat_plot, 
+        x = ~dt, y = ~ret, color = ~lifetime_cat,
+        type = 'scatter', mode = 'lines') %>%
+  layout(
+    title = 'Retention rate дневных когорт',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)  
+
+```
+
+
+### level 5 (N)
+
+Постройте и сравните графики rolling retention и retention rate (возьмите данные за логины и инсталлы из практикума).
+
+
+```{r}
+# сначала считаем просто ret1 по всей июньской когорте, без разбивки по каналм привлечения
+
+# оставляем группировку только по дням лайфтайма
+retention_type <- installs_june[, list(returned = uniqueN(user_pseudo_id)), by = list(lifetime)]
+
+# считаем количество инсталлов, data.table-way
+retention_type[, total_users := returned[lifetime == 0]]
+
+# считаем собственно ретеншен
+retention_type[, ret_rate := returned / total_users]
+```
+
+Для rolling retention необходимо:
+
+- посчитать максимальный лайфтайм пользователя
+- посчитать количество пользователей по лайфтайму
+- cделать обратную кумулятивную сумму
+- cумму поделить на количество установок (для lifetime == 0 значения количества инсталлов и обратная кумсумма должны совпадать)
+
+
+```{r}
+# считаем rolling retention
+# считаем количество пользователей, в зависимости от того, на какой максимальный день от логина они вернулись
+rrolling <- installs_june[, list(lifetime = max(lifetime)), by = list(user_pseudo_id, dt)]
+
+# считаем количество дней от инсталла до последнего логина
+rrolling_stat <- rrolling[, list(n_users = uniqueN(user_pseudo_id)), keyby = lifetime]
+
+# нужна обратная кумулята, так как мы считаем "сколько пришло после дня x"
+# а в статистике у нас "сколько пришло в день x" - то есть, для каждого дня надо получить,
+# накопительную сумму этого и всех следующих дней. а это делается с помощью обратной кумуляты
+# для этого мы переворачиваем значения колонки с помощью rev(), считаем обычную кумуляту
+# а потом результат переворачиваем обратно
+# чтобы понять результат, попробуйте выражения: 1:5; rev(1:5), cumsum(1:5), cumsum(rev(1:5)), rev(cumsum(rev(1:5)))
+rrolling_stat[, returned_after := rev(cumsum(rev(n_users)))]
+
+# или более простой вариант
+rrolling_stat = rrolling_stat[order(-lifetime)]
+rrolling_stat[, returned_after_2 := cumsum(n_users)]
+rrolling_stat = rrolling_stat[order(-lifetime)]
+
+# проверяем
+rrolling_stat[, all.equal(returned_after, returned_after_2)]
+```
+
+
+```{r}
+# объединяем
+retention_type <- merge(
+  retention_type,
+  rrolling_stat,
+  by = 'lifetime',
+  all.x = TRUE
+)
+
+retention_type[, ret_rolling := returned_after / total_users]
+retention_type <- retention_type[lifetime <= 30]
+
+# и рисуем
+plot_ly(retention_type, x = ~lifetime, y = ~ret_rate, type = 'scatter', mode = 'lines', name = 'Retention rate') %>%
+  add_trace(y = ~ret_rolling, name = 'Rolling retention')  %>%
+  layout(
+    title = 'Retention rate vs Rolling retention, июньская когорта',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)  
+```
+
+## Метрики монетизации
+
+### Gross / Net
+
+Gross - общая сумма всех платежей. Обычно полезно для финансистов и прочей отчетности.
+
+Net (revenue) - сумма платежей после вычета налогов и комиссии магазина приложений. Полезно для вычисления метрик ARPU/ARPPU и их сравнения со стоимостью закупки пользователей (т. е. для оценки юнит-экономики и окупаемости проекта).
+
+### Конверсия
+
+Обычно под конверсией понимают ситуацию, когда пользователь меняет один статус на другой. Например, становится из неплатящего платящим пользователем (совершает платеж). Нередко говорят "конверсия в корзину" и подобно -- то есть, какая доля пользователей после просмотра товаров перешла в корзину (готова сделать платеж). 
+
+Конверсия в платящих (здесь и далее мы говорим про это) считается по такой формуле:
+Conversion = N Paying Users / N Users
+
+
+### Практикум
+
+Посчитать, какая доля пользователей стала платящими в интервале 7 дней о инсталла, должно получиться 1 число.
+Игнорируйте install_dt в табличке payments, используйте dt из installs
+
+```{r}
+payments <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv')
+
+# рисоединяем к инсталлам платежи
+conversion <- merge(
+  installs,
+  payments,
+  by = c('user_pseudo_id', 'platform'), all.x = TRUE
+)
+
+# считаем лайфтайм
+conversion[, lifetime := pay_dt - dt]
+
+# так как хотим считать метрику на 7 день от инсталла, то мы должны проконтролировать
+# что все пользователи могли прожить столько дней в приложении
+# поэтому оставляем инсталлы только по 2022-07-24
+conversion <- conversion[dt <= '2022-07-24']
+
+
+# совершенно примитивным способом считаем, сколько было пользователей, кто сделал платеж
+# до седьмого дня от инсталла включительно
+# при этом сюда не попадут пользователи, которые не делали платежей, так как сравнение lifetime <= 7
+# отсекает значения, когда lifetime is null (нет значений, так как не платил и нет дату платежа)
+conversion[lifetime <= 7, uniqueN(user_pseudo_id)] / conversion[, uniqueN(user_pseudo_id)]
+
+# синтаксически другой способ расчета цифры, более data.table-way
+conversion[, uniqueN(user_pseudo_id[lifetime <= 7]) / uniqueN(user_pseudo_id)]
+```
+
+## Домашнее задание
+
+### level 1 (IATYTD)
+
+Внимательно разберите решения заданий (материалы конспекта).
+
+
+<!-- ### level 2 (HNTR) -->
+
+<!-- ### level 3 (HMP) -->
+
+<!-- ### level 4 (UV) -->
+
+<!-- ### level 5 (N) -->
+
+
+### level 2 (HNTR)
+
+На основе данных по [платежам](https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv) нарисуйте [area plot](https://en.wikipedia.org/wiki/Area_chart) подневную структуру гросса проекта, в котором цветами выделите группы пользователей по количеству дней с момента инсталла:
+
+-   группа 1: 0 дней с инсталла
+
+-   группа 2: 1-7 дней с момента инсталла
+
+-   группа 3: 8-28 дней с инсталла
+
+-   группа 4: более 28 дней с инсталла
+
+Решение аналогично такому же заданию на расчет структуры DAU.
+
+
+
+### level 3 (HMP)
+Посчитайте по каждой платформе конверсию в платящих в день инсталла. Когорта -- пришедшие в июне.
+
+Делать аналогично динамике ретеншена первого дня.
+
+
+### level 4 (UV)
+
+Постройте график накопительной конверсии для пользователей, кто пришел в июне.
+Для этого надо сначала посчитать, в какой день от инсталла пользователь сделал платеж (lifetime.
+Потом посчитать, сколько пользователей сделало первый платеж в 0-30 дни от инсталла (new payers).
+Посчитать накопительную сумму по количеству пользователей (cumulative new payers).
+Посчитать отношение cumulative new users / total users
+Нарисовать график.
+
+### level 5 (N)
+
+Постройте график накопительной конверсии в когорте июньскийх пользователей с разбивкой по источнику пользователей.
+
