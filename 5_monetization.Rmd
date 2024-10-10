@@ -1,0 +1,158 @@
+# Метрики монетизации pt.2 {#c5_monetization}
+
+## Запись занятия {-}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/16-9hKo7ulw?si=nzfR9xjtS8FC6iw2" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Код занятия на Python
+https://colab.research.google.com/drive/1tAAkLUsyck3OJE-994owPh3TIGJI_qDX?usp=sharing
+
+
+## Разбор домашнего задания
+
+### level 4 (UV)
+
+Постройте график накопительной конверсии с разбивкой по источнику пользователей.
+
+
+```{r, warning=FALSE, message=FALSE}
+library(data.table)
+library(plotly)
+
+# импортируем данные
+installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+payments <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv')
+
+# к платежам присоединяем дату инсталла и источник трафика
+conversion <- merge(
+  payments,
+  installs[, list(user_pseudo_id, media_source, dt)],
+  by = 'user_pseudo_id', all.x = TRUE
+)
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+conversion[, lifetime := pay_dt - dt]
+conversion <- conversion[dt < '2022-07-01']
+conversion <- conversion[lifetime >= 0 & lifetime <= 30]
+
+# беру минимальный день от инсталла
+# это будет день первого платежа
+conversion_stat <- conversion[, list(lifetime = min(lifetime)), by = list(user_pseudo_id, media_source)]
+
+# считаю количество пользователей, которые сделали платеж на этот день
+conversion_stat <- conversion_stat[, list(new_payers = uniqueN(user_pseudo_id)), by = list(lifetime)]
+
+# считаю, сколько всего было пользователей в когорте
+conversion_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+
+# сортирую и считаю накопительное количество пользователей, которые сделали 
+# первый платеж в этот день от инсталла
+conversion_stat <- conversion_stat[order(lifetime)]
+conversion_stat[, new_payers_cum := cumsum(new_payers)]
+
+# считаю накопительную конверсию в платящих
+conversion_stat[, cum_conversion := new_payers_cum / total_users]
+
+# рисую
+plot_ly(
+  conversion_stat, x = ~lifetime, y = ~cum_conversion, type = 'scatter', mode='lines'
+) %>%
+  layout(
+    title = 'Накопительная конверсия',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)    
+```
+
+
+## ARPU / ARPPU
+
+Averange revenue per user - сумма платежей за определенный период, деленная на общее количество пользователей когорты. Средний чек, наверное, одна из самых важных метрик для оперирования продуктом, так как изучение структуры ARPU позволяет понять, за что платят пользователи и как можно улучшить эту метрику и так далее.
+
+Average revenue per paying user - сумма платежей за определенный период, деленная на количество платящих пользователей когорты.
+
+Обе метрики считаются в определенном окне (количестве дней от инсталла) - обычно 7, 28 или 30 дней. Это необходимо для того, чтобы учесть ситуацию, когда пользователи одной когорты (месячной, например) могли прожить разное количество дней в приложении. Или когда необходимо сравнить разные каналы привлечения, рекламные кампании или группы аб-тестов.
+
+Для оценки динамики метрики и приянтия продуктовых решений (на какой день от инсталла что-то сломалось) часто рисуют кривую кумулятивного ARPU.
+
+```{r}
+# расчет во многом похож на накопительную конверсию, так как тоже считается накопительно
+# но не количество пользователей, сделавших первый платеж, а просто выручка
+
+# повторяющийся блок
+# к платежам присоединяем дату инсталла и источник трафика
+conversion <- merge(
+  payments,
+  installs[, list(user_pseudo_id, media_source, dt)],
+  by = 'user_pseudo_id', all.x = TRUE
+)
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+conversion[, lifetime := pay_dt - dt]
+conversion <- conversion[dt < '2022-07-01']
+conversion <- conversion[lifetime >= 0 & lifetime <= 30]
+
+# считаем выручку по дням от инсталла
+arpu_stat <- conversion[, list(gross = sum(gross)), by = list(lifetime)]
+
+# считаем количество уникальных пользователей в июньской когорте
+arpu_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+
+# сортируем и считаем кумулятивную выручку
+arpu_stat <- arpu_stat[order(lifetime)]
+arpu_stat[, gross_cum := cumsum(gross)]
+
+# считаем кумулятивное ARPU
+arpu_stat[, cARPU := gross_cum / total_users]
+
+# рисуем
+plot_ly(
+  arpu_stat, x = ~lifetime, y = ~cARPU, type = 'scatter', mode='lines'
+) %>%
+  layout(
+    title = 'Cumulative ARPU, installs in June',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)   
+```
+
+## Полезные материалы {-}
+
+[Основные метрики мобильных приложений](https://apptractor.ru/measure/user-analytics/osnovnyie-metriki-mobilnyih-prilozheniy.html) Очень обзорный материал от devtodev. Есть неплохой блок по метрикам монетизации.
+
+## Домашнее задание
+
+### level 1 (IATYTD)
+
+Внимательно разберите материалы конспекта.
+
+
+### level 2 (HNTR)
+
+Постройте график накопительной конверсии в когорте июньских пользователей с разбивкой по источнику пользователей.
+
+### level 3 (N)
+
+Посчитайте по каждой платформе динамику метрики конверсию в платящих в день инсталла.
+На графике на оси OX должна быть дата инсталла, на оси OY -- значение конверсии в день инсталла.
+Делать аналогично динамике ретеншена первого дня.
+
+
+### level 4 (UV)
+
+Постройте и нарисуйте структуру накопительного ARPU для июньских пользователей в зависимости оттого, какие offer_type покупали пользователи. Таким образом мы можем понять, какая товарная категория делает наибольший вклад в кумулятивное ARPU.
+
+ИЛИ
+
+Постройте график накопительного ARPU в когорте июньских пользователей с разбивкой по источнику пользователей.
+
+
+### level 5 (N)
+
+Посчитайте по каждой платформе динамику ARPU 0, 1, 7 и 30 дней (сколько в среднем заплатили пользователи когорты в день инсталла, за 0 и 1 дни жизни в приложении, за первые 7 дней жизни, за первые 30 дней жизни в приложении). 
+На графике на оси OX должна быть дата инсталла, на оси OY -- значение ARPU, с разбивкой, по какому количеству дней от инсталла мы это считаем
+
+Делать аналогично динамике ретеншена, я показывал на занятии про ретеншен как раз близкое решение.
+
+
+
