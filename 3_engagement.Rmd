@@ -8,6 +8,8 @@
 https://colab.research.google.com/drive/1FcFTz7sI8QXhVLcLnshyHFMdGS5znlw5?usp=sharing
 
 
+## Разбор домашнего задания
+
 ### level 2 (HNTR) {-}
 
 Необходимо подсчитать и нарисовать, сколько пользователей в день приходит в приложение, в том числе и с разбивкой по платформам. Датасет: <https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv>
@@ -327,7 +329,6 @@ plot_ly(retention_stat, x = ~lifetime, y = ~ret, color = ~platform,
 
 ### level 4 (UV)
 Добавьте на этот график группировку по источникам трафика (media_source).
-
 
 ### level 5 (N)
 

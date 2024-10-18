@@ -1,0 +1,438 @@
+# Метрики монетизации pt.3 {#c6_monetization}
+
+## Запись занятия {-}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/pHv379smESs?si=mcGL0VShCW0D4cFn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Код занятия на Python
+
+https://colab.research.google.com/drive/1P36fEEJQHb-q5yKR9ieywopqd2USJ39b
+
+
+## Разбор домашнего задания
+
+Датасеты:
+```{r, message=FALSE, warning=FALSE}
+library(data.table)
+library(plotly)
+
+# импортируем данные
+installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+payments <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv')
+
+# делаем рыбу, чтобы учесть потерянные дни, в которых не было платежей
+arpu_fish <- data.table(
+  dt = seq(as.Date('2022-06-01'), as.Date('2022-07-31'), by = 1)
+)
+arpu_fish <- arpu_fish[, list(lifetime = 0:30), by = dt]
+
+
+# корректируем медиасорсы
+installs[media_source %in% c('organic', 'other') | is.na(media_source), media_source := 'organic']
+```
+
+
+### level 2 (HNTR)
+
+Постройте график накопительной конверсии в когорте июньских пользователей с разбивкой по источнику пользователей.
+
+```{r}
+# к платежам присоединяем дату инсталла и источник трафика
+conversion <- merge(
+  payments,
+  installs[, list(user_pseudo_id, media_source, dt)],
+  by = 'user_pseudo_id', all.x = TRUE
+)
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+conversion[, lifetime := pay_dt - dt]
+conversion <- conversion[dt < '2022-07-01']
+conversion <- conversion[lifetime >= 0 & lifetime <= 30]
+
+# беру минимальный день от инсталла
+# это будет день первого платежа
+conversion_stat <- conversion[, list(lifetime = min(lifetime)), by = list(user_pseudo_id, media_source)]
+
+# считаю количество пользователей, которые сделали платеж на этот день
+conversion_stat <- conversion_stat[, list(new_payers = uniqueN(user_pseudo_id)), by = list(media_source, lifetime)]
+
+# считаю, сколько всего было пользователей в когорте
+# conversion_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+
+conversion_stat <- merge(
+  installs[dt < '2022-07-01', list(total_users = uniqueN(user_pseudo_id)), by = media_source],
+  conversion_stat,
+  by = 'media_source', all.x = TRUE
+)
+
+# сортирую и считаю накопительное количество пользователей, которые сделали 
+# первый платеж в этот день от инсталла
+conversion_stat <- conversion_stat[order(media_source, lifetime)]
+
+conversion_stat[, new_payers_cum := cumsum(new_payers), by = media_source]
+
+# считаю накопительную конверсию в платящих
+conversion_stat[, cum_conversion := new_payers_cum / total_users]
+
+# рисую
+plot_ly(
+  conversion_stat, x = ~lifetime, y = ~cum_conversion, type = 'scatter', mode='lines', color = ~media_source
+) %>%
+  layout(
+    title = 'Накопительная конверсия в зависимости от источников трафика',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)    
+```
+
+
+### level 3 (N)
+
+Посчитайте динамику метрики конверсию в платящих в дни 0, 3, 7, 30 от инсталла.
+На графике на оси OX должна быть дата инсталла, на оси OY -- значение конверсии в день инсталла.
+Делать аналогично динамике ретеншена первого дня.
+
+
+```{r}
+# Посчитайте по каждой платформе динамику метрики конверсии в платящих в день инсталла. 0, 3, 7, 30
+# На графике на оси OX должна быть дата инсталла, на оси OY – значение конверсии в день инсталла. 
+# Делать аналогично динамике ретеншена первого дня.
+
+conversion_dyn <- merge(
+  payments,
+  installs[, list(user_pseudo_id, media_source, dt)],
+  by = 'user_pseudo_id', all.x = TRUE
+)
+conversion_dyn <- conversion_dyn[!is.na(dt)]
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+conversion_dyn[, lifetime := pay_dt - dt]
+
+# это будет день первого платежа
+conversion_dyn_stat <- conversion_dyn[, list(lifetime = min(lifetime)), by = list(user_pseudo_id, dt)]
+
+# считаю количество пользователей, которые сделали платеж на этот день
+conversion_dyn_stat <- conversion_dyn_stat[, list(new_payers = uniqueN(user_pseudo_id)), 
+                                           by = list(dt, lifetime)]
+
+# присоединяем рыбу
+conversion_dyn_stat <- merge(arpu_fish, conversion_dyn_stat, by = c('dt', 'lifetime'), all.x = TRUE)
+
+# считаю, сколько всего было пользователей в когорте
+# conversion_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+
+conversion_dyn_stat <- merge(
+  installs[, list(total_users = uniqueN(user_pseudo_id)), by = dt],
+  conversion_dyn_stat,
+  by = 'dt', all.x = TRUE
+)
+
+# сортирую и считаю накопительное количество пользователей, которые сделали 
+# первый платеж в этот день от инсталла
+conversion_dyn_stat <- conversion_dyn_stat[order(dt, lifetime)]
+conversion_dyn_stat[is.na(new_payers), new_payers := 0]
+conversion_dyn_stat[, new_payers_cum := cumsum(new_payers), by = dt]
+
+# считаю накопительную конверсию в платящих
+conversion_dyn_stat[, cum_conversion := new_payers_cum / total_users]
+
+# рисую
+plot_ly(
+  conversion_dyn_stat[lifetime %in% c(0, 3, 7, 30)], 
+  x = ~dt, y = ~cum_conversion, 
+  type = 'scatter', mode='lines', color = ~as.character(lifetime)
+) %>%
+  layout(
+    title = 'Накопительная конверсия в дневных когортах',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)    
+```
+
+
+Посчитайте по каждой платформе динамику метрики конверсию в платящих в день инсталла.
+На графике на оси OX должна быть дата инсталла, на оси OY -- значение конверсии в день инсталла.
+Делать аналогично динамике ретеншена первого дня.
+
+
+
+```{r, message=FALSE, warning=FALSE}
+conversion_dyn <- merge(
+  payments,
+  installs[, list(user_pseudo_id, platform, dt)],
+  by = c('user_pseudo_id', 'platform'), all.x = TRUE
+)
+conversion_dyn <- conversion_dyn[!is.na(dt)]
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+conversion_dyn[, lifetime := pay_dt - dt]
+
+
+# это будет день первого платежа
+conversion_dyn_stat <- conversion_dyn[, list(lifetime = min(lifetime)), by = list(user_pseudo_id, dt, platform)]
+
+# считаю количество пользователей, которые сделали платеж на этот день
+conversion_dyn_stat <- conversion_dyn_stat[, list(new_payers = uniqueN(user_pseudo_id)), 
+                                           by = list(platform, dt, lifetime)]
+
+conversion_dyn_stat <- merge(arpu_fish, conversion_dyn_stat, by = c('dt', 'lifetime'), all.x = TRUE)
+
+# считаю, сколько всего было пользователей в когорте
+# conversion_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+
+conversion_dyn_stat <- merge(
+  installs[, list(total_users = uniqueN(user_pseudo_id)), by = list(platform, dt)],
+  conversion_dyn_stat,
+  by = c('dt', 'platform'), all.x = TRUE
+)
+
+# сортирую и считаю накопительное количество пользователей, которые сделали 
+# первый платеж в этот день от инсталла
+conversion_dyn_stat <- conversion_dyn_stat[order(platform, dt, lifetime)]
+conversion_dyn_stat[is.na(new_payers), new_payers := 0]
+conversion_dyn_stat[, new_payers_cum := cumsum(new_payers), by = list(platform, dt)]
+
+# считаю накопительную конверсию в платящих
+conversion_dyn_stat[, cum_conversion := new_payers_cum / total_users]
+
+# рисую
+plot_ly(
+  conversion_dyn_stat[lifetime == 0], 
+  x = ~dt, y = ~cum_conversion, 
+  type = 'scatter', mode='lines', color = ~platform
+) %>%
+  layout(
+    title = 'Динамика конверсии в платящих в дневных когортах в день инсталла',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)    
+```
+
+
+### level 4 (UV)
+
+Постройте и нарисуйте структуру накопительного ARPU для июньских пользователей в зависимости оттого, какие offer_type покупали пользователи. Таким образом мы можем понять, какая товарная категория делает наибольший вклад в кумулятивное ARPU.
+
+ИЛИ
+
+Постройте график накопительного ARPU в когорте июньских пользователей с разбивкой по источнику пользователей.
+
+
+```{r}
+# к платежам присоединяем дату инсталла и источник трафика
+arpu_june <- merge(
+  payments,
+  installs[, list(user_pseudo_id, media_source, dt)],
+  by = 'user_pseudo_id', all.x = TRUE
+)
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+arpu_june[, lifetime := pay_dt - dt]
+arpu_june <- conversion[dt < '2022-07-01']
+arpu_june <- arpu_june[lifetime >= 0 & lifetime <= 30]
+
+
+# считаем деньги, которые платили в определенный день от инстала
+arpu_june_stat <- arpu_june[, list(gross = sum(gross)), by = list(lifetime, offer_type)]
+
+# считаю, сколько всего было пользователей в когорте
+arpu_june_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+
+# сортирую и считаю накопительную сумму денег, которую заплатили пользователи
+arpu_june_stat <- arpu_june_stat[order(offer_type, lifetime)]
+arpu_june_stat[, gross_cum := cumsum(gross), by = offer_type]
+
+# считаю накопительную конверсию в платящих
+arpu_june_stat[, cum_ARPU := gross_cum / total_users]
+
+# рисую
+plot_ly(
+  arpu_june_stat, x = ~lifetime, y = ~cum_ARPU, type = 'scatter', mode='none', stackgroup ='one', color = ~offer_type
+) %>%
+  layout(
+    title = 'Накопительное ARPU по категориям',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)    
+```
+
+### level 5 (N)
+
+Посчитайте по каждой платформе динамику ARPU 0, 1, 7 и 30 дней (сколько в среднем заплатили пользователи когорты в день инсталла, за 0 и 1 дни жизни в приложении, за первые 7 дней жизни, за первые 30 дней жизни в приложении). 
+На графике на оси OX должна быть дата инсталла, на оси OY -- значение ARPU, с разбивкой, по какому количеству дней от инсталла мы это считаем
+
+Делать аналогично динамике ретеншена, я показывал на занятии про ретеншен как раз близкое решение.
+
+
+```{r}
+arpu_dyn <- merge(
+  payments,
+  installs[, list(user_pseudo_id, platform, dt)],
+  by = c('user_pseudo_id', 'platform'), all.x = TRUE
+)
+
+# удаляю пользователей, которые пришли раньше июня
+arpu_dyn <- conversion_dyn[!is.na(dt)]
+arpu_dyn[, lifetime := pay_dt - dt]
+
+arpu_dyn_stat <- arpu_dyn[, list(gross = sum(gross)), by = list(dt, lifetime)]
+
+
+# присоединяю рыбу
+arpu_dyn_stat <- merge(arpu_fish, arpu_dyn_stat, by = c('dt', 'lifetime'), all.x = TRUE)
+
+# считаю, сколько всего было пользователей в когорте
+# conversion_stat[, total_users := installs[dt < '2022-07-01', uniqueN(user_pseudo_id)]]
+arpu_dyn_stat <- merge(
+  installs[, list(total_users = uniqueN(user_pseudo_id)), by = list(dt)],
+  arpu_dyn_stat,
+  by = c('dt'), all.x = TRUE
+)
+
+# сортирую и считаю накопительный гросс
+arpu_dyn_stat <- arpu_dyn_stat[order(dt, lifetime)]
+arpu_dyn_stat[is.na(gross), gross := 0]
+arpu_dyn_stat[, gross_cum := cumsum(gross), by = list(dt)]
+
+# считаю накопительную конверсию в платящих
+arpu_dyn_stat[, cum_ARPU := gross_cum / total_users]
+
+# рисую
+plot_ly(
+  arpu_dyn_stat[lifetime %in% c(0, 3, 7, 30)], 
+  x = ~dt, y = ~cum_ARPU, 
+  type = 'scatter', mode='lines', color = ~as.character(lifetime)
+) %>%
+  layout(
+    title = 'Динамика накопительного ARPU дневных когорт',
+    yaxis = list(rangemode = 'tozero')
+  ) %>%
+  config(displayModeBar = FALSE)    
+```
+
+
+## Метрики монетизации
+
+Для июньской когорты, с разбивкой по платформе посчитать:
+
+- количество пользователей
+- количество платящих пользователей
+- конверсия
+- гросс
+- арпу
+- арппу
+- средний размер платежа (гросс / количество платежей)
+- среднее количество платежей на пользователя (количество платежей / количество платящих)
+
+Все в окне 30 дней от инсталла.
+
+```{r}
+installs_june <- installs[dt < '2022-07-01']
+installs_june_stat <- installs_june[, list(total_users = uniqueN(user_pseudo_id)), by = platform]
+
+
+payments_june <- merge(
+    installs_june[, list(user_pseudo_id, dt)],
+    payments,
+    by = 'user_pseudo_id', all = FALSE
+)
+payments_june[, lifetime := pay_dt - dt]
+payments_june <- payments_june[lifetime <= 30]
+
+payments_june_stat <- payments_june[, list(
+    payers_30 = uniqueN(user_pseudo_id),
+    gross_30 = sum(gross),
+    n_transactions_30 = length(ts)
+  ), 
+  by = platform]
+
+users_june_stat <- merge(
+  installs_june_stat,
+  payments_june_stat,
+  by = 'platform', all.x = TRUE
+)
+
+
+users_june_stat[, gross_30 := round(gross_30)]
+users_june_stat[, Conversion_30 := paste0(round(payers_30 / total_users * 100, 1), '%')]
+users_june_stat[, ARPU_30 := round(gross_30 / total_users, 3)]
+users_june_stat[, ARPPU_30 := round(gross_30 / payers_30, 3)]
+users_june_stat[, Av.Check_30 := round(gross_30 / n_transactions_30, 1)]
+users_june_stat[, Av.Purchases_30 := round(n_transactions_30 / payers_30, 1)]
+
+users_june_stat
+```
+
+
+
+## ARPDAU
+
+Некогортная метрика -- сколько в среднем приносит каждый зашедший в этот день пользователь. Обычно используется на дашбордах для мониторинга, какие сегменты пользователей как платят.
+
+ARPDAU = revenue / DAU
+
+## Paying share
+
+Еще одна некогортная метрика -- какая доля платящих среди зашедших в этот день. Также используется для мониторинга. 
+
+Paying share = Payers / DAU
+
+## Воронка платежей
+
+Доля пользователей, которые сделали второй, третий и т.д. платеж. Нужна для понимания, совершают ли пользователи повторные платежи. Дальше начинаются вопросы и интерпретации -- почему не сделал второй платеж, и т. д.
+
+Алгоритм расчета:
+- берем таблицу платежей пользователя
+- сортируем по времени платежа
+- создаем новую колонку-счетчик (1, 2, 3) платежей для каждого пользователя
+- считаем, сколько пользователей сделало каждый номер платежа (т.е группируем по этому счетчику)
+- делим количество пользователей на сколько всего было пользователей, сделавших первый платеж (т.е. на значение из первой колонки)
+- рисуем барчартами
+
+ - опционально: лучше ограничить это все на лайфтайм (например, на 7 дней) и на количество платежей (например, 10, чтобы баров было не сильно много и график был читаемым)
+
+
+Как создать колонку-счетчик:
+
+```{r, eval=FALSE}
+# в R
+my_dt[, counter := 1:.N, by = uid]
+
+# в Python
+my_dt['counter'] = my_dt.groupby('uid').cumcount() + 1
+```
+
+
+
+## Домашнее задание
+
+
+### level 1 (IATYTD)
+
+Внимательно разберите решения заданий (материалы конспекта).
+
+### level 2 (HNTR)
+
+Рассчитайте табличку с метриками монетизации для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.
+
+### level 3 (HMP)
+
+Рассчитайте табличку с метриками монетизации для июньской и июльской когорт (должно быть две строки в табличке, отдельно на каждую когорту). Выберите правильный период лайфтайма. Попробуйте проинтерпретировать результаты.
+
+### level 4 (UV)
+
+Постройте воронку платежей для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.
+
+### level 5 (N)
+
+Постройте графики ARPDAU и Paying Share. Для этого вам понадобится табличка логинов (https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv).
+
+Сделайте эти метрики в разбивке по тому, как давно пользователи пришли в приложение:
+
+-   группа 1: 0 дней с инсталла
+-   группа 2: 1-7 дней с момента инсталла
+-   группа 3: 8-28 дней с инсталла
+-   группа 4: более 28 дней с инсталла
+
+
+
