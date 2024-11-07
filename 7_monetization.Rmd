@@ -1,0 +1,200 @@
+# Метрики монетизации pt.4 {#c7_monetization}
+
+## Запись занятия {-}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3JY43wF9mVM?si=9DNqdaVefwRm6TmP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Код занятия на Python
+
+https://colab.research.google.com/drive/1V4x-LdknR1vVhgrwCIvzsQjHpN1xmOrj
+
+
+## Разбор домашнего задания
+
+Датасеты:
+```{r, message=FALSE, warning=FALSE}
+library(data.table)
+library(plotly)
+
+Sys.setlocale('LC_ALL', 'en_US.UTF-8')
+
+# импортируем данные
+installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+payments <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv')
+
+# делаем рыбу, чтобы учесть потерянные дни, в которых не было платежей
+arpu_fish <- data.table(
+  dt = seq(as.Date('2022-06-01'), as.Date('2022-07-31'), by = 1)
+)
+arpu_fish <- arpu_fish[, list(lifetime = 0:30), by = dt]
+
+
+# корректируем медиасорсы
+installs[media_source %in% c('organic', 'other') | is.na(media_source), media_source := 'organic']
+```
+
+### level 2 (HNTR)
+
+Рассчитайте табличку с метриками монетизации для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.
+
+```{r}
+# выделяем инсталлы в июне
+installs_june <- installs[dt >= '2022-06-01' & dt < '2022-07-01']
+
+installs_june_stat <- installs_june[, list(total_users = uniqueN(user_pseudo_id)), by = list(media_source)]
+
+installs_june_stat
+```
+
+```{r}
+# к платежам присоединяем дату инсталла и источник трафика
+payments_june <- merge(
+  installs_june[, list(user_pseudo_id, media_source, dt)],
+  payments,  
+  by = 'user_pseudo_id', all = FALSE
+)
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+payments_june[, lifetime := pay_dt - dt]
+payments_june <- payments_june[lifetime >= 0 & lifetime <= 30]
+
+payments_june_stat <- payments_june[, list(
+  payers_30 = uniqueN(user_pseudo_id), 
+  gross_30 = sum(gross),
+  n_transactions_30 = length(ts)
+), by = list(media_source)]
+
+payments_june_stat
+```
+
+```{r}
+users_june_stat = merge(
+    installs_june_stat,
+    payments_june_stat,
+    by = 'media_source', all.x = TRUE
+)
+
+users_june_stat[, gross_30 := round(gross_30)]
+users_june_stat[, Conversion_30 := paste0(round(payers_30 * 100 / total_users, 1), '%')]
+users_june_stat[, ARPU_30 := round(gross_30 / total_users, 3)]
+users_june_stat[, ARPPU_30 := round(gross_30 / payers_30, 3)]
+users_june_stat[, Av.Check_30 := round(gross_30 / n_transactions_30, 1)]
+users_june_stat[, Av.Purchases_30 := round(n_transactions_30 / payers_30, 1)]
+
+users_june_stat[, CPI := c(0.5, 2, .9, NA, 0.3)]
+users_june_stat[, RoAS := round(ARPU_30 / CPI, 3)]
+
+kableExtra::kable(users_june_stat)
+```
+
+
+
+
+### level 3 (HMP)
+
+Рассчитайте табличку с метриками монетизации для июньской и июльской когорт (должно быть две строки в табличке, отдельно на каждую когорту). Выберите правильный период лайфтайма. Попробуйте проинтерпретировать результаты.
+
+```{r}
+installs_jj <- installs[dt < '2022-07-25']
+installs_jj[, month := strftime(dt, '%B')]
+
+installs_jj_stat <- installs_jj[, list(total_users = uniqueN(user_pseudo_id)), by = list(month)]
+
+# к платежам присоединяем дату инсталла и источник трафика
+payments_jj <- merge(
+  installs_jj[, list(user_pseudo_id, month, dt)],
+  payments,  
+  by = 'user_pseudo_id', all = FALSE
+)
+
+# берем июньскую когорту и ограничиваем даты лайфтайма
+payments_jj[, lifetime := pay_dt - dt]
+payments_jj <- payments_jj[lifetime >= 0 & lifetime <= 7]
+
+payments_jj_stat <- payments_jj[, list(
+  payers_7 = uniqueN(user_pseudo_id), 
+  gross_7 = sum(gross),
+  n_transactions_7 = length(ts)
+), by = list(month)]
+
+users_jj_stat = merge(
+    installs_jj_stat,
+    payments_jj_stat,
+    by = 'month', all.x = TRUE
+)
+
+users_jj_stat[, gross_7 := round(gross_7)]
+users_jj_stat[, Conversion_7 := paste0(round(payers_7 * 100 / total_users, 1), '%')]
+users_jj_stat[, ARPU_7 := round(gross_7 / total_users, 3)]
+users_jj_stat[, ARPPU_7 := round(gross_7 / payers_7, 3)]
+users_jj_stat[, Av.Check_7 := round(gross_7 / n_transactions_7, 1)]
+users_jj_stat[, Av.Purchases_7 := round(n_transactions_7 / payers_7, 1)]
+
+kableExtra::kable(users_jj_stat)
+```
+
+
+
+
+
+### level 4 (UV)
+
+Постройте воронку платежей для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.
+```{r}
+# выше мы уже делали вычисление дней от инсталла и фильтрацию на 30 дней
+payments_june <- payments_june[order(user_pseudo_id, ts)]
+payments_june[, purchase_number := seq_len(.N), by = user_pseudo_id]
+
+# считаем, сколько пользователей сделало платеж с этим номером
+payments_funnel <- payments_june[, list(n_users = uniqueN(user_pseudo_id)), keyby = purchase_number]
+
+# считаем посчитать долю от всего пользователей, сделавших платеж (purchase_number == 1)
+payments_funnel[, total_payers := n_users[purchase_number == 1]]
+
+# если у нас есть группировка, то надо отдельно считать и мерджить по ключу
+
+# рисуем
+payments_funnel[, share := n_users / total_payers]
+
+plot_ly(payments_funnel[purchase_number <= 10], 
+        x = ~purchase_number, y = ~share, type = 'bar') %>%
+  layout(
+    title = 'Воронка платежей'
+  ) %>%
+  config(displayModeBar = FALSE)  
+
+```
+
+Воронки можно считать не от первого шага, а от предыдущего. В некоторых случаях это удобнее и информативнее.
+```{r}
+# если хотим считать от предыдущего шага
+payments_funnel[, prev_users := shift(n_users, n = 1)]
+payments_funnel[, prev_share := n_users / prev_users]
+
+plot_ly(payments_funnel[purchase_number <= 10], 
+        x = ~purchase_number, y = ~prev_share, type = 'bar') %>%
+  layout(
+    title = 'Воронка платежей, доля от предыдущего'
+  ) %>%
+  config(displayModeBar = FALSE)
+```
+
+
+Обе воронки сразу
+```{r}
+plot_ly(payments_funnel[purchase_number <= 10], 
+        x = ~purchase_number, y = ~share, type = 'bar', name = '% from payers') %>%
+  add_trace(y = ~prev_share, name = '% from prev') %>%
+  layout(
+    title = 'Воронка платежей'
+  ) %>%
+  config(displayModeBar = FALSE)  
+```
+
+
+
+
+
+
+
+

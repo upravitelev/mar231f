@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ru-RU" xml:lang="ru-RU">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Метрики монетизации pt.4 | Методы анализа больших данных</title>
+  <meta name="description" content="Метрики монетизации pt.4 | Методы анализа больших данных" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Метрики монетизации pt.4 | Методы анализа больших данных" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Метрики монетизации pt.4 | Методы анализа больших данных" />
+  
+  
+  
+
+<meta name="author" content="Ph.A.Upravitelev" />
+
+
+<meta name="date" content="2024-11-07" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="c6_monetization.html"/>
+<link rel="next" href="ux.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<link href="libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
+<script src="libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">mar 231f</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Intro</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html"><i class="fa fa-check"></i>О курсе и аналитиках</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#запись-занятия"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#обо-мне"><i class="fa fa-check"></i>Обо мне</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#contacts"><i class="fa fa-check"></i>Contacts</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#о-курсе"><i class="fa fa-check"></i>О курсе</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#основные-темы"><i class="fa fa-check"></i>основные темы</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#дополнительные-темы"><i class="fa fa-check"></i>дополнительные темы</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#формы-контроля"><i class="fa fa-check"></i>формы контроля</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#виды-аналитиков"><i class="fa fa-check"></i>Виды аналитиков</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#data-scientists"><i class="fa fa-check"></i>data scientists</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#web-аналитика"><i class="fa fa-check"></i>web-аналитика</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#маркетинговая-аналитика"><i class="fa fa-check"></i>маркетинговая аналитика</a></li>
+<li><a href="c1_intro.html#section" id="toc-section"></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#продуктовая-аналитика"><i class="fa fa-check"></i>Продуктовая аналитика</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#что-такое-продукт"><i class="fa fa-check"></i>что такое продукт</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#cxux-исследователи"><i class="fa fa-check"></i>CX/UX-исследователи</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#структура-команды-разработки"><i class="fa fa-check"></i>структура команды разработки</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#роли-продуктовых-аналитиков"><i class="fa fa-check"></i>роли продуктовых аналитиков</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#стадии-развития-продукта"><i class="fa fa-check"></i>Стадии развития продукта</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#этапы-жизни"><i class="fa fa-check"></i>этапы жизни</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#технические-этапы"><i class="fa fa-check"></i>технические этапы</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#бизнес-модели"><i class="fa fa-check"></i>Бизнес-модели</a>
+<ul>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#компоненты"><i class="fa fa-check"></i>компоненты</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#варианты"><i class="fa fa-check"></i>варианты</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#полезные-материалы"><i class="fa fa-check"></i>Полезные материалы</a></li>
+<li class="chapter" data-level="" data-path="c1_intro.html"><a href="c1_intro.html#домашнее-задание"><i class="fa fa-check"></i>Домашнее задание</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html"><i class="fa fa-check"></i>Метрики вовлечения pt1</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#запись-занятия-1"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#aarrr-фреймворк"><i class="fa fa-check"></i>AARRR фреймворк</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#user-aquisition"><i class="fa fa-check"></i>User Aquisition</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#процесс-привлечения-пользователей"><i class="fa fa-check"></i>Процесс привлечения пользователей</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#маркетинговая-воронка-в-мобильных-приложениях"><i class="fa fa-check"></i>Маркетинговая воронка в мобильных приложениях</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#новый-пользователь"><i class="fa fa-check"></i>Новый пользователь</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#активность-и-вовлечение"><i class="fa fa-check"></i>Активность и вовлечение</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#dau-wau-mau"><i class="fa fa-check"></i>DAU, WAU, MAU</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#stickness-sticky-factor"><i class="fa fa-check"></i>Stickness / Sticky factor</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#retention-rate"><i class="fa fa-check"></i>Retention rate</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#churn-rate"><i class="fa fa-check"></i>Churn rate</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#sessions-per-day"><i class="fa fa-check"></i>Sessions per day</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#полезные-материалы-1"><i class="fa fa-check"></i>Полезные материалы</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#домашнее-задание-1"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-1-iatytd"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-2-hntr"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-3-hmp"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-4-uv"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt1.html"><a href="метрики-вовлечения-pt1.html#level-5-n"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html"><i class="fa fa-check"></i>Метрики вовлечения pt2</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#запись-занятия-2"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#код-занятия-на-python"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#разбор-домашнего-задания"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-2-hntr-1"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-4-uv-1"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-5-n-1"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#расчет-retention"><i class="fa fa-check"></i>Расчет retention</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#домашнее-задание-2"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-1-iatytd-1"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-2-hntr-2"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-3-hmp-1"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-4-uv-2"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-вовлечения-pt2.html"><a href="метрики-вовлечения-pt2.html#level-5-n-2"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html"><i class="fa fa-check"></i>Метрики монетизации pt1</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#запись-занятия-3"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#код-занятия-на-python-1"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#разбор-домашнего-задания-1"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-2-hntr-3"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-3-hmp-2"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-5-n-3"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#метрики-монетизации"><i class="fa fa-check"></i>Метрики монетизации</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#gross-net"><i class="fa fa-check"></i>Gross / Net</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#конверсия"><i class="fa fa-check"></i>Конверсия</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#практикум"><i class="fa fa-check"></i>Практикум</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#домашнее-задание-3"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-1-iatytd-2"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-2-hntr-4"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-3-hmp-3"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-4-uv-3"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="метрики-монетизации-pt1.html"><a href="метрики-монетизации-pt1.html#level-5-n-4"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html"><i class="fa fa-check"></i>Метрики монетизации pt.2</a>
+<ul>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#запись-занятия-4"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#код-занятия-на-python-2"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#разбор-домашнего-задания-2"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#level-4-uv-4"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#arpu-arppu"><i class="fa fa-check"></i>ARPU / ARPPU</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#полезные-материалы-2"><i class="fa fa-check"></i>Полезные материалы</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#домашнее-задание-4"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#level-1-iatytd-3"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#level-2-hntr-5"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#level-3-n"><i class="fa fa-check"></i>level 3 (N)</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#level-4-uv-5"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="c5_monetization.html"><a href="c5_monetization.html#level-5-n-5"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html"><i class="fa fa-check"></i>Метрики монетизации pt.3</a>
+<ul>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#запись-занятия-5"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#код-занятия-на-python-3"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#разбор-домашнего-задания-3"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-2-hntr-6"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-3-n-1"><i class="fa fa-check"></i>level 3 (N)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-4-uv-6"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-5-n-6"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#метрики-монетизации-1"><i class="fa fa-check"></i>Метрики монетизации</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#arpdau"><i class="fa fa-check"></i>ARPDAU</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#paying-share"><i class="fa fa-check"></i>Paying share</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#воронка-платежей"><i class="fa fa-check"></i>Воронка платежей</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#домашнее-задание-5"><i class="fa fa-check"></i>Домашнее задание</a>
+<ul>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-1-iatytd-4"><i class="fa fa-check"></i>level 1 (IATYTD)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-2-hntr-7"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-3-hmp-4"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-4-uv-7"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+<li class="chapter" data-level="" data-path="c6_monetization.html"><a href="c6_monetization.html#level-5-n-7"><i class="fa fa-check"></i>level 5 (N)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html"><i class="fa fa-check"></i>Метрики монетизации pt.4</a>
+<ul>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html#запись-занятия-6"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html#код-занятия-на-python-4"><i class="fa fa-check"></i>Код занятия на Python</a></li>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html#разбор-домашнего-задания-4"><i class="fa fa-check"></i>Разбор домашнего задания</a>
+<ul>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html#level-2-hntr-8"><i class="fa fa-check"></i>level 2 (HNTR)</a></li>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html#level-3-hmp-5"><i class="fa fa-check"></i>level 3 (HMP)</a></li>
+<li class="chapter" data-level="" data-path="c7_monetization.html"><a href="c7_monetization.html#level-4-uv-8"><i class="fa fa-check"></i>level 4 (UV)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ux.html"><a href="ux.html"><i class="fa fa-check"></i>UX intro</a>
+<ul>
+<li class="chapter" data-level="" data-path="ux.html"><a href="ux.html#запись-занятия-7"><i class="fa fa-check"></i>Запись занятия</a></li>
+<li class="chapter" data-level="" data-path="ux.html"><a href="ux.html#полезные-ссылки"><i class="fa fa-check"></i>Полезные ссылки</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html"><i class="fa fa-check"></i>Homework 1</a>
+<ul>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#общие-замечания"><i class="fa fa-check"></i>Общие замечания</a></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#описание-данных"><i class="fa fa-check"></i>Описание данных</a></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#задание-1"><i class="fa fa-check"></i>Задание 1</a></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#задание-2"><i class="fa fa-check"></i>Задание 2</a>
+<ul>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#описание-приложения"><i class="fa fa-check"></i>Описание приложения</a></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#changelog-изменения-в-функционале-и-исправления-ошибок"><i class="fa fa-check"></i>Changelog (изменения в функционале и исправления ошибок):</a></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#задание"><i class="fa fa-check"></i>Задание</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#задание-3"><i class="fa fa-check"></i>Задание 3</a></li>
+<li class="chapter" data-level="" data-path="homework-1.html"><a href="homework-1.html#задание-4"><i class="fa fa-check"></i>Задание 4</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Методы анализа больших данных</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="c7_monetization" class="section level1 hasAnchor">
+<h1>Метрики монетизации pt.4<a href="c7_monetization.html#c7_monetization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="запись-занятия-6" class="section level2 unnumbered hasAnchor">
+<h2>Запись занятия<a href="c7_monetization.html#запись-занятия-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3JY43wF9mVM?si=9DNqdaVefwRm6TmP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+</div>
+<div id="код-занятия-на-python-4" class="section level2 hasAnchor">
+<h2>Код занятия на Python<a href="c7_monetization.html#код-занятия-на-python-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://colab.research.google.com/drive/1V4x-LdknR1vVhgrwCIvzsQjHpN1xmOrj" class="uri">https://colab.research.google.com/drive/1V4x-LdknR1vVhgrwCIvzsQjHpN1xmOrj</a></p>
+</div>
+<div id="разбор-домашнего-задания-4" class="section level2 hasAnchor">
+<h2>Разбор домашнего задания<a href="c7_monetization.html#разбор-домашнего-задания-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Датасеты:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="c7_monetization.html#cb42-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb42-2"><a href="c7_monetization.html#cb42-2" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb42-3"><a href="c7_monetization.html#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="c7_monetization.html#cb42-4" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="st">&#39;LC_ALL&#39;</span>, <span class="st">&#39;en_US.UTF-8&#39;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;LC_CTYPE=en_US.UTF-8;LC_NUMERIC=C;LC_TIME=en_US.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=en_US.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=ru_RU.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=ru_RU.UTF-8;LC_IDENTIFICATION=C&quot;</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="c7_monetization.html#cb44-1" tabindex="-1"></a><span class="co"># импортируем данные</span></span>
+<span id="cb44-2"><a href="c7_monetization.html#cb44-2" tabindex="-1"></a>installs <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv&#39;</span>)</span>
+<span id="cb44-3"><a href="c7_monetization.html#cb44-3" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv&#39;</span>)</span>
+<span id="cb44-4"><a href="c7_monetization.html#cb44-4" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="c7_monetization.html#cb44-5" tabindex="-1"></a><span class="co"># делаем рыбу, чтобы учесть потерянные дни, в которых не было платежей</span></span>
+<span id="cb44-6"><a href="c7_monetization.html#cb44-6" tabindex="-1"></a>arpu_fish <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb44-7"><a href="c7_monetization.html#cb44-7" tabindex="-1"></a>  <span class="at">dt =</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">&#39;2022-06-01&#39;</span>), <span class="fu">as.Date</span>(<span class="st">&#39;2022-07-31&#39;</span>), <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb44-8"><a href="c7_monetization.html#cb44-8" tabindex="-1"></a>)</span>
+<span id="cb44-9"><a href="c7_monetization.html#cb44-9" tabindex="-1"></a>arpu_fish <span class="ot">&lt;-</span> arpu_fish[, <span class="fu">list</span>(<span class="at">lifetime =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>), by <span class="ot">=</span> dt]</span>
+<span id="cb44-10"><a href="c7_monetization.html#cb44-10" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="c7_monetization.html#cb44-11" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="c7_monetization.html#cb44-12" tabindex="-1"></a><span class="co"># корректируем медиасорсы</span></span>
+<span id="cb44-13"><a href="c7_monetization.html#cb44-13" tabindex="-1"></a>installs[media_source <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;organic&#39;</span>, <span class="st">&#39;other&#39;</span>) <span class="sc">|</span> <span class="fu">is.na</span>(media_source), media_source <span class="sc">:=</span> <span class="st">&#39;organic&#39;</span>]</span></code></pre></div>
+<div id="level-2-hntr-8" class="section level3 hasAnchor">
+<h3>level 2 (HNTR)<a href="c7_monetization.html#level-2-hntr-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Рассчитайте табличку с метриками монетизации для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="c7_monetization.html#cb45-1" tabindex="-1"></a><span class="co"># выделяем инсталлы в июне</span></span>
+<span id="cb45-2"><a href="c7_monetization.html#cb45-2" tabindex="-1"></a>installs_june <span class="ot">&lt;-</span> installs[dt <span class="sc">&gt;=</span> <span class="st">&#39;2022-06-01&#39;</span> <span class="sc">&amp;</span> dt <span class="sc">&lt;</span> <span class="st">&#39;2022-07-01&#39;</span>]</span>
+<span id="cb45-3"><a href="c7_monetization.html#cb45-3" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="c7_monetization.html#cb45-4" tabindex="-1"></a>installs_june_stat <span class="ot">&lt;-</span> installs_june[, <span class="fu">list</span>(<span class="at">total_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(media_source)]</span>
+<span id="cb45-5"><a href="c7_monetization.html#cb45-5" tabindex="-1"></a></span>
+<span id="cb45-6"><a href="c7_monetization.html#cb45-6" tabindex="-1"></a>installs_june_stat</span></code></pre></div>
+<pre><code>##         media_source total_users
+##               &lt;char&gt;       &lt;int&gt;
+## 1:      applovin_int       36714
+## 2:           organic       43070
+## 3:      unityads_int       21932
+## 4: googleadwords_int        7767
+## 5:      Facebook Ads        1297</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="c7_monetization.html#cb47-1" tabindex="-1"></a><span class="co"># к платежам присоединяем дату инсталла и источник трафика</span></span>
+<span id="cb47-2"><a href="c7_monetization.html#cb47-2" tabindex="-1"></a>payments_june <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb47-3"><a href="c7_monetization.html#cb47-3" tabindex="-1"></a>  installs_june[, <span class="fu">list</span>(user_pseudo_id, media_source, dt)],</span>
+<span id="cb47-4"><a href="c7_monetization.html#cb47-4" tabindex="-1"></a>  payments,  </span>
+<span id="cb47-5"><a href="c7_monetization.html#cb47-5" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;user_pseudo_id&#39;</span>, <span class="at">all =</span> <span class="cn">FALSE</span></span>
+<span id="cb47-6"><a href="c7_monetization.html#cb47-6" tabindex="-1"></a>)</span>
+<span id="cb47-7"><a href="c7_monetization.html#cb47-7" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="c7_monetization.html#cb47-8" tabindex="-1"></a><span class="co"># берем июньскую когорту и ограничиваем даты лайфтайма</span></span>
+<span id="cb47-9"><a href="c7_monetization.html#cb47-9" tabindex="-1"></a>payments_june[, lifetime <span class="sc">:=</span> pay_dt <span class="sc">-</span> dt]</span>
+<span id="cb47-10"><a href="c7_monetization.html#cb47-10" tabindex="-1"></a>payments_june <span class="ot">&lt;-</span> payments_june[lifetime <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> lifetime <span class="sc">&lt;=</span> <span class="dv">30</span>]</span>
+<span id="cb47-11"><a href="c7_monetization.html#cb47-11" tabindex="-1"></a></span>
+<span id="cb47-12"><a href="c7_monetization.html#cb47-12" tabindex="-1"></a>payments_june_stat <span class="ot">&lt;-</span> payments_june[, <span class="fu">list</span>(</span>
+<span id="cb47-13"><a href="c7_monetization.html#cb47-13" tabindex="-1"></a>  <span class="at">payers_30 =</span> <span class="fu">uniqueN</span>(user_pseudo_id), </span>
+<span id="cb47-14"><a href="c7_monetization.html#cb47-14" tabindex="-1"></a>  <span class="at">gross_30 =</span> <span class="fu">sum</span>(gross),</span>
+<span id="cb47-15"><a href="c7_monetization.html#cb47-15" tabindex="-1"></a>  <span class="at">n_transactions_30 =</span> <span class="fu">length</span>(ts)</span>
+<span id="cb47-16"><a href="c7_monetization.html#cb47-16" tabindex="-1"></a>), by <span class="ot">=</span> <span class="fu">list</span>(media_source)]</span>
+<span id="cb47-17"><a href="c7_monetization.html#cb47-17" tabindex="-1"></a></span>
+<span id="cb47-18"><a href="c7_monetization.html#cb47-18" tabindex="-1"></a>payments_june_stat</span></code></pre></div>
+<pre><code>##         media_source payers_30 gross_30 n_transactions_30
+##               &lt;char&gt;     &lt;int&gt;    &lt;num&gt;             &lt;int&gt;
+## 1:           organic      1000 39958.64              4444
+## 2:      unityads_int       262  6061.02               974
+## 3:      applovin_int      1120 38554.59              4583
+## 4:      Facebook Ads        53   914.41               103
+## 5: googleadwords_int       161  4392.92               518</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="c7_monetization.html#cb49-1" tabindex="-1"></a>users_june_stat <span class="ot">=</span> <span class="fu">merge</span>(</span>
+<span id="cb49-2"><a href="c7_monetization.html#cb49-2" tabindex="-1"></a>    installs_june_stat,</span>
+<span id="cb49-3"><a href="c7_monetization.html#cb49-3" tabindex="-1"></a>    payments_june_stat,</span>
+<span id="cb49-4"><a href="c7_monetization.html#cb49-4" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&#39;media_source&#39;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb49-5"><a href="c7_monetization.html#cb49-5" tabindex="-1"></a>)</span>
+<span id="cb49-6"><a href="c7_monetization.html#cb49-6" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="c7_monetization.html#cb49-7" tabindex="-1"></a>users_june_stat[, gross_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30)]</span>
+<span id="cb49-8"><a href="c7_monetization.html#cb49-8" tabindex="-1"></a>users_june_stat[, Conversion_30 <span class="sc">:=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(payers_30 <span class="sc">*</span> <span class="dv">100</span> <span class="sc">/</span> total_users, <span class="dv">1</span>), <span class="st">&#39;%&#39;</span>)]</span>
+<span id="cb49-9"><a href="c7_monetization.html#cb49-9" tabindex="-1"></a>users_june_stat[, ARPU_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30 <span class="sc">/</span> total_users, <span class="dv">3</span>)]</span>
+<span id="cb49-10"><a href="c7_monetization.html#cb49-10" tabindex="-1"></a>users_june_stat[, ARPPU_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30 <span class="sc">/</span> payers_30, <span class="dv">3</span>)]</span>
+<span id="cb49-11"><a href="c7_monetization.html#cb49-11" tabindex="-1"></a>users_june_stat[, Av.Check_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30 <span class="sc">/</span> n_transactions_30, <span class="dv">1</span>)]</span>
+<span id="cb49-12"><a href="c7_monetization.html#cb49-12" tabindex="-1"></a>users_june_stat[, Av.Purchases_30 <span class="sc">:=</span> <span class="fu">round</span>(n_transactions_30 <span class="sc">/</span> payers_30, <span class="dv">1</span>)]</span>
+<span id="cb49-13"><a href="c7_monetization.html#cb49-13" tabindex="-1"></a></span>
+<span id="cb49-14"><a href="c7_monetization.html#cb49-14" tabindex="-1"></a>users_june_stat[, CPI <span class="sc">:=</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, .<span class="dv">9</span>, <span class="cn">NA</span>, <span class="fl">0.3</span>)]</span>
+<span id="cb49-15"><a href="c7_monetization.html#cb49-15" tabindex="-1"></a>users_june_stat[, RoAS <span class="sc">:=</span> <span class="fu">round</span>(ARPU_30 <span class="sc">/</span> CPI, <span class="dv">3</span>)]</span>
+<span id="cb49-16"><a href="c7_monetization.html#cb49-16" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="c7_monetization.html#cb49-17" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(users_june_stat)</span></code></pre></div>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="8%" />
+<col width="7%" />
+<col width="6%" />
+<col width="13%" />
+<col width="10%" />
+<col width="5%" />
+<col width="6%" />
+<col width="8%" />
+<col width="11%" />
+<col width="2%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">media_source</th>
+<th align="right">total_users</th>
+<th align="right">payers_30</th>
+<th align="right">gross_30</th>
+<th align="right">n_transactions_30</th>
+<th align="left">Conversion_30</th>
+<th align="right">ARPU_30</th>
+<th align="right">ARPPU_30</th>
+<th align="right">Av.Check_30</th>
+<th align="right">Av.Purchases_30</th>
+<th align="right">CPI</th>
+<th align="right">RoAS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Facebook Ads</td>
+<td align="right">1297</td>
+<td align="right">53</td>
+<td align="right">914</td>
+<td align="right">103</td>
+<td align="left">4.1%</td>
+<td align="right">0.705</td>
+<td align="right">17.245</td>
+<td align="right">8.9</td>
+<td align="right">1.9</td>
+<td align="right">0.5</td>
+<td align="right">1.410</td>
+</tr>
+<tr class="even">
+<td align="left">applovin_int</td>
+<td align="right">36714</td>
+<td align="right">1120</td>
+<td align="right">38555</td>
+<td align="right">4583</td>
+<td align="left">3.1%</td>
+<td align="right">1.050</td>
+<td align="right">34.424</td>
+<td align="right">8.4</td>
+<td align="right">4.1</td>
+<td align="right">2.0</td>
+<td align="right">0.525</td>
+</tr>
+<tr class="odd">
+<td align="left">googleadwords_int</td>
+<td align="right">7767</td>
+<td align="right">161</td>
+<td align="right">4393</td>
+<td align="right">518</td>
+<td align="left">2.1%</td>
+<td align="right">0.566</td>
+<td align="right">27.286</td>
+<td align="right">8.5</td>
+<td align="right">3.2</td>
+<td align="right">0.9</td>
+<td align="right">0.629</td>
+</tr>
+<tr class="even">
+<td align="left">organic</td>
+<td align="right">43070</td>
+<td align="right">1000</td>
+<td align="right">39959</td>
+<td align="right">4444</td>
+<td align="left">2.3%</td>
+<td align="right">0.928</td>
+<td align="right">39.959</td>
+<td align="right">9.0</td>
+<td align="right">4.4</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">unityads_int</td>
+<td align="right">21932</td>
+<td align="right">262</td>
+<td align="right">6061</td>
+<td align="right">974</td>
+<td align="left">1.2%</td>
+<td align="right">0.276</td>
+<td align="right">23.134</td>
+<td align="right">6.2</td>
+<td align="right">3.7</td>
+<td align="right">0.3</td>
+<td align="right">0.920</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="level-3-hmp-5" class="section level3 hasAnchor">
+<h3>level 3 (HMP)<a href="c7_monetization.html#level-3-hmp-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Рассчитайте табличку с метриками монетизации для июньской и июльской когорт (должно быть две строки в табличке, отдельно на каждую когорту). Выберите правильный период лайфтайма. Попробуйте проинтерпретировать результаты.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="c7_monetization.html#cb50-1" tabindex="-1"></a>installs_jj <span class="ot">&lt;-</span> installs[dt <span class="sc">&lt;</span> <span class="st">&#39;2022-07-25&#39;</span>]</span>
+<span id="cb50-2"><a href="c7_monetization.html#cb50-2" tabindex="-1"></a>installs_jj[, month <span class="sc">:=</span> <span class="fu">strftime</span>(dt, <span class="st">&#39;%B&#39;</span>)]</span>
+<span id="cb50-3"><a href="c7_monetization.html#cb50-3" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="c7_monetization.html#cb50-4" tabindex="-1"></a>installs_jj_stat <span class="ot">&lt;-</span> installs_jj[, <span class="fu">list</span>(<span class="at">total_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(month)]</span>
+<span id="cb50-5"><a href="c7_monetization.html#cb50-5" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="c7_monetization.html#cb50-6" tabindex="-1"></a><span class="co"># к платежам присоединяем дату инсталла и источник трафика</span></span>
+<span id="cb50-7"><a href="c7_monetization.html#cb50-7" tabindex="-1"></a>payments_jj <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb50-8"><a href="c7_monetization.html#cb50-8" tabindex="-1"></a>  installs_jj[, <span class="fu">list</span>(user_pseudo_id, month, dt)],</span>
+<span id="cb50-9"><a href="c7_monetization.html#cb50-9" tabindex="-1"></a>  payments,  </span>
+<span id="cb50-10"><a href="c7_monetization.html#cb50-10" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;user_pseudo_id&#39;</span>, <span class="at">all =</span> <span class="cn">FALSE</span></span>
+<span id="cb50-11"><a href="c7_monetization.html#cb50-11" tabindex="-1"></a>)</span>
+<span id="cb50-12"><a href="c7_monetization.html#cb50-12" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="c7_monetization.html#cb50-13" tabindex="-1"></a><span class="co"># берем июньскую когорту и ограничиваем даты лайфтайма</span></span>
+<span id="cb50-14"><a href="c7_monetization.html#cb50-14" tabindex="-1"></a>payments_jj[, lifetime <span class="sc">:=</span> pay_dt <span class="sc">-</span> dt]</span>
+<span id="cb50-15"><a href="c7_monetization.html#cb50-15" tabindex="-1"></a>payments_jj <span class="ot">&lt;-</span> payments_jj[lifetime <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> lifetime <span class="sc">&lt;=</span> <span class="dv">7</span>]</span>
+<span id="cb50-16"><a href="c7_monetization.html#cb50-16" tabindex="-1"></a></span>
+<span id="cb50-17"><a href="c7_monetization.html#cb50-17" tabindex="-1"></a>payments_jj_stat <span class="ot">&lt;-</span> payments_jj[, <span class="fu">list</span>(</span>
+<span id="cb50-18"><a href="c7_monetization.html#cb50-18" tabindex="-1"></a>  <span class="at">payers_7 =</span> <span class="fu">uniqueN</span>(user_pseudo_id), </span>
+<span id="cb50-19"><a href="c7_monetization.html#cb50-19" tabindex="-1"></a>  <span class="at">gross_7 =</span> <span class="fu">sum</span>(gross),</span>
+<span id="cb50-20"><a href="c7_monetization.html#cb50-20" tabindex="-1"></a>  <span class="at">n_transactions_7 =</span> <span class="fu">length</span>(ts)</span>
+<span id="cb50-21"><a href="c7_monetization.html#cb50-21" tabindex="-1"></a>), by <span class="ot">=</span> <span class="fu">list</span>(month)]</span>
+<span id="cb50-22"><a href="c7_monetization.html#cb50-22" tabindex="-1"></a></span>
+<span id="cb50-23"><a href="c7_monetization.html#cb50-23" tabindex="-1"></a>users_jj_stat <span class="ot">=</span> <span class="fu">merge</span>(</span>
+<span id="cb50-24"><a href="c7_monetization.html#cb50-24" tabindex="-1"></a>    installs_jj_stat,</span>
+<span id="cb50-25"><a href="c7_monetization.html#cb50-25" tabindex="-1"></a>    payments_jj_stat,</span>
+<span id="cb50-26"><a href="c7_monetization.html#cb50-26" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&#39;month&#39;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb50-27"><a href="c7_monetization.html#cb50-27" tabindex="-1"></a>)</span>
+<span id="cb50-28"><a href="c7_monetization.html#cb50-28" tabindex="-1"></a></span>
+<span id="cb50-29"><a href="c7_monetization.html#cb50-29" tabindex="-1"></a>users_jj_stat[, gross_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7)]</span>
+<span id="cb50-30"><a href="c7_monetization.html#cb50-30" tabindex="-1"></a>users_jj_stat[, Conversion_7 <span class="sc">:=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(payers_7 <span class="sc">*</span> <span class="dv">100</span> <span class="sc">/</span> total_users, <span class="dv">1</span>), <span class="st">&#39;%&#39;</span>)]</span>
+<span id="cb50-31"><a href="c7_monetization.html#cb50-31" tabindex="-1"></a>users_jj_stat[, ARPU_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7 <span class="sc">/</span> total_users, <span class="dv">3</span>)]</span>
+<span id="cb50-32"><a href="c7_monetization.html#cb50-32" tabindex="-1"></a>users_jj_stat[, ARPPU_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7 <span class="sc">/</span> payers_7, <span class="dv">3</span>)]</span>
+<span id="cb50-33"><a href="c7_monetization.html#cb50-33" tabindex="-1"></a>users_jj_stat[, Av.Check_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7 <span class="sc">/</span> n_transactions_7, <span class="dv">1</span>)]</span>
+<span id="cb50-34"><a href="c7_monetization.html#cb50-34" tabindex="-1"></a>users_jj_stat[, Av.Purchases_7 <span class="sc">:=</span> <span class="fu">round</span>(n_transactions_7 <span class="sc">/</span> payers_7, <span class="dv">1</span>)]</span>
+<span id="cb50-35"><a href="c7_monetization.html#cb50-35" tabindex="-1"></a></span>
+<span id="cb50-36"><a href="c7_monetization.html#cb50-36" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(users_jj_stat)</span></code></pre></div>
+<table style="width:100%;">
+<colgroup>
+<col width="5%" />
+<col width="11%" />
+<col width="8%" />
+<col width="7%" />
+<col width="16%" />
+<col width="12%" />
+<col width="6%" />
+<col width="7%" />
+<col width="10%" />
+<col width="14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">month</th>
+<th align="right">total_users</th>
+<th align="right">payers_7</th>
+<th align="right">gross_7</th>
+<th align="right">n_transactions_7</th>
+<th align="left">Conversion_7</th>
+<th align="right">ARPU_7</th>
+<th align="right">ARPPU_7</th>
+<th align="right">Av.Check_7</th>
+<th align="right">Av.Purchases_7</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">July</td>
+<td align="right">11843</td>
+<td align="right">217</td>
+<td align="right">4582</td>
+<td align="right">757</td>
+<td align="left">1.8%</td>
+<td align="right">0.387</td>
+<td align="right">21.115</td>
+<td align="right">6.1</td>
+<td align="right">3.5</td>
+</tr>
+<tr class="even">
+<td align="left">June</td>
+<td align="right">110780</td>
+<td align="right">2059</td>
+<td align="right">42518</td>
+<td align="right">5217</td>
+<td align="left">1.9%</td>
+<td align="right">0.384</td>
+<td align="right">20.650</td>
+<td align="right">8.1</td>
+<td align="right">2.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="level-4-uv-8" class="section level3 hasAnchor">
+<h3>level 4 (UV)<a href="c7_monetization.html#level-4-uv-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Постройте воронку платежей для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="c7_monetization.html#cb51-1" tabindex="-1"></a><span class="co"># выше мы уже делали вычисление дней от инсталла и фильтрацию на 30 дней</span></span>
+<span id="cb51-2"><a href="c7_monetization.html#cb51-2" tabindex="-1"></a>payments_june <span class="ot">&lt;-</span> payments_june[<span class="fu">order</span>(user_pseudo_id, ts)]</span>
+<span id="cb51-3"><a href="c7_monetization.html#cb51-3" tabindex="-1"></a>payments_june[, purchase_number <span class="sc">:=</span> <span class="fu">seq_len</span>(.N), by <span class="ot">=</span> user_pseudo_id]</span>
+<span id="cb51-4"><a href="c7_monetization.html#cb51-4" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="c7_monetization.html#cb51-5" tabindex="-1"></a><span class="co"># считаем, сколько пользователей сделало платеж с этим номером</span></span>
+<span id="cb51-6"><a href="c7_monetization.html#cb51-6" tabindex="-1"></a>payments_funnel <span class="ot">&lt;-</span> payments_june[, <span class="fu">list</span>(<span class="at">n_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), keyby <span class="ot">=</span> purchase_number]</span>
+<span id="cb51-7"><a href="c7_monetization.html#cb51-7" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="c7_monetization.html#cb51-8" tabindex="-1"></a><span class="co"># считаем посчитать долю от всего пользователей, сделавших платеж (purchase_number == 1)</span></span>
+<span id="cb51-9"><a href="c7_monetization.html#cb51-9" tabindex="-1"></a>payments_funnel[, total_payers <span class="sc">:=</span> n_users[purchase_number <span class="sc">==</span> <span class="dv">1</span>]]</span>
+<span id="cb51-10"><a href="c7_monetization.html#cb51-10" tabindex="-1"></a></span>
+<span id="cb51-11"><a href="c7_monetization.html#cb51-11" tabindex="-1"></a><span class="co"># если у нас есть группировка, то надо отдельно считать и мерджить по ключу</span></span>
+<span id="cb51-12"><a href="c7_monetization.html#cb51-12" tabindex="-1"></a></span>
+<span id="cb51-13"><a href="c7_monetization.html#cb51-13" tabindex="-1"></a><span class="co"># рисуем</span></span>
+<span id="cb51-14"><a href="c7_monetization.html#cb51-14" tabindex="-1"></a>payments_funnel[, share <span class="sc">:=</span> n_users <span class="sc">/</span> total_payers]</span>
+<span id="cb51-15"><a href="c7_monetization.html#cb51-15" tabindex="-1"></a></span>
+<span id="cb51-16"><a href="c7_monetization.html#cb51-16" tabindex="-1"></a><span class="fu">plot_ly</span>(payments_funnel[purchase_number <span class="sc">&lt;=</span> <span class="dv">10</span>], </span>
+<span id="cb51-17"><a href="c7_monetization.html#cb51-17" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>purchase_number, <span class="at">y =</span> <span class="sc">~</span>share, <span class="at">type =</span> <span class="st">&#39;bar&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb51-18"><a href="c7_monetization.html#cb51-18" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb51-19"><a href="c7_monetization.html#cb51-19" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Воронка платежей&#39;</span></span>
+<span id="cb51-20"><a href="c7_monetization.html#cb51-20" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb51-21"><a href="c7_monetization.html#cb51-21" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c4e4c5fad7a95d391485" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-c4e4c5fad7a95d391485">{"x":{"visdat":{"1f4b10e5acd3":["function () ","plotlyVisDat"]},"cur_data":"1f4b10e5acd3","attrs":{"1f4b10e5acd3":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Воронка платежей","xaxis":{"domain":[0,1],"automargin":true,"title":"purchase_number"},"yaxis":{"domain":[0,1],"automargin":true,"title":"share"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10],"y":[1,0.53620955315870567,0.35978428351309705,0.26771956856702617,0.2083975346687211,0.17488443759630201,0.14291217257318953,0.12326656394453005,0.1059322033898305,0.095916795069337438],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Воронки можно считать не от первого шага, а от предыдущего. В некоторых случаях это удобнее и информативнее.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="c7_monetization.html#cb52-1" tabindex="-1"></a><span class="co"># если хотим считать от предыдущего шага</span></span>
+<span id="cb52-2"><a href="c7_monetization.html#cb52-2" tabindex="-1"></a>payments_funnel[, prev_users <span class="sc">:=</span> <span class="fu">shift</span>(n_users, <span class="at">n =</span> <span class="dv">1</span>)]</span>
+<span id="cb52-3"><a href="c7_monetization.html#cb52-3" tabindex="-1"></a>payments_funnel[, prev_share <span class="sc">:=</span> n_users <span class="sc">/</span> prev_users]</span>
+<span id="cb52-4"><a href="c7_monetization.html#cb52-4" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="c7_monetization.html#cb52-5" tabindex="-1"></a><span class="fu">plot_ly</span>(payments_funnel[purchase_number <span class="sc">&lt;=</span> <span class="dv">10</span>], </span>
+<span id="cb52-6"><a href="c7_monetization.html#cb52-6" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>purchase_number, <span class="at">y =</span> <span class="sc">~</span>prev_share, <span class="at">type =</span> <span class="st">&#39;bar&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb52-7"><a href="c7_monetization.html#cb52-7" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb52-8"><a href="c7_monetization.html#cb52-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Воронка платежей, доля от предыдущего&#39;</span></span>
+<span id="cb52-9"><a href="c7_monetization.html#cb52-9" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb52-10"><a href="c7_monetization.html#cb52-10" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## Warning: Ignoring 1 observations</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4f6306fa52619383606b" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-4f6306fa52619383606b">{"x":{"visdat":{"1f4bdfb6f42":["function () ","plotlyVisDat"]},"cur_data":"1f4bdfb6f42","attrs":{"1f4bdfb6f42":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Воронка платежей, доля от предыдущего","xaxis":{"domain":[0,1],"automargin":true,"title":"purchase_number"},"yaxis":{"domain":[0,1],"automargin":true,"title":"prev_share"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[2,3,4,5,6,7,8,9,10],"y":[0.53620955315870567,0.67097701149425293,0.74411134903640253,0.77841726618705032,0.83918669131238444,0.81718061674008813,0.86253369272237201,0.859375,0.9054545454545454],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<p>Обе воронки сразу</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="c7_monetization.html#cb54-1" tabindex="-1"></a><span class="fu">plot_ly</span>(payments_funnel[purchase_number <span class="sc">&lt;=</span> <span class="dv">10</span>], </span>
+<span id="cb54-2"><a href="c7_monetization.html#cb54-2" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>purchase_number, <span class="at">y =</span> <span class="sc">~</span>share, <span class="at">type =</span> <span class="st">&#39;bar&#39;</span>, <span class="at">name =</span> <span class="st">&#39;% from payers&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-3"><a href="c7_monetization.html#cb54-3" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">y =</span> <span class="sc">~</span>prev_share, <span class="at">name =</span> <span class="st">&#39;% from prev&#39;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb54-4"><a href="c7_monetization.html#cb54-4" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
+<span id="cb54-5"><a href="c7_monetization.html#cb54-5" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Воронка платежей&#39;</span></span>
+<span id="cb54-6"><a href="c7_monetization.html#cb54-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb54-7"><a href="c7_monetization.html#cb54-7" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
+<pre><code>## Warning: Ignoring 1 observations</code></pre>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-9a23dc3beeece08a7a52" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-9a23dc3beeece08a7a52">{"x":{"visdat":{"1f4b2a350834":["function () ","plotlyVisDat"]},"cur_data":"1f4b2a350834","attrs":{"1f4b2a350834":{"x":{},"y":{},"name":"% from payers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"1f4b2a350834.1":{"x":{},"y":{},"name":"% from prev","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Воронка платежей","xaxis":{"domain":[0,1],"automargin":true,"title":"purchase_number"},"yaxis":{"domain":[0,1],"automargin":true,"title":"share"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10],"y":[1,0.53620955315870567,0.35978428351309705,0.26771956856702617,0.2083975346687211,0.17488443759630201,0.14291217257318953,0.12326656394453005,0.1059322033898305,0.095916795069337438],"name":"% from payers","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,3,4,5,6,7,8,9,10],"y":[0.53620955315870567,0.67097701149425293,0.74411134903640253,0.77841726618705032,0.83918669131238444,0.81718061674008813,0.86253369272237201,0.859375,0.9054545454545454],"name":"% from prev","type":"bar","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="c6_monetization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ux.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": false,
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"scroll_highlight": true
+},
+"toolbar": {
+"position": "static"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
