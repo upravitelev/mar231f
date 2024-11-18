@@ -24,7 +24,8 @@ library(plotly)
 library(magrittr)
 
 # импортируем данные
-installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+# installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+installs <- fread('./data/installs.csv')
 
 # считаем количество уникальных пользователей по дням
 intalls_stat <- installs[, list(n_users = uniqueN(user_pseudo_id)), 
@@ -67,7 +68,8 @@ plot_ly(intalls_stat, x = ~dt, y = ~n_users, color = ~media_source,
 options(timeout=360)
 
 # импортируем датасает
-dau <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv')
+# dau <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv')
+dau <- fread('./data/logins.csv')
 
 # считаем количество дней от инсталла
 dau[, lifetime := login_dt - install_dt]

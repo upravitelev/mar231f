@@ -17,8 +17,11 @@ library(data.table)
 library(plotly)
 
 # импортируем данные
-installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
-payments <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv')
+# installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+installs <- fread('./data/installs.csv')
+
+# payments <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv')
+payments <- fread('./data/payments.csv')
 
 # делаем рыбу, чтобы учесть потерянные дни, в которых не было платежей
 arpu_fish <- data.table(

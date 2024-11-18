@@ -24,9 +24,11 @@ library(plotly)
 # чтобы загрузка не обрывалась по таймауту, если слабый интернет
 options(timeout=360)
 
-installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
-logins <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv')
+# installs <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv')
+installs <- fread('./data/installs.csv')
 
+# logins <- fread('https://gitlab.com/hse_mar/mar211f/-/raw/main/data/dau.csv')
+logins <- fread('./data/logins.csv')
 
 # выделяем инсталлы в июне
 installs_june <- installs[dt >= '2022-06-01' & dt < '2022-07-01']

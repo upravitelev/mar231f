@@ -17,7 +17,7 @@ rmd_files: [
   'hw_1.Rmd',
   # '7_sql.Rmd',
   # '8_sql.Rmd',
-  # '9_abtest.Rmd',
+  '8_abtest.Rmd',
   # '11_nhst.Rmd',
   # '12_power.Rmd',
   # '13_case.Rmd',
