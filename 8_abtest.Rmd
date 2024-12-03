@@ -47,7 +47,7 @@ Data-informed подход
 
 ## Rice framework
 
-<img src="./pics/rice_formula.png" width="90%" style="position:absolute;">
+<img src="./pics/rice_formula.png" width="70%">
 
 ### Охват (Reach)
 

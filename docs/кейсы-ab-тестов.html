@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Page not found | Методы анализа больших данных</title>
-  <meta name="description" content="Page not found | Методы анализа больших данных" />
+  <title>Кейсы A/B-тестов | Методы анализа больших данных</title>
+  <meta name="description" content="Кейсы A/B-тестов | Методы анализа больших данных" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Page not found | Методы анализа больших данных" />
+  <meta property="og:title" content="Кейсы A/B-тестов | Методы анализа больших данных" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Page not found | Методы анализа больших данных" />
+  <meta name="twitter:title" content="Кейсы A/B-тестов | Методы анализа больших данных" />
   
   
   
@@ -30,7 +30,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
+<link rel="prev" href="основы-статистики.html"/>
 
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -411,18 +411,70 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="page-not-found" class="section level1">
-<h1>Page not found</h1>
-<p>The page you requested cannot be found (perhaps it was moved or renamed).</p>
-<p>You may want to try searching to find the page's new location, or use
-the table of contents to find the page you are looking for.</p>
+<div id="кейсы-ab-тестов" class="section level1 unnumbered hasAnchor">
+<h1>Кейсы A/B-тестов<a href="кейсы-ab-тестов.html#кейсы-ab-тестов" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="запись-занятия-10" class="section level2 unnumbered hasAnchor">
+<h2>Запись занятия<a href="кейсы-ab-тестов.html#запись-занятия-10" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/NXf7sLRncQc?si=aAaRf-L8ohNqa3j_" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+</iframe>
+</div>
+<div id="домашнее-задание-6" class="section level2 hasAnchor">
+<h2>Домашнее задание<a href="кейсы-ab-тестов.html#домашнее-задание-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="level-1-iatytd-5" class="section level3 hasAnchor">
+<h3>level 1 (IATYTD)<a href="кейсы-ab-тестов.html#level-1-iatytd-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<!-- На следующем занятии мы должны провести контрольную. Основные темы -- дизайн аб-тестов (что, зачем, почему, ошибки) и базовые определения из статистики, которая используется в A/B-тестах. Формат контрольной -- тест в гугл-формах с закрытыми вариантами ответов. -->
+<!-- Перечитайте конспекты / презентации. -->
+<p>Задание из тестового задания на продуктового аналитика Авиасейлз.</p>
+<p>У нас есть сервис поиска дешевых авиабилетов. Основная воронка: юзер зашел на сайт, нажал “искать билеты”, открыл конкретный билет, выбрал предложение конкретного партнера и перешел к нему на сайт, купил билет на сайте. Партнер платит нам комиссию за покупку билета.</p>
+<p>К нам приходит новый потенциальный партнер и хочет, чтобы мы добавили его в поисковую выдачу.
+Как оценить целесообразность добавления партнера в выдачу? Можно предположить, что мы можем проводить любые эксперименты (в пределах разумного).</p>
+</div>
+<div id="level-2-hntr-9" class="section level3 hasAnchor">
+<h3>level 2 (HNTR)<a href="кейсы-ab-тестов.html#level-2-hntr-9" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Прочитайте <a href="https://medstatistic.ru/methods/methods4.html">пример расчета</a> критерия <span class="math inline">\(\chi^2\)</span>-Пирсона. Повторите его вручную (повторите действия, которые описаны на странице).
+Проверьте значимость различия групп с помощью R / Python (необходимо выбрать соответствующую функцию и/или пакет).</p>
+</div>
+<div id="level-3-hmp-6" class="section level3 hasAnchor">
+<h3>level 3 (HMP)<a href="кейсы-ab-тестов.html#level-3-hmp-6" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Сгенерируйте две выборки из нормального распределения (N = 100 в каждой, средние различаются на 5). Сравните, значимо ли различие выборок с помощью R / Python с помощью <span class="math inline">\(t\)</span>-критерия Стьюдента (необходимо выбрать соответствующую функцию и/или пакет).</p>
+<p>Для семплирования вам нужны функция <code>rnorm()</code> в R и пакет <code>numpy</code> в Python (там либо <code>numpy.random.Generator.normal</code>, либо <code>numpy.random.normal</code>, но это устаревшая функция).</p>
+</div>
+<div id="level-4-uv-9" class="section level3 hasAnchor">
+<h3>level 4 (UV)<a href="кейсы-ab-тестов.html#level-4-uv-9" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Задание из тестового задания на продуктового аналитика в Альфа-банк.</p>
+<p>Был проведен эксперимент: изменение заголовка на кнопке на главном экране подписной страницы. Сделан акцент на выгоде пользователя.</p>
+<p><img src="pics/alfa_ab_test_pic.jpeg" width="80%"></p>
+<p>Описание полей:</p>
+<ul>
+<li>date – Дата</li>
+<li>deviceCategory – Тип устройства</li>
+<li>sourceMedium – Источник и канал привлечения</li>
+<li>experimentVariant – Группа (варианта) эксперимента: 0 - контроль, 1 - тест</li>
+<li>clickButtonOnMain – Кликнул/не кликнул по кнопке на главной странице в рамках сеанса (1 – кликнул, или 0 – не кликнул)</li>
+<li>sessionDuration – Время проведенное на сайте в рамках сеанса</li>
+</ul>
+<p>Данные: <a href="https://raw.githubusercontent.com/upravitelev/mar231f/refs/heads/main/data/AB_ab_2_1.csv">AB_ab_2_1</a></p>
+<p>Проверьте гипотезы:</p>
+<ul>
+<li>Есть ли значимое изменение в большую или меньшую сторону у клика на целевую кнопку?</li>
+<li>Изменилось ли время проведенное на сайте в рамках сеанса?</li>
+<li>Напишите, какими тестами пользовались и почему выбрали их?</li>
+<li>Напишите выводы, которые можно сделать на основе анализа.</li>
+</ul>
+</div>
+<div id="level-5-n-8" class="section level3 hasAnchor">
+<h3>level 5 (N)<a href="кейсы-ab-тестов.html#level-5-n-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Определите, какая нужна выборка для тестирования ретеншена первого дня (ret1), если учесть, что мы ожидаем ret1 = 35%, и хотим погрешность в пределах +-1%.</p>
+
+</div>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
+<a href="основы-статистики.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
