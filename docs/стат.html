@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Метрики монетизации pt.4 | Методы анализа больших данных</title>
-  <meta name="description" content="Метрики монетизации pt.4 | Методы анализа больших данных" />
+  <title>Стат.критерии | Методы анализа больших данных</title>
+  <meta name="description" content="Стат.критерии | Методы анализа больших данных" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Метрики монетизации pt.4 | Методы анализа больших данных" />
+  <meta property="og:title" content="Стат.критерии | Методы анализа больших данных" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Метрики монетизации pt.4 | Методы анализа больших данных" />
+  <meta name="twitter:title" content="Стат.критерии | Методы анализа больших данных" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="c6_monetization.html"/>
-<link rel="next" href="ux.html"/>
+<link rel="prev" href="кейсы-ab-тестов.html"/>
+<link rel="next" href="homework-2.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -416,350 +416,131 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="c7_monetization" class="section level1 hasAnchor">
-<h1>Метрики монетизации pt.4<a href="c7_monetization.html#c7_monetization" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="запись-занятия-6" class="section level2 unnumbered hasAnchor">
-<h2>Запись занятия<a href="c7_monetization.html#запись-занятия-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3JY43wF9mVM?si=9DNqdaVefwRm6TmP" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+<div id="стат.критерии" class="section level1 hasAnchor">
+<h1>Стат.критерии<a href="стат.html#стат.критерии" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="запись-занятия-11" class="section level2 hasAnchor">
+<h2>Запись занятия<a href="стат.html#запись-занятия-11" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/uD1DNim8Is4?si=VQnoN1TL7PvwBdub" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
 </iframe>
 </div>
-<div id="код-занятия-на-python-4" class="section level2 hasAnchor">
-<h2>Код занятия на Python<a href="c7_monetization.html#код-занятия-на-python-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><a href="https://colab.research.google.com/drive/1V4x-LdknR1vVhgrwCIvzsQjHpN1xmOrj" class="uri">https://colab.research.google.com/drive/1V4x-LdknR1vVhgrwCIvzsQjHpN1xmOrj</a></p>
+<div id="код-занятия-на-python-5" class="section level2 hasAnchor">
+<h2>Код занятия на Python<a href="стат.html#код-занятия-на-python-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://colab.research.google.com/drive/19wQXtrX6in8Sj305043R1hnMCF_F9tno" class="uri">https://colab.research.google.com/drive/19wQXtrX6in8Sj305043R1hnMCF_F9tno</a></p>
 </div>
-<div id="разбор-домашнего-задания-4" class="section level2 hasAnchor">
-<h2>Разбор домашнего задания<a href="c7_monetization.html#разбор-домашнего-задания-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Датасеты:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="c7_monetization.html#cb42-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb42-2"><a href="c7_monetization.html#cb42-2" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
-<span id="cb42-3"><a href="c7_monetization.html#cb42-3" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="c7_monetization.html#cb42-4" tabindex="-1"></a><span class="fu">Sys.setlocale</span>(<span class="st">&#39;LC_ALL&#39;</span>, <span class="st">&#39;en_US.UTF-8&#39;</span>)</span></code></pre></div>
-<pre><code>## [1] &quot;LC_CTYPE=en_US.UTF-8;LC_NUMERIC=C;LC_TIME=en_US.UTF-8;LC_COLLATE=en_US.UTF-8;LC_MONETARY=en_US.UTF-8;LC_MESSAGES=en_US.UTF-8;LC_PAPER=ru_RU.UTF-8;LC_NAME=C;LC_ADDRESS=C;LC_TELEPHONE=C;LC_MEASUREMENT=ru_RU.UTF-8;LC_IDENTIFICATION=C&quot;</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="c7_monetization.html#cb44-1" tabindex="-1"></a><span class="co"># импортируем данные</span></span>
-<span id="cb44-2"><a href="c7_monetization.html#cb44-2" tabindex="-1"></a><span class="co"># installs &lt;- fread(&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/installs.csv&#39;)</span></span>
-<span id="cb44-3"><a href="c7_monetization.html#cb44-3" tabindex="-1"></a>installs <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;./data/installs.csv&#39;</span>)</span>
-<span id="cb44-4"><a href="c7_monetization.html#cb44-4" tabindex="-1"></a></span>
-<span id="cb44-5"><a href="c7_monetization.html#cb44-5" tabindex="-1"></a><span class="co"># payments &lt;- fread(&#39;https://gitlab.com/hse_mar/mar211f/-/raw/main/data/payments_custom.csv&#39;)</span></span>
-<span id="cb44-6"><a href="c7_monetization.html#cb44-6" tabindex="-1"></a>payments <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;./data/payments.csv&#39;</span>)</span>
-<span id="cb44-7"><a href="c7_monetization.html#cb44-7" tabindex="-1"></a></span>
-<span id="cb44-8"><a href="c7_monetization.html#cb44-8" tabindex="-1"></a></span>
-<span id="cb44-9"><a href="c7_monetization.html#cb44-9" tabindex="-1"></a><span class="co"># делаем рыбу, чтобы учесть потерянные дни, в которых не было платежей</span></span>
-<span id="cb44-10"><a href="c7_monetization.html#cb44-10" tabindex="-1"></a>arpu_fish <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
-<span id="cb44-11"><a href="c7_monetization.html#cb44-11" tabindex="-1"></a>  <span class="at">dt =</span> <span class="fu">seq</span>(<span class="fu">as.Date</span>(<span class="st">&#39;2022-06-01&#39;</span>), <span class="fu">as.Date</span>(<span class="st">&#39;2022-07-31&#39;</span>), <span class="at">by =</span> <span class="dv">1</span>)</span>
-<span id="cb44-12"><a href="c7_monetization.html#cb44-12" tabindex="-1"></a>)</span>
-<span id="cb44-13"><a href="c7_monetization.html#cb44-13" tabindex="-1"></a>arpu_fish <span class="ot">&lt;-</span> arpu_fish[, <span class="fu">list</span>(<span class="at">lifetime =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">30</span>), by <span class="ot">=</span> dt]</span>
-<span id="cb44-14"><a href="c7_monetization.html#cb44-14" tabindex="-1"></a></span>
-<span id="cb44-15"><a href="c7_monetization.html#cb44-15" tabindex="-1"></a></span>
-<span id="cb44-16"><a href="c7_monetization.html#cb44-16" tabindex="-1"></a><span class="co"># корректируем медиасорсы</span></span>
-<span id="cb44-17"><a href="c7_monetization.html#cb44-17" tabindex="-1"></a>installs[media_source <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&#39;organic&#39;</span>, <span class="st">&#39;other&#39;</span>, <span class="st">&#39;&#39;</span>) <span class="sc">|</span> <span class="fu">is.na</span>(media_source), media_source <span class="sc">:=</span> <span class="st">&#39;organic&#39;</span>]</span></code></pre></div>
-<div id="level-2-hntr-8" class="section level3 hasAnchor">
-<h3>level 2 (HNTR)<a href="c7_monetization.html#level-2-hntr-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Рассчитайте табличку с метриками монетизации для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="c7_monetization.html#cb45-1" tabindex="-1"></a><span class="co"># выделяем инсталлы в июне</span></span>
-<span id="cb45-2"><a href="c7_monetization.html#cb45-2" tabindex="-1"></a>installs_june <span class="ot">&lt;-</span> installs[dt <span class="sc">&gt;=</span> <span class="st">&#39;2022-06-01&#39;</span> <span class="sc">&amp;</span> dt <span class="sc">&lt;</span> <span class="st">&#39;2022-07-01&#39;</span>]</span>
-<span id="cb45-3"><a href="c7_monetization.html#cb45-3" tabindex="-1"></a></span>
-<span id="cb45-4"><a href="c7_monetization.html#cb45-4" tabindex="-1"></a>installs_june_stat <span class="ot">&lt;-</span> installs_june[, <span class="fu">list</span>(<span class="at">total_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(media_source)]</span>
-<span id="cb45-5"><a href="c7_monetization.html#cb45-5" tabindex="-1"></a></span>
-<span id="cb45-6"><a href="c7_monetization.html#cb45-6" tabindex="-1"></a>installs_june_stat</span></code></pre></div>
-<pre><code>##         media_source total_users
-##               &lt;char&gt;       &lt;int&gt;
-## 1:      applovin_int       36714
-## 2:           organic       43070
-## 3:      unityads_int       21932
-## 4: googleadwords_int        7767
-## 5:      Facebook Ads        1297</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="c7_monetization.html#cb47-1" tabindex="-1"></a><span class="co"># к платежам присоединяем дату инсталла и источник трафика</span></span>
-<span id="cb47-2"><a href="c7_monetization.html#cb47-2" tabindex="-1"></a>payments_june <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb47-3"><a href="c7_monetization.html#cb47-3" tabindex="-1"></a>  installs_june[, <span class="fu">list</span>(user_pseudo_id, media_source, dt)],</span>
-<span id="cb47-4"><a href="c7_monetization.html#cb47-4" tabindex="-1"></a>  payments,  </span>
-<span id="cb47-5"><a href="c7_monetization.html#cb47-5" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;user_pseudo_id&#39;</span>, <span class="at">all =</span> <span class="cn">FALSE</span></span>
-<span id="cb47-6"><a href="c7_monetization.html#cb47-6" tabindex="-1"></a>)</span>
-<span id="cb47-7"><a href="c7_monetization.html#cb47-7" tabindex="-1"></a></span>
-<span id="cb47-8"><a href="c7_monetization.html#cb47-8" tabindex="-1"></a><span class="co"># берем июньскую когорту и ограничиваем даты лайфтайма</span></span>
-<span id="cb47-9"><a href="c7_monetization.html#cb47-9" tabindex="-1"></a>payments_june[, lifetime <span class="sc">:=</span> pay_dt <span class="sc">-</span> dt]</span>
-<span id="cb47-10"><a href="c7_monetization.html#cb47-10" tabindex="-1"></a>payments_june <span class="ot">&lt;-</span> payments_june[lifetime <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> lifetime <span class="sc">&lt;=</span> <span class="dv">30</span>]</span>
-<span id="cb47-11"><a href="c7_monetization.html#cb47-11" tabindex="-1"></a></span>
-<span id="cb47-12"><a href="c7_monetization.html#cb47-12" tabindex="-1"></a>payments_june_stat <span class="ot">&lt;-</span> payments_june[, <span class="fu">list</span>(</span>
-<span id="cb47-13"><a href="c7_monetization.html#cb47-13" tabindex="-1"></a>  <span class="at">payers_30 =</span> <span class="fu">uniqueN</span>(user_pseudo_id), </span>
-<span id="cb47-14"><a href="c7_monetization.html#cb47-14" tabindex="-1"></a>  <span class="at">gross_30 =</span> <span class="fu">sum</span>(gross),</span>
-<span id="cb47-15"><a href="c7_monetization.html#cb47-15" tabindex="-1"></a>  <span class="at">n_transactions_30 =</span> <span class="fu">length</span>(ts)</span>
-<span id="cb47-16"><a href="c7_monetization.html#cb47-16" tabindex="-1"></a>), by <span class="ot">=</span> <span class="fu">list</span>(media_source)]</span>
-<span id="cb47-17"><a href="c7_monetization.html#cb47-17" tabindex="-1"></a></span>
-<span id="cb47-18"><a href="c7_monetization.html#cb47-18" tabindex="-1"></a>payments_june_stat</span></code></pre></div>
-<pre><code>##         media_source payers_30 gross_30 n_transactions_30
-##               &lt;char&gt;     &lt;int&gt;    &lt;num&gt;             &lt;int&gt;
-## 1:           organic      1000 39958.64              4444
-## 2:      unityads_int       262  6061.02               974
-## 3:      applovin_int      1120 38554.59              4583
-## 4:      Facebook Ads        53   914.41               103
-## 5: googleadwords_int       161  4392.92               518</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="c7_monetization.html#cb49-1" tabindex="-1"></a>users_june_stat <span class="ot">=</span> <span class="fu">merge</span>(</span>
-<span id="cb49-2"><a href="c7_monetization.html#cb49-2" tabindex="-1"></a>    installs_june_stat,</span>
-<span id="cb49-3"><a href="c7_monetization.html#cb49-3" tabindex="-1"></a>    payments_june_stat,</span>
-<span id="cb49-4"><a href="c7_monetization.html#cb49-4" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&#39;media_source&#39;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
-<span id="cb49-5"><a href="c7_monetization.html#cb49-5" tabindex="-1"></a>)</span>
-<span id="cb49-6"><a href="c7_monetization.html#cb49-6" tabindex="-1"></a></span>
-<span id="cb49-7"><a href="c7_monetization.html#cb49-7" tabindex="-1"></a>users_june_stat[, gross_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30)]</span>
-<span id="cb49-8"><a href="c7_monetization.html#cb49-8" tabindex="-1"></a>users_june_stat[, Conversion_30 <span class="sc">:=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(payers_30 <span class="sc">*</span> <span class="dv">100</span> <span class="sc">/</span> total_users, <span class="dv">1</span>), <span class="st">&#39;%&#39;</span>)]</span>
-<span id="cb49-9"><a href="c7_monetization.html#cb49-9" tabindex="-1"></a>users_june_stat[, ARPU_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30 <span class="sc">/</span> total_users, <span class="dv">3</span>)]</span>
-<span id="cb49-10"><a href="c7_monetization.html#cb49-10" tabindex="-1"></a>users_june_stat[, ARPPU_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30 <span class="sc">/</span> payers_30, <span class="dv">3</span>)]</span>
-<span id="cb49-11"><a href="c7_monetization.html#cb49-11" tabindex="-1"></a>users_june_stat[, Av.Check_30 <span class="sc">:=</span> <span class="fu">round</span>(gross_30 <span class="sc">/</span> n_transactions_30, <span class="dv">1</span>)]</span>
-<span id="cb49-12"><a href="c7_monetization.html#cb49-12" tabindex="-1"></a>users_june_stat[, Av.Purchases_30 <span class="sc">:=</span> <span class="fu">round</span>(n_transactions_30 <span class="sc">/</span> payers_30, <span class="dv">1</span>)]</span>
-<span id="cb49-13"><a href="c7_monetization.html#cb49-13" tabindex="-1"></a></span>
-<span id="cb49-14"><a href="c7_monetization.html#cb49-14" tabindex="-1"></a>users_june_stat[, CPI <span class="sc">:=</span> <span class="fu">c</span>(<span class="fl">0.5</span>, <span class="dv">2</span>, .<span class="dv">9</span>, <span class="cn">NA</span>, <span class="fl">0.3</span>)]</span>
-<span id="cb49-15"><a href="c7_monetization.html#cb49-15" tabindex="-1"></a>users_june_stat[, RoAS <span class="sc">:=</span> <span class="fu">round</span>(ARPU_30 <span class="sc">/</span> CPI, <span class="dv">3</span>)]</span>
-<span id="cb49-16"><a href="c7_monetization.html#cb49-16" tabindex="-1"></a></span>
-<span id="cb49-17"><a href="c7_monetization.html#cb49-17" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(users_june_stat)</span></code></pre></div>
-<table>
-<colgroup>
-<col width="13%" />
-<col width="8%" />
-<col width="7%" />
-<col width="6%" />
-<col width="13%" />
-<col width="10%" />
-<col width="5%" />
-<col width="6%" />
-<col width="8%" />
-<col width="11%" />
-<col width="2%" />
-<col width="4%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">media_source</th>
-<th align="right">total_users</th>
-<th align="right">payers_30</th>
-<th align="right">gross_30</th>
-<th align="right">n_transactions_30</th>
-<th align="left">Conversion_30</th>
-<th align="right">ARPU_30</th>
-<th align="right">ARPPU_30</th>
-<th align="right">Av.Check_30</th>
-<th align="right">Av.Purchases_30</th>
-<th align="right">CPI</th>
-<th align="right">RoAS</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">Facebook Ads</td>
-<td align="right">1297</td>
-<td align="right">53</td>
-<td align="right">914</td>
-<td align="right">103</td>
-<td align="left">4.1%</td>
-<td align="right">0.705</td>
-<td align="right">17.245</td>
-<td align="right">8.9</td>
-<td align="right">1.9</td>
-<td align="right">0.5</td>
-<td align="right">1.410</td>
-</tr>
-<tr class="even">
-<td align="left">applovin_int</td>
-<td align="right">36714</td>
-<td align="right">1120</td>
-<td align="right">38555</td>
-<td align="right">4583</td>
-<td align="left">3.1%</td>
-<td align="right">1.050</td>
-<td align="right">34.424</td>
-<td align="right">8.4</td>
-<td align="right">4.1</td>
-<td align="right">2.0</td>
-<td align="right">0.525</td>
-</tr>
-<tr class="odd">
-<td align="left">googleadwords_int</td>
-<td align="right">7767</td>
-<td align="right">161</td>
-<td align="right">4393</td>
-<td align="right">518</td>
-<td align="left">2.1%</td>
-<td align="right">0.566</td>
-<td align="right">27.286</td>
-<td align="right">8.5</td>
-<td align="right">3.2</td>
-<td align="right">0.9</td>
-<td align="right">0.629</td>
-</tr>
-<tr class="even">
-<td align="left">organic</td>
-<td align="right">43070</td>
-<td align="right">1000</td>
-<td align="right">39959</td>
-<td align="right">4444</td>
-<td align="left">2.3%</td>
-<td align="right">0.928</td>
-<td align="right">39.959</td>
-<td align="right">9.0</td>
-<td align="right">4.4</td>
-<td align="right">NA</td>
-<td align="right">NA</td>
-</tr>
-<tr class="odd">
-<td align="left">unityads_int</td>
-<td align="right">21932</td>
-<td align="right">262</td>
-<td align="right">6061</td>
-<td align="right">974</td>
-<td align="left">1.2%</td>
-<td align="right">0.276</td>
-<td align="right">23.134</td>
-<td align="right">6.2</td>
-<td align="right">3.7</td>
-<td align="right">0.3</td>
-<td align="right">0.920</td>
-</tr>
-</tbody>
-</table>
+<div id="разбор-домашнего-задания-5" class="section level2 hasAnchor">
+<h2>Разбор домашнего задания<a href="стат.html#разбор-домашнего-задания-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="level-2-hntr-10" class="section level3 hasAnchor">
+<h3>level 2 (HNTR)<a href="стат.html#level-2-hntr-10" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Прочитайте <a href="https://medstatistic.ru/methods/methods4.html">пример расчета</a> критерия <span class="math inline">\(\chi^2\)</span>-Пирсона. Повторите его вручную (повторите действия, которые описаны на странице).
+Проверьте значимость различия групп с помощью R / Python (необходимо выбрать соответствующую функцию и/или пакет).</p>
+<p>Для ситуаций, когда у нас есть одна категориальная группирующая переменная и бинарная зависимая переменная (вернулся/не вернулся, купил/не купил), мы используем тест пропорций (<span class="math inline">\(\chi^2\)</span>-Пирсона для таблиц 2*2 как раз сводится к нему):</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="стат.html#cb56-1" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="fu">c</span>(<span class="dv">40</span>, <span class="dv">30</span>), <span class="fu">c</span>(<span class="dv">72</span>, <span class="dv">78</span>), <span class="at">correct =</span> <span class="cn">FALSE</span>, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  2-sample test for equality of proportions without continuity correction
+## 
+## data:  c(40, 30) out of c(72, 78)
+## X-squared = 4.3956, df = 1, p-value = 0.03603
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.0133635 0.3285168
+## sample estimates:
+##    prop 1    prop 2 
+## 0.5555556 0.3846154</code></pre>
 </div>
-<div id="level-3-hmp-5" class="section level3 hasAnchor">
-<h3>level 3 (HMP)<a href="c7_monetization.html#level-3-hmp-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Рассчитайте табличку с метриками монетизации для июньской и июльской когорт (должно быть две строки в табличке, отдельно на каждую когорту). Выберите правильный период лайфтайма. Попробуйте проинтерпретировать результаты.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="c7_monetization.html#cb50-1" tabindex="-1"></a>installs_jj <span class="ot">&lt;-</span> installs[dt <span class="sc">&lt;</span> <span class="st">&#39;2022-07-25&#39;</span>]</span>
-<span id="cb50-2"><a href="c7_monetization.html#cb50-2" tabindex="-1"></a>installs_jj[, month <span class="sc">:=</span> <span class="fu">strftime</span>(dt, <span class="st">&#39;%B&#39;</span>)]</span>
-<span id="cb50-3"><a href="c7_monetization.html#cb50-3" tabindex="-1"></a></span>
-<span id="cb50-4"><a href="c7_monetization.html#cb50-4" tabindex="-1"></a>installs_jj_stat <span class="ot">&lt;-</span> installs_jj[, <span class="fu">list</span>(<span class="at">total_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), by <span class="ot">=</span> <span class="fu">list</span>(month)]</span>
-<span id="cb50-5"><a href="c7_monetization.html#cb50-5" tabindex="-1"></a></span>
-<span id="cb50-6"><a href="c7_monetization.html#cb50-6" tabindex="-1"></a><span class="co"># к платежам присоединяем дату инсталла и источник трафика</span></span>
-<span id="cb50-7"><a href="c7_monetization.html#cb50-7" tabindex="-1"></a>payments_jj <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb50-8"><a href="c7_monetization.html#cb50-8" tabindex="-1"></a>  installs_jj[, <span class="fu">list</span>(user_pseudo_id, month, dt)],</span>
-<span id="cb50-9"><a href="c7_monetization.html#cb50-9" tabindex="-1"></a>  payments,  </span>
-<span id="cb50-10"><a href="c7_monetization.html#cb50-10" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">&#39;user_pseudo_id&#39;</span>, <span class="at">all =</span> <span class="cn">FALSE</span></span>
-<span id="cb50-11"><a href="c7_monetization.html#cb50-11" tabindex="-1"></a>)</span>
-<span id="cb50-12"><a href="c7_monetization.html#cb50-12" tabindex="-1"></a></span>
-<span id="cb50-13"><a href="c7_monetization.html#cb50-13" tabindex="-1"></a><span class="co"># берем июньскую когорту и ограничиваем даты лайфтайма</span></span>
-<span id="cb50-14"><a href="c7_monetization.html#cb50-14" tabindex="-1"></a>payments_jj[, lifetime <span class="sc">:=</span> pay_dt <span class="sc">-</span> dt]</span>
-<span id="cb50-15"><a href="c7_monetization.html#cb50-15" tabindex="-1"></a>payments_jj <span class="ot">&lt;-</span> payments_jj[lifetime <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> lifetime <span class="sc">&lt;=</span> <span class="dv">7</span>]</span>
-<span id="cb50-16"><a href="c7_monetization.html#cb50-16" tabindex="-1"></a></span>
-<span id="cb50-17"><a href="c7_monetization.html#cb50-17" tabindex="-1"></a>payments_jj_stat <span class="ot">&lt;-</span> payments_jj[, <span class="fu">list</span>(</span>
-<span id="cb50-18"><a href="c7_monetization.html#cb50-18" tabindex="-1"></a>  <span class="at">payers_7 =</span> <span class="fu">uniqueN</span>(user_pseudo_id), </span>
-<span id="cb50-19"><a href="c7_monetization.html#cb50-19" tabindex="-1"></a>  <span class="at">gross_7 =</span> <span class="fu">sum</span>(gross),</span>
-<span id="cb50-20"><a href="c7_monetization.html#cb50-20" tabindex="-1"></a>  <span class="at">n_transactions_7 =</span> <span class="fu">length</span>(ts)</span>
-<span id="cb50-21"><a href="c7_monetization.html#cb50-21" tabindex="-1"></a>), by <span class="ot">=</span> <span class="fu">list</span>(month)]</span>
-<span id="cb50-22"><a href="c7_monetization.html#cb50-22" tabindex="-1"></a></span>
-<span id="cb50-23"><a href="c7_monetization.html#cb50-23" tabindex="-1"></a>users_jj_stat <span class="ot">=</span> <span class="fu">merge</span>(</span>
-<span id="cb50-24"><a href="c7_monetization.html#cb50-24" tabindex="-1"></a>    installs_jj_stat,</span>
-<span id="cb50-25"><a href="c7_monetization.html#cb50-25" tabindex="-1"></a>    payments_jj_stat,</span>
-<span id="cb50-26"><a href="c7_monetization.html#cb50-26" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">&#39;month&#39;</span>, <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
-<span id="cb50-27"><a href="c7_monetization.html#cb50-27" tabindex="-1"></a>)</span>
-<span id="cb50-28"><a href="c7_monetization.html#cb50-28" tabindex="-1"></a></span>
-<span id="cb50-29"><a href="c7_monetization.html#cb50-29" tabindex="-1"></a>users_jj_stat[, gross_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7)]</span>
-<span id="cb50-30"><a href="c7_monetization.html#cb50-30" tabindex="-1"></a>users_jj_stat[, Conversion_7 <span class="sc">:=</span> <span class="fu">paste0</span>(<span class="fu">round</span>(payers_7 <span class="sc">*</span> <span class="dv">100</span> <span class="sc">/</span> total_users, <span class="dv">1</span>), <span class="st">&#39;%&#39;</span>)]</span>
-<span id="cb50-31"><a href="c7_monetization.html#cb50-31" tabindex="-1"></a>users_jj_stat[, ARPU_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7 <span class="sc">/</span> total_users, <span class="dv">3</span>)]</span>
-<span id="cb50-32"><a href="c7_monetization.html#cb50-32" tabindex="-1"></a>users_jj_stat[, ARPPU_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7 <span class="sc">/</span> payers_7, <span class="dv">3</span>)]</span>
-<span id="cb50-33"><a href="c7_monetization.html#cb50-33" tabindex="-1"></a>users_jj_stat[, Av.Check_7 <span class="sc">:=</span> <span class="fu">round</span>(gross_7 <span class="sc">/</span> n_transactions_7, <span class="dv">1</span>)]</span>
-<span id="cb50-34"><a href="c7_monetization.html#cb50-34" tabindex="-1"></a>users_jj_stat[, Av.Purchases_7 <span class="sc">:=</span> <span class="fu">round</span>(n_transactions_7 <span class="sc">/</span> payers_7, <span class="dv">1</span>)]</span>
-<span id="cb50-35"><a href="c7_monetization.html#cb50-35" tabindex="-1"></a></span>
-<span id="cb50-36"><a href="c7_monetization.html#cb50-36" tabindex="-1"></a>kableExtra<span class="sc">::</span><span class="fu">kable</span>(users_jj_stat)</span></code></pre></div>
-<table style="width:100%;">
-<colgroup>
-<col width="5%" />
-<col width="11%" />
-<col width="8%" />
-<col width="7%" />
-<col width="16%" />
-<col width="12%" />
-<col width="6%" />
-<col width="7%" />
-<col width="10%" />
-<col width="14%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">month</th>
-<th align="right">total_users</th>
-<th align="right">payers_7</th>
-<th align="right">gross_7</th>
-<th align="right">n_transactions_7</th>
-<th align="left">Conversion_7</th>
-<th align="right">ARPU_7</th>
-<th align="right">ARPPU_7</th>
-<th align="right">Av.Check_7</th>
-<th align="right">Av.Purchases_7</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">July</td>
-<td align="right">11843</td>
-<td align="right">217</td>
-<td align="right">4582</td>
-<td align="right">757</td>
-<td align="left">1.8%</td>
-<td align="right">0.387</td>
-<td align="right">21.115</td>
-<td align="right">6.1</td>
-<td align="right">3.5</td>
-</tr>
-<tr class="even">
-<td align="left">June</td>
-<td align="right">110780</td>
-<td align="right">2059</td>
-<td align="right">42518</td>
-<td align="right">5217</td>
-<td align="left">1.9%</td>
-<td align="right">0.384</td>
-<td align="right">20.650</td>
-<td align="right">8.1</td>
-<td align="right">2.5</td>
-</tr>
-</tbody>
-</table>
+<div id="level-3-hmp-7" class="section level3 hasAnchor">
+<h3>level 3 (HMP)<a href="стат.html#level-3-hmp-7" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Сгенерируйте две выборки из нормального распределения (N = 100 в каждой, средние различаются на 5). Сравните, значимо ли различие выборок с помощью R / Python с помощью <span class="math inline">\(t\)</span>-критерия Стьюдента (необходимо выбрать соответствующую функцию и/или пакет).</p>
+<p>Для семплирования вам нужны функция <code>rnorm()</code> в R и пакет <code>numpy</code> в Python (там либо <code>numpy.random.Generator.normal</code>, либо <code>numpy.random.normal</code>, но это устаревшая функция).</p>
+<p>В случаях, когда у нас есть две группы (то есть одна из переменных – категориальная) и вторая – интервальная (деньги, время, количество пользователей и т. д.) мы используем разные тесты, в зависимости от количества наблюдений и формы распределения. Один из самых распространенных тестов – <span class="math inline">\(t\)</span>-критерия Стьюдента:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="стат.html#cb58-1" tabindex="-1"></a>s1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb58-2"><a href="стат.html#cb58-2" tabindex="-1"></a>s2 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">5</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb58-3"><a href="стат.html#cb58-3" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="стат.html#cb58-4" tabindex="-1"></a><span class="fu">t.test</span>(s1, s2, <span class="at">alternative =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  s1 and s2
+## t = -37.208, df = 198, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -5.373909 -4.832949
+## sample estimates:
+## mean of x mean of y 
+## 0.0219104 5.1253395</code></pre>
+<p>Здесь я использую метку, что дисперсии выборок одинаковые. Но это потому что я сам при генерации сэмплов указал, что <code>sd = 1</code>.</p>
 </div>
-<div id="level-4-uv-8" class="section level3 hasAnchor">
-<h3>level 4 (UV)<a href="c7_monetization.html#level-4-uv-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Постройте воронку платежей для июньской когорты. Сделайте разбивку по платформам. Попробуйте проинтерпретировать результаты.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="c7_monetization.html#cb51-1" tabindex="-1"></a><span class="co"># выше мы уже делали вычисление дней от инсталла и фильтрацию на 30 дней</span></span>
-<span id="cb51-2"><a href="c7_monetization.html#cb51-2" tabindex="-1"></a>payments_june <span class="ot">&lt;-</span> payments_june[<span class="fu">order</span>(user_pseudo_id, ts)]</span>
-<span id="cb51-3"><a href="c7_monetization.html#cb51-3" tabindex="-1"></a>payments_june[, purchase_number <span class="sc">:=</span> <span class="fu">seq_len</span>(.N), by <span class="ot">=</span> user_pseudo_id]</span>
-<span id="cb51-4"><a href="c7_monetization.html#cb51-4" tabindex="-1"></a></span>
-<span id="cb51-5"><a href="c7_monetization.html#cb51-5" tabindex="-1"></a><span class="co"># считаем, сколько пользователей сделало платеж с этим номером</span></span>
-<span id="cb51-6"><a href="c7_monetization.html#cb51-6" tabindex="-1"></a>payments_funnel <span class="ot">&lt;-</span> payments_june[, <span class="fu">list</span>(<span class="at">n_users =</span> <span class="fu">uniqueN</span>(user_pseudo_id)), keyby <span class="ot">=</span> purchase_number]</span>
-<span id="cb51-7"><a href="c7_monetization.html#cb51-7" tabindex="-1"></a></span>
-<span id="cb51-8"><a href="c7_monetization.html#cb51-8" tabindex="-1"></a><span class="co"># считаем посчитать долю от всего пользователей, сделавших платеж (purchase_number == 1)</span></span>
-<span id="cb51-9"><a href="c7_monetization.html#cb51-9" tabindex="-1"></a>payments_funnel[, total_payers <span class="sc">:=</span> n_users[purchase_number <span class="sc">==</span> <span class="dv">1</span>]]</span>
-<span id="cb51-10"><a href="c7_monetization.html#cb51-10" tabindex="-1"></a></span>
-<span id="cb51-11"><a href="c7_monetization.html#cb51-11" tabindex="-1"></a><span class="co"># если у нас есть группировка, то надо отдельно считать и мерджить по ключу</span></span>
-<span id="cb51-12"><a href="c7_monetization.html#cb51-12" tabindex="-1"></a></span>
-<span id="cb51-13"><a href="c7_monetization.html#cb51-13" tabindex="-1"></a><span class="co"># рисуем</span></span>
-<span id="cb51-14"><a href="c7_monetization.html#cb51-14" tabindex="-1"></a>payments_funnel[, share <span class="sc">:=</span> n_users <span class="sc">/</span> total_payers]</span>
-<span id="cb51-15"><a href="c7_monetization.html#cb51-15" tabindex="-1"></a></span>
-<span id="cb51-16"><a href="c7_monetization.html#cb51-16" tabindex="-1"></a><span class="fu">plot_ly</span>(payments_funnel[purchase_number <span class="sc">&lt;=</span> <span class="dv">10</span>], </span>
-<span id="cb51-17"><a href="c7_monetization.html#cb51-17" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>purchase_number, <span class="at">y =</span> <span class="sc">~</span>share, <span class="at">type =</span> <span class="st">&#39;bar&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb51-18"><a href="c7_monetization.html#cb51-18" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb51-19"><a href="c7_monetization.html#cb51-19" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Воронка платежей&#39;</span></span>
-<span id="cb51-20"><a href="c7_monetization.html#cb51-20" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb51-21"><a href="c7_monetization.html#cb51-21" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-6df741e94496e6ca3053" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-6df741e94496e6ca3053">{"x":{"visdat":{"97041a06a9a2":["function () ","plotlyVisDat"]},"cur_data":"97041a06a9a2","attrs":{"97041a06a9a2":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Воронка платежей","xaxis":{"domain":[0,1],"automargin":true,"title":"purchase_number"},"yaxis":{"domain":[0,1],"automargin":true,"title":"share"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10],"y":[1,0.53620955315870567,0.35978428351309705,0.26771956856702617,0.2083975346687211,0.17488443759630201,0.14291217257318953,0.12326656394453005,0.1059322033898305,0.095916795069337438],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<p>Воронки можно считать не от первого шага, а от предыдущего. В некоторых случаях это удобнее и информативнее.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="c7_monetization.html#cb52-1" tabindex="-1"></a><span class="co"># если хотим считать от предыдущего шага</span></span>
-<span id="cb52-2"><a href="c7_monetization.html#cb52-2" tabindex="-1"></a>payments_funnel[, prev_users <span class="sc">:=</span> <span class="fu">shift</span>(n_users, <span class="at">n =</span> <span class="dv">1</span>)]</span>
-<span id="cb52-3"><a href="c7_monetization.html#cb52-3" tabindex="-1"></a>payments_funnel[, prev_share <span class="sc">:=</span> n_users <span class="sc">/</span> prev_users]</span>
-<span id="cb52-4"><a href="c7_monetization.html#cb52-4" tabindex="-1"></a></span>
-<span id="cb52-5"><a href="c7_monetization.html#cb52-5" tabindex="-1"></a><span class="fu">plot_ly</span>(payments_funnel[purchase_number <span class="sc">&lt;=</span> <span class="dv">10</span>], </span>
-<span id="cb52-6"><a href="c7_monetization.html#cb52-6" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>purchase_number, <span class="at">y =</span> <span class="sc">~</span>prev_share, <span class="at">type =</span> <span class="st">&#39;bar&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb52-7"><a href="c7_monetization.html#cb52-7" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb52-8"><a href="c7_monetization.html#cb52-8" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Воронка платежей, доля от предыдущего&#39;</span></span>
-<span id="cb52-9"><a href="c7_monetization.html#cb52-9" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb52-10"><a href="c7_monetization.html#cb52-10" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
-<pre><code>## Warning: Ignoring 1 observations</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-dc39cbdbf05aad2bbd89" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-dc39cbdbf05aad2bbd89">{"x":{"visdat":{"970428b13c40":["function () ","plotlyVisDat"]},"cur_data":"970428b13c40","attrs":{"970428b13c40":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Воронка платежей, доля от предыдущего","xaxis":{"domain":[0,1],"automargin":true,"title":"purchase_number"},"yaxis":{"domain":[0,1],"automargin":true,"title":"prev_share"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[2,3,4,5,6,7,8,9,10],"y":[0.53620955315870567,0.67097701149425293,0.74411134903640253,0.77841726618705032,0.83918669131238444,0.81718061674008813,0.86253369272237201,0.859375,0.9054545454545454],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
-<p>Обе воронки сразу</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="c7_monetization.html#cb54-1" tabindex="-1"></a><span class="fu">plot_ly</span>(payments_funnel[purchase_number <span class="sc">&lt;=</span> <span class="dv">10</span>], </span>
-<span id="cb54-2"><a href="c7_monetization.html#cb54-2" tabindex="-1"></a>        <span class="at">x =</span> <span class="sc">~</span>purchase_number, <span class="at">y =</span> <span class="sc">~</span>share, <span class="at">type =</span> <span class="st">&#39;bar&#39;</span>, <span class="at">name =</span> <span class="st">&#39;% from payers&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb54-3"><a href="c7_monetization.html#cb54-3" tabindex="-1"></a>  <span class="fu">add_trace</span>(<span class="at">y =</span> <span class="sc">~</span>prev_share, <span class="at">name =</span> <span class="st">&#39;% from prev&#39;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb54-4"><a href="c7_monetization.html#cb54-4" tabindex="-1"></a>  <span class="fu">layout</span>(</span>
-<span id="cb54-5"><a href="c7_monetization.html#cb54-5" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&#39;Воронка платежей&#39;</span></span>
-<span id="cb54-6"><a href="c7_monetization.html#cb54-6" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb54-7"><a href="c7_monetization.html#cb54-7" tabindex="-1"></a>  <span class="fu">config</span>(<span class="at">displayModeBar =</span> <span class="cn">FALSE</span>)  </span></code></pre></div>
-<pre><code>## Warning: Ignoring 1 observations</code></pre>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-6a83609d774a636277d8" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-6a83609d774a636277d8">{"x":{"visdat":{"970472c21568":["function () ","plotlyVisDat"]},"cur_data":"970472c21568","attrs":{"970472c21568":{"x":{},"y":{},"name":"% from payers","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"},"970472c21568.1":{"x":{},"y":{},"name":"% from prev","alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar","inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Воронка платежей","xaxis":{"domain":[0,1],"automargin":true,"title":"purchase_number"},"yaxis":{"domain":[0,1],"automargin":true,"title":"share"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10],"y":[1,0.53620955315870567,0.35978428351309705,0.26771956856702617,0.2083975346687211,0.17488443759630201,0.14291217257318953,0.12326656394453005,0.1059322033898305,0.095916795069337438],"name":"% from payers","type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2,3,4,5,6,7,8,9,10],"y":[0.53620955315870567,0.67097701149425293,0.74411134903640253,0.77841726618705032,0.83918669131238444,0.81718061674008813,0.86253369272237201,0.859375,0.9054545454545454],"name":"% from prev","type":"bar","marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="level-4-uv-10" class="section level3 hasAnchor">
+<h3>level 4 (UV)<a href="стат.html#level-4-uv-10" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Задание из тестового задания на продуктового аналитика в Альфа-банк.</p>
+<p>Был проведен эксперимент: изменение заголовка на кнопке на главном экране подписной страницы. Сделан акцент на выгоде пользователя.</p>
+<p><img src="pics/alfa_ab_test_pic.jpeg" width="80%"></p>
+<p>Описание полей:</p>
+<ul>
+<li>date – Дата</li>
+<li>deviceCategory – Тип устройства</li>
+<li>sourceMedium – Источник и канал привлечения</li>
+<li>experimentVariant – Группа (варианта) эксперимента: 0 - контроль, 1 - тест</li>
+<li>clickButtonOnMain – Кликнул/не кликнул по кнопке на главной странице в рамках сеанса (1 – кликнул, или 0 – не кликнул)</li>
+<li>sessionDuration – Время проведенное на сайте в рамках сеанса</li>
+</ul>
+<p>Данные: <a href="https://raw.githubusercontent.com/upravitelev/mar231f/refs/heads/main/data/AB_ab_2_1.csv">AB_ab_2_1</a></p>
+<p>Проверьте гипотезы:</p>
+<ul>
+<li>Есть ли значимое изменение в большую или меньшую сторону у клика на целевую кнопку?</li>
+<li>Изменилось ли время проведенное на сайте в рамках сеанса?</li>
+<li>Напишите, какими тестами пользовались и почему выбрали их?</li>
+<li>Напишите выводы, которые можно сделать на основе анализа.</li>
+</ul>
+<p>Импортируем датасет и приводим к нормальному виду:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="стат.html#cb60-1" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb60-2"><a href="стат.html#cb60-2" tabindex="-1"></a>dataset <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">&#39;https://raw.githubusercontent.com/upravitelev/mar231f/refs/heads/main/data/AB_ab_2_1.csv&#39;</span>)</span>
+<span id="cb60-3"><a href="стат.html#cb60-3" tabindex="-1"></a>dataset[, sessionDuration <span class="sc">:=</span> <span class="fu">gsub</span>(<span class="st">&#39;,&#39;</span>, <span class="st">&#39;.&#39;</span>, sessionDuration, <span class="at">fixed =</span> <span class="cn">TRUE</span>)]</span>
+<span id="cb60-4"><a href="стат.html#cb60-4" tabindex="-1"></a>dataset[, sessionDuration <span class="sc">:=</span> <span class="fu">as.numeric</span>(sessionDuration)]</span></code></pre></div>
+<p>Считаем количество нажавших на кнопку в каждой группе и количество всего пользователей:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="стат.html#cb61-1" tabindex="-1"></a>dataset_stat <span class="ot">&lt;-</span> dataset[, <span class="fu">list</span>(<span class="at">n_users =</span> <span class="fu">uniqueN</span>(userId)), keyby <span class="ot">=</span> <span class="fu">list</span>(experimentVariant, clickButtonOnMain)]</span>
+<span id="cb61-2"><a href="стат.html#cb61-2" tabindex="-1"></a>dataset_stat[, total_users <span class="sc">:=</span> <span class="fu">sum</span>(n_users), keyby <span class="ot">=</span> experimentVariant]</span>
+<span id="cb61-3"><a href="стат.html#cb61-3" tabindex="-1"></a>dataset_stat</span></code></pre></div>
+<pre><code>## Key: &lt;experimentVariant&gt;
+##    experimentVariant clickButtonOnMain n_users total_users
+##                &lt;int&gt;             &lt;int&gt;   &lt;int&gt;       &lt;int&gt;
+## 1:                 0                 0    1293        1485
+## 2:                 0                 1     192        1485
+## 3:                 1                 0    1325        1458
+## 4:                 1                 1     133        1458</code></pre>
+<p>Применяем тест пропорций, видим значимые различия (т.е. кнопка повлияло на количество кликов):</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="стат.html#cb63-1" tabindex="-1"></a><span class="fu">prop.test</span>(<span class="fu">c</span>(<span class="dv">192</span>, <span class="dv">133</span>), <span class="fu">c</span>(<span class="dv">1485</span>, <span class="dv">1458</span>))</span></code></pre></div>
+<pre><code>## 
+##  2-sample test for equality of proportions with continuity correction
+## 
+## data:  c(192, 133) out of c(1485, 1458)
+## X-squared = 10.471, df = 1, p-value = 0.001213
+## alternative hypothesis: two.sided
+## 95 percent confidence interval:
+##  0.01481732 0.06132684
+## sample estimates:
+##     prop 1     prop 2 
+## 0.12929293 0.09122085</code></pre>
+<p>Считаем значимость различий между группами по длительности сессий:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="стат.html#cb65-1" tabindex="-1"></a><span class="fu">t.test</span>(sessionDuration <span class="sc">~</span> experimentVariant, <span class="at">data =</span> dataset)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  sessionDuration by experimentVariant
+## t = -45.299, df = 2217.4, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means between group 0 and group 1 is not equal to 0
+## 95 percent confidence interval:
+##  -13.58488 -12.45749
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        120.0380        133.0592</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="стат.html#cb67-1" tabindex="-1"></a><span class="co"># альтернативна запись 1</span></span>
+<span id="cb67-2"><a href="стат.html#cb67-2" tabindex="-1"></a><span class="co"># dataset[, t.test(sessionDuration ~ experimentVariant)]</span></span>
+<span id="cb67-3"><a href="стат.html#cb67-3" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="стат.html#cb67-4" tabindex="-1"></a><span class="co"># альтернативная запись 2, python-like</span></span>
+<span id="cb67-5"><a href="стат.html#cb67-5" tabindex="-1"></a><span class="co"># t.test(</span></span>
+<span id="cb67-6"><a href="стат.html#cb67-6" tabindex="-1"></a><span class="co">#   dataset[experimentVariant == 0, sessionDuration],</span></span>
+<span id="cb67-7"><a href="стат.html#cb67-7" tabindex="-1"></a><span class="co">#   dataset[experimentVariant == 1, sessionDuration]</span></span>
+<span id="cb67-8"><a href="стат.html#cb67-8" tabindex="-1"></a><span class="co"># )</span></span></code></pre></div>
 
 </div>
 </div>
@@ -769,8 +550,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="c6_monetization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="ux.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="кейсы-ab-тестов.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="homework-2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
