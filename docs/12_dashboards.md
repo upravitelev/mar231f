@@ -1,0 +1,11 @@
+# Dashboards {-}
+
+## Запись занятия {-}
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/TZiqWSxjB5A?si=ow4h3q7V-f6KGlhI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+## Датасеты
+
+installs: https://docs.google.com/spreadsheets/d/1jm9iE9hEofpn0yOOMZY7blNM3-KfbuNUZz_sY23WDmw/edit?usp=drive_link
+
+payments: https://docs.google.com/spreadsheets/d/1SNM_a-HvZQk29V2kG1-PBtI_ZsDEOLAGyG76fgOL1Fw/edit?usp=drive_link

@@ -59,13 +59,13 @@ t.test(s1, s2, alternative = "two.sided", var.equal = TRUE)
 ## 	Two Sample t-test
 ## 
 ## data:  s1 and s2
-## t = -37.208, df = 198, p-value < 2.2e-16
+## t = -39.506, df = 198, p-value < 2.2e-16
 ## alternative hypothesis: true difference in means is not equal to 0
 ## 95 percent confidence interval:
-##  -5.373909 -4.832949
+##  -5.374199 -4.863176
 ## sample estimates:
-## mean of x mean of y 
-## 0.0219104 5.1253395
+##  mean of x  mean of y 
+## -0.1214402  4.9972475
 ```
 
 Здесь я использую метку, что дисперсии выборок одинаковые. Но это потому что я сам при генерации сэмплов указал, что `sd = 1`.

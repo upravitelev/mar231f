@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Методы анализа больших данных</title>
-  <meta name="description" content="Методы анализа больших данных" />
+  <title>SQL | Методы анализа больших данных</title>
+  <meta name="description" content="SQL | Методы анализа больших данных" />
   <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Методы анализа больших данных" />
+  <meta property="og:title" content="SQL | Методы анализа больших данных" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Методы анализа больших данных" />
+  <meta name="twitter:title" content="SQL | Методы анализа больших данных" />
   
   
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="c1_intro.html"/>
+<link rel="prev" href="dashboards.html"/>
+<link rel="next" href="sql-advanced.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -473,25 +473,734 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Методы анализа больших данных</h1>
-<h2 class="subtitle"><em>в исследованиях поведения покупателей</em></h2>
-<p class="author"><em>Ph.A.Upravitelev</em></p>
-<p class="date"><em>2024-12-26</em></p>
+<div id="sql" class="section level1 unnumbered hasAnchor">
+<h1>SQL<a href="sql.html#sql" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="запись-занятия-13" class="section level2 unnumbered hasAnchor">
+<h2>Запись занятия<a href="sql.html#запись-занятия-13" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/o44EYYJJN_A?si=X7JVJPX_aZNFfTKD" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
+<p><br></p>
 </div>
-<div id="intro" class="section level1 hasAnchor">
-<h1>Intro<a href="index.html#intro" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>September 9: <a href="c1_intro.html#c1_intro">О курсе + задачи продуктовых аналитиков</a>. Знакомство. Структура курса. Организационная информация по курсу. Виды аналитиков. Продукт, продуктовая аналитика. Роли продуктовых аналитиков в командах. Грейды. Этапы развития продукта и задачи аналитиков на каждом этапе. Бизнес-модели.</p>
-<!-- September 18: [Метрики вовлечения и удержания](#c2_engagement) -->
+<div id="dbeaver" class="section level2 unnumbered hasAnchor">
+<h2>DBeaver<a href="sql.html#dbeaver" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><a href="https://dbeaver.io/download/" class="uri">https://dbeaver.io/download/</a></p>
+<p><br></p>
+</div>
+<div id="параметры-подключений" class="section level2 unnumbered hasAnchor">
+<h2>Параметры подключений<a href="sql.html#параметры-подключений" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>user = “student”</p>
+<p>password = “pmsar2018”</p>
+<p>dbname = “pmsar”</p>
+<p>host = “188.225.77.95”</p>
+<p>port = 5432</p>
+<p><br></p>
+</div>
+<div id="sql-1" class="section level2 unnumbered hasAnchor">
+<h2>SQL<a href="sql.html#sql-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="main-structure" class="section level3 unnumbered hasAnchor">
+<h3>main structure<a href="sql.html#main-structure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>SQL - декларативный язык с жестко закрепленным порядком операторов (зарезервированных ключевых слов) в sql-выражении. При запросе данных из таблицы обязательны <code>select</code> и <code>from</code>, остальные - по необходимости.</p>
+<ul>
+<li><p>select (указание, какие колонки таблицы должны быть в результате, аналог j в data.table- dt[i, j, by])</p></li>
+<li><p>from (из какой таблицы или результата слияния таблиц должны быть выбраны колонки)</p></li>
+<li><p>join (какая таблица должна быть присоединена по ключу, аналог merge в R)</p></li>
+<li><p>where (набор логических выражений для фильтрация по строкам, аналогично фильтрации в data.table в разделе i - dt[i, j, by])</p></li>
+<li><p>group by (по значениям каких колонок должна быть группировка, аналог by в data.table - dt[i, j, by])</p></li>
+<li><p>order by (по значениям каких колонок должна быть отсортированная результирующая таблица)</p></li>
+<li><p>limit (ограничение на выдачу, сколько строк таблицы должно быть отдано)</p></li>
+<li><p>; (завершение запроса, некоторые IDE могут за пользователя подставлять)</p></li>
+</ul>
+<p><br></p>
+</div>
+<div id="simple-query" class="section level3 unnumbered hasAnchor">
+<h3>simple query<a href="sql.html#simple-query" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Простейшие арифметические запросы требуют <code>select</code> и все:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb68-1"><a href="sql.html#cb68-1" tabindex="-1"></a><span class="kw">select</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">5</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-1">Table 1: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="right">?column?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb69-1"><a href="sql.html#cb69-1" tabindex="-1"></a><span class="kw">select</span> now();</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-2">Table 2: </span>1 records</caption>
+<thead>
+<tr class="header">
+<th align="left">now</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">2024-12-26 18:21:42</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+</div>
+<div id="select-columns-selection" class="section level3 unnumbered hasAnchor">
+<h3>select: columns selection<a href="sql.html#select-columns-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Запросы для выбора колонок. <code>*</code> используется как аналог <code>select all</code>, то есть выбор всех колонок, которые есть в таблице.</p>
+<p>В разделе from указывается схема (набор таблиц) и таблица из этой схемы, через точку: <code>public.chars</code> означает <code>таблица chars из схемы public</code>:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb70-1"><a href="sql.html#cb70-1" tabindex="-1"></a><span class="kw">select</span></span>
+<span id="cb70-2"><a href="sql.html#cb70-2" tabindex="-1"></a>  <span class="op">*</span></span>
+<span id="cb70-3"><a href="sql.html#cb70-3" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb70-4"><a href="sql.html#cb70-4" tabindex="-1"></a><span class="kw">limit</span> <span class="dv">3</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table style="width:100%;">
+<caption><span id="tab:unnamed-chunk-3">Table 3: </span>3 records</caption>
+<colgroup>
+<col width="7%" />
+<col width="11%" />
+<col width="5%" />
+<col width="3%" />
+<col width="8%" />
+<col width="8%" />
+<col width="7%" />
+<col width="8%" />
+<col width="5%" />
+<col width="23%" />
+<col width="9%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">row.names</th>
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="right">mass</th>
+<th align="left">hair_color</th>
+<th align="left">skin_color</th>
+<th align="left">eye_color</th>
+<th align="left">birth_year</th>
+<th align="left">gender</th>
+<th align="left">url</th>
+<th align="left">planet_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">Luke Skywalker</td>
+<td align="right">172</td>
+<td align="right">77</td>
+<td align="left">blond</td>
+<td align="left">fair</td>
+<td align="left">blue</td>
+<td align="left">19BBY</td>
+<td align="left">male</td>
+<td align="left"><a href="https://swapi.co/api/people/1/" class="uri">https://swapi.co/api/people/1/</a></td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">C-3PO</td>
+<td align="right">167</td>
+<td align="right">75</td>
+<td align="left">n/a</td>
+<td align="left">gold</td>
+<td align="left">yellow</td>
+<td align="left">112BBY</td>
+<td align="left">n/a</td>
+<td align="left"><a href="https://swapi.co/api/people/2/" class="uri">https://swapi.co/api/people/2/</a></td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="left">Darth Vader</td>
+<td align="right">202</td>
+<td align="right">136</td>
+<td align="left">none</td>
+<td align="left">white</td>
+<td align="left">yellow</td>
+<td align="left">41.9BBY</td>
+<td align="left">male</td>
+<td align="left"><a href="https://swapi.co/api/people/4/" class="uri">https://swapi.co/api/people/4/</a></td>
+<td align="left">Tatooine</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Также в блоке <code>select</code> можно указать одну или несколько колонок, результат арифметических операций над колонками.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb71-1"><a href="sql.html#cb71-1" tabindex="-1"></a><span class="kw">select</span></span>
+<span id="cb71-2"><a href="sql.html#cb71-2" tabindex="-1"></a>  name,</span>
+<span id="cb71-3"><a href="sql.html#cb71-3" tabindex="-1"></a>  height,</span>
+<span id="cb71-4"><a href="sql.html#cb71-4" tabindex="-1"></a>  planet_name</span>
+<span id="cb71-5"><a href="sql.html#cb71-5" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb71-6"><a href="sql.html#cb71-6" tabindex="-1"></a><span class="kw">limit</span> <span class="dv">3</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 4: </span>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="left">planet_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Luke Skywalker</td>
+<td align="right">172</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="even">
+<td align="left">C-3PO</td>
+<td align="right">167</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="odd">
+<td align="left">Darth Vader</td>
+<td align="right">202</td>
+<td align="left">Tatooine</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Алиасы формы <code>column_name as new_name</code> используются для переименования колонок или результатов вычислений.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb72-1"><a href="sql.html#cb72-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb72-2"><a href="sql.html#cb72-2" tabindex="-1"></a>  name <span class="kw">as</span> char_name,</span>
+<span id="cb72-3"><a href="sql.html#cb72-3" tabindex="-1"></a>  height,</span>
+<span id="cb72-4"><a href="sql.html#cb72-4" tabindex="-1"></a>  planet_name,</span>
+<span id="cb72-5"><a href="sql.html#cb72-5" tabindex="-1"></a>  height <span class="op">*</span> <span class="dv">3</span> <span class="kw">as</span> height_mult</span>
+<span id="cb72-6"><a href="sql.html#cb72-6" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb72-7"><a href="sql.html#cb72-7" tabindex="-1"></a><span class="kw">limit</span> <span class="dv">3</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 5: </span>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">char_name</th>
+<th align="right">height</th>
+<th align="left">planet_name</th>
+<th align="right">height_mult</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Luke Skywalker</td>
+<td align="right">172</td>
+<td align="left">Tatooine</td>
+<td align="right">516</td>
+</tr>
+<tr class="even">
+<td align="left">C-3PO</td>
+<td align="right">167</td>
+<td align="left">Tatooine</td>
+<td align="right">501</td>
+</tr>
+<tr class="odd">
+<td align="left">Darth Vader</td>
+<td align="right">202</td>
+<td align="left">Tatooine</td>
+<td align="right">606</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+</div>
+<div id="where-rows-selection" class="section level3 unnumbered hasAnchor">
+<h3>where: rows selection<a href="sql.html#where-rows-selection" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Для фильтрации по строкам используют набор логических выражений в разделе <code>where</code>. <code>where planet_name = 'Coruscant'</code> читается как <code>все строки, в которых в колонке planet_name встречается значение Coruscant</code>. Строковые значения и даты указыаются в одинарных кавычках, двойные кавычки только для названий колонок и схем.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb73-1"><a href="sql.html#cb73-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb73-2"><a href="sql.html#cb73-2" tabindex="-1"></a>  name,</span>
+<span id="cb73-3"><a href="sql.html#cb73-3" tabindex="-1"></a>  height,</span>
+<span id="cb73-4"><a href="sql.html#cb73-4" tabindex="-1"></a>  planet_name</span>
+<span id="cb73-5"><a href="sql.html#cb73-5" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb73-6"><a href="sql.html#cb73-6" tabindex="-1"></a><span class="kw">where</span> planet_name <span class="op">=</span> <span class="st">&#39;Coruscant&#39;</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 6: </span>3 records</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="left">planet_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Finis Valorum</td>
+<td align="right">170</td>
+<td align="left">Coruscant</td>
+</tr>
+<tr class="even">
+<td align="left">Adi Gallia</td>
+<td align="right">184</td>
+<td align="left">Coruscant</td>
+</tr>
+<tr class="odd">
+<td align="left">Jocasta Nu</td>
+<td align="right">167</td>
+<td align="left">Coruscant</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Логические выражения можно сочетать через операторы <code>and</code> и <code>or</code>, они аналогичны логическим операторам <code>&amp;</code> и <code>|</code> в R.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb74-1"><a href="sql.html#cb74-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb74-2"><a href="sql.html#cb74-2" tabindex="-1"></a>  name,</span>
+<span id="cb74-3"><a href="sql.html#cb74-3" tabindex="-1"></a>  height,</span>
+<span id="cb74-4"><a href="sql.html#cb74-4" tabindex="-1"></a>  planet_name</span>
+<span id="cb74-5"><a href="sql.html#cb74-5" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb74-6"><a href="sql.html#cb74-6" tabindex="-1"></a><span class="kw">where</span> </span>
+<span id="cb74-7"><a href="sql.html#cb74-7" tabindex="-1"></a>  planet_name <span class="op">=</span> <span class="st">&#39;Coruscant&#39;</span> </span>
+<span id="cb74-8"><a href="sql.html#cb74-8" tabindex="-1"></a>  <span class="kw">or</span> height <span class="op">&gt;=</span> <span class="dv">170</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 7: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="left">planet_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Luke Skywalker</td>
+<td align="right">172</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="even">
+<td align="left">Darth Vader</td>
+<td align="right">202</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="odd">
+<td align="left">Owen Lars</td>
+<td align="right">178</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="even">
+<td align="left">Biggs Darklighter</td>
+<td align="right">183</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="odd">
+<td align="left">Anakin Skywalker</td>
+<td align="right">188</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="even">
+<td align="left">Cliegg Lars</td>
+<td align="right">183</td>
+<td align="left">Tatooine</td>
+</tr>
+<tr class="odd">
+<td align="left">Boba Fett</td>
+<td align="right">183</td>
+<td align="left">Kamino</td>
+</tr>
+<tr class="even">
+<td align="left">Lama Su</td>
+<td align="right">229</td>
+<td align="left">Kamino</td>
+</tr>
+<tr class="odd">
+<td align="left">Taun We</td>
+<td align="right">213</td>
+<td align="left">Kamino</td>
+</tr>
+<tr class="even">
+<td align="left">Poggle the Lesser</td>
+<td align="right">183</td>
+<td align="left">Geonosis</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Оператор <code>in</code> аналогичен оператору <code>%in%</code> в R. Отрицание производится как <code>not in</code>:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb75-1"><a href="sql.html#cb75-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb75-2"><a href="sql.html#cb75-2" tabindex="-1"></a>  name,</span>
+<span id="cb75-3"><a href="sql.html#cb75-3" tabindex="-1"></a>  height,</span>
+<span id="cb75-4"><a href="sql.html#cb75-4" tabindex="-1"></a>  planet_name</span>
+<span id="cb75-5"><a href="sql.html#cb75-5" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb75-6"><a href="sql.html#cb75-6" tabindex="-1"></a><span class="kw">where</span> </span>
+<span id="cb75-7"><a href="sql.html#cb75-7" tabindex="-1"></a>  planet_name <span class="kw">in</span> (<span class="st">&#39;Coruscant&#39;</span>, <span class="st">&#39;Alderaan&#39;</span>);</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-8">Table 8: </span>6 records</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="left">planet_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Leia Organa</td>
+<td align="right">150</td>
+<td align="left">Alderaan</td>
+</tr>
+<tr class="even">
+<td align="left">Bail Prestor Organa</td>
+<td align="right">191</td>
+<td align="left">Alderaan</td>
+</tr>
+<tr class="odd">
+<td align="left">Raymus Antilles</td>
+<td align="right">188</td>
+<td align="left">Alderaan</td>
+</tr>
+<tr class="even">
+<td align="left">Finis Valorum</td>
+<td align="right">170</td>
+<td align="left">Coruscant</td>
+</tr>
+<tr class="odd">
+<td align="left">Adi Gallia</td>
+<td align="right">184</td>
+<td align="left">Coruscant</td>
+</tr>
+<tr class="even">
+<td align="left">Jocasta Nu</td>
+<td align="right">167</td>
+<td align="left">Coruscant</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Также есть инструментарий проверки на вхождение, аналог <code>grepl()</code> в R. Для этого используется оператор <code>like</code>, а в качестве искомого выражения указывается строка, где <code>%</code> используются в качестве <code>любые символы</code>. Выражение <code>planet_name like '%Coru%'</code> можно прочитать как “все строки таблицы, в которых в колонке planet_name встречаются строковые значения, содержащие ‘Coru’, притом и до, и после ‘Coru’ могут быть еще символы”“. Отрицание также делается как <code>not like</code>, для регулярных выражений используется оператор <code>~</code>:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb76-1"><a href="sql.html#cb76-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb76-2"><a href="sql.html#cb76-2" tabindex="-1"></a>  name,</span>
+<span id="cb76-3"><a href="sql.html#cb76-3" tabindex="-1"></a>  height,</span>
+<span id="cb76-4"><a href="sql.html#cb76-4" tabindex="-1"></a>  planet_name</span>
+<span id="cb76-5"><a href="sql.html#cb76-5" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb76-6"><a href="sql.html#cb76-6" tabindex="-1"></a><span class="kw">where</span> </span>
+<span id="cb76-7"><a href="sql.html#cb76-7" tabindex="-1"></a>  planet_name <span class="kw">like</span> <span class="st">&#39;%Coru%&#39;</span></span>
+<span id="cb76-8"><a href="sql.html#cb76-8" tabindex="-1"></a>  <span class="kw">or</span> planet_name ~ <span class="st">&#39;raan&#39;</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 9: </span>6 records</caption>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="left">planet_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Leia Organa</td>
+<td align="right">150</td>
+<td align="left">Alderaan</td>
+</tr>
+<tr class="even">
+<td align="left">Bail Prestor Organa</td>
+<td align="right">191</td>
+<td align="left">Alderaan</td>
+</tr>
+<tr class="odd">
+<td align="left">Raymus Antilles</td>
+<td align="right">188</td>
+<td align="left">Alderaan</td>
+</tr>
+<tr class="even">
+<td align="left">Finis Valorum</td>
+<td align="right">170</td>
+<td align="left">Coruscant</td>
+</tr>
+<tr class="odd">
+<td align="left">Adi Gallia</td>
+<td align="right">184</td>
+<td align="left">Coruscant</td>
+</tr>
+<tr class="even">
+<td align="left">Jocasta Nu</td>
+<td align="right">167</td>
+<td align="left">Coruscant</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+</div>
+<div id="group-by-aggregations" class="section level3 unnumbered hasAnchor">
+<h3>group by: aggregations<a href="sql.html#group-by-aggregations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Группировки аналогичны группировкам в data.table - для каждой группы строк, выделяемых по значениям группирующей колонки, над колонками производятся вычисления (средние, суммы и проч). В примере ниже считается количество строк в таблице персонажей для каждого значения, количество уникальных персонажей (в таблице одна строка на персонажа, так что совпадает с предыдущим значением) и максимальный рост среди персонажей этой группы (всех персонажей с этой планеты):</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb77-1"><a href="sql.html#cb77-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb77-2"><a href="sql.html#cb77-2" tabindex="-1"></a>  planet_name,</span>
+<span id="cb77-3"><a href="sql.html#cb77-3" tabindex="-1"></a>  <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">as</span> n_rows,</span>
+<span id="cb77-4"><a href="sql.html#cb77-4" tabindex="-1"></a>  <span class="fu">count</span>(<span class="kw">distinct</span> name) <span class="kw">as</span> n_unique_chars,</span>
+<span id="cb77-5"><a href="sql.html#cb77-5" tabindex="-1"></a>  <span class="fu">max</span>(height) <span class="kw">as</span> max_height</span>
+<span id="cb77-6"><a href="sql.html#cb77-6" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars</span>
+<span id="cb77-7"><a href="sql.html#cb77-7" tabindex="-1"></a><span class="kw">group</span> <span class="kw">by</span> planet_name</span>
+<span id="cb77-8"><a href="sql.html#cb77-8" tabindex="-1"></a><span class="kw">limit</span> <span class="dv">10</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-10">Table 10: </span>Displaying records 1 - 10</caption>
+<thead>
+<tr class="header">
+<th align="left">planet_name</th>
+<th align="right">n_rows</th>
+<th align="right">n_unique_chars</th>
+<th align="right">max_height</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alderaan</td>
+<td align="right">3</td>
+<td align="right">3</td>
+<td align="right">191</td>
+</tr>
+<tr class="even">
+<td align="left">Aleen Minor</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">79</td>
+</tr>
+<tr class="odd">
+<td align="left">Bespin</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">175</td>
+</tr>
+<tr class="even">
+<td align="left">Bestine IV</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">180</td>
+</tr>
+<tr class="odd">
+<td align="left">Cato Neimoidia</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">191</td>
+</tr>
+<tr class="even">
+<td align="left">Cerea</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">198</td>
+</tr>
+<tr class="odd">
+<td align="left">Champala</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">196</td>
+</tr>
+<tr class="even">
+<td align="left">Chandrila</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">150</td>
+</tr>
+<tr class="odd">
+<td align="left">Concord Dawn</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">183</td>
+</tr>
+<tr class="even">
+<td align="left">Corellia</td>
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">180</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><br></p>
+</div>
+<div id="join" class="section level3 unnumbered hasAnchor">
+<h3>join<a href="sql.html#join" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Слияние таблиц по ключу, в R аналогом выступает <code>merge()</code>. В зависимости от схемы присоединения, используются разные операторы джойна, чайще сего - <code>left join</code> (сохраняем все значения ключевой колонки в той таблице, к которой присоединяем) и <code>inner join</code> (сохраняем только те строки, по которым значения есть и в той таблице, к которой присоединяем, и в которой присоединяем).</p>
+<p>При этом в блоке <code>select</code> указываем те колонки, которые хотим получить из результата слияния. Если в таблицах используются одни и те же назания колонок, то колонки надо указывать с указанием таблицы или алиаса таблицы - <code>table1.column_name</code>.</p>
+<p>В разделе <code>from</code> указывается таблица, к которой присоединяется вторая или следующие таблицы. По возможности это должна быть самая короткая таблица.</p>
+<p>Ключ, по которому соединяются колонки - <code>using(column_name)</code>. В том случае, когда в разных таблицах колонка-ключ называется по-разному, можно использовать выражение <code>on table1.column_name1 = table2.column_name2</code>. Где <code>table1</code> и <code>table2</code> - назания таблиц и могут быть заменены алиасами таблиц. В редких случаях в конструкции с <code>on</code> можно использовать знаки сравнения, чтобы фильтровать определенные значения,
+это может ускорять выполнение запроса, но стилистически это лучше делать в разделе <code>where</code>.</p>
+<p>Если через <code>join</code> присоединяется несколько таблиц, то они присоединяются не последовательно, к результату предыдущего джойна, а к таблице, указанной в <code>from</code> - то есть, порядок джойнов значения не имеет.</p>
+<p>В том случае, если используется внутренний селект (в выражении join указывается не таблица, а подзапрос, с select, from и прочими атрибутами), то для таким образом полученной таблицы нужно указать алиас.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb78-1"><a href="sql.html#cb78-1" tabindex="-1"></a><span class="kw">select</span> </span>
+<span id="cb78-2"><a href="sql.html#cb78-2" tabindex="-1"></a>  name,</span>
+<span id="cb78-3"><a href="sql.html#cb78-3" tabindex="-1"></a>  height,</span>
+<span id="cb78-4"><a href="sql.html#cb78-4" tabindex="-1"></a>  skin_color,</span>
+<span id="cb78-5"><a href="sql.html#cb78-5" tabindex="-1"></a>  climate,</span>
+<span id="cb78-6"><a href="sql.html#cb78-6" tabindex="-1"></a>  gravity,</span>
+<span id="cb78-7"><a href="sql.html#cb78-7" tabindex="-1"></a>  terrain,</span>
+<span id="cb78-8"><a href="sql.html#cb78-8" tabindex="-1"></a>  ch.url <span class="kw">as</span> char_url,</span>
+<span id="cb78-9"><a href="sql.html#cb78-9" tabindex="-1"></a>  pl.url <span class="kw">as</span> planet_url</span>
+<span id="cb78-10"><a href="sql.html#cb78-10" tabindex="-1"></a><span class="kw">from</span> <span class="kw">public</span>.chars <span class="kw">as</span> ch</span>
+<span id="cb78-11"><a href="sql.html#cb78-11" tabindex="-1"></a><span class="kw">left</span> <span class="kw">join</span> (</span>
+<span id="cb78-12"><a href="sql.html#cb78-12" tabindex="-1"></a>  <span class="kw">select</span> <span class="op">*</span> </span>
+<span id="cb78-13"><a href="sql.html#cb78-13" tabindex="-1"></a>  <span class="kw">from</span> <span class="kw">public</span>.planets</span>
+<span id="cb78-14"><a href="sql.html#cb78-14" tabindex="-1"></a>  <span class="kw">limit</span> <span class="dv">10</span>) <span class="kw">as</span> pl <span class="kw">using</span>(planet_name)</span>
+<span id="cb78-15"><a href="sql.html#cb78-15" tabindex="-1"></a><span class="kw">order</span> <span class="kw">by</span> name</span>
+<span id="cb78-16"><a href="sql.html#cb78-16" tabindex="-1"></a><span class="kw">limit</span> <span class="dv">5</span>;</span></code></pre></div>
+<div class="knitsql-table">
+<table>
+<caption><span id="tab:unnamed-chunk-11">Table 11: </span>5 records</caption>
+<colgroup>
+<col width="13%" />
+<col width="4%" />
+<col width="8%" />
+<col width="6%" />
+<col width="7%" />
+<col width="14%" />
+<col width="21%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">name</th>
+<th align="right">height</th>
+<th align="left">skin_color</th>
+<th align="left">climate</th>
+<th align="left">gravity</th>
+<th align="left">terrain</th>
+<th align="left">char_url</th>
+<th align="left">planet_url</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Ackbar</td>
+<td align="right">180</td>
+<td align="left">brown mottle</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left"><a href="https://swapi.co/api/people/27/" class="uri">https://swapi.co/api/people/27/</a></td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Adi Gallia</td>
+<td align="right">184</td>
+<td align="left">dark</td>
+<td align="left">temperate</td>
+<td align="left">1 standard</td>
+<td align="left">cityscape, mountains</td>
+<td align="left"><a href="https://swapi.co/api/people/55/" class="uri">https://swapi.co/api/people/55/</a></td>
+<td align="left"><a href="https://swapi.co/api/planets/9/" class="uri">https://swapi.co/api/planets/9/</a></td>
+</tr>
+<tr class="odd">
+<td align="left">Anakin Skywalker</td>
+<td align="right">188</td>
+<td align="left">fair</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left"><a href="https://swapi.co/api/people/11/" class="uri">https://swapi.co/api/people/11/</a></td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">Ayla Secura</td>
+<td align="right">178</td>
+<td align="left">blue</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="left"><a href="https://swapi.co/api/people/46/" class="uri">https://swapi.co/api/people/46/</a></td>
+<td align="left">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">Bail Prestor Organa</td>
+<td align="right">191</td>
+<td align="left">tan</td>
+<td align="left">temperate</td>
+<td align="left">1 standard</td>
+<td align="left">grasslands, mountains</td>
+<td align="left"><a href="https://swapi.co/api/people/68/" class="uri">https://swapi.co/api/people/68/</a></td>
+<td align="left"><a href="https://swapi.co/api/planets/2/" class="uri">https://swapi.co/api/planets/2/</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Визуальная схема вариантов джойнов (для <code>merge()</code> тоже полезно, для понимания аргументов all.x, all.y)</p>
+<p><img src="pics/8_joins.jpg" width="75%"></p>
+<p><br>
+<br></p>
+</div>
+</div>
+<div id="r-connectors" class="section level2 unnumbered hasAnchor">
+<h2>r connectors<a href="sql.html#r-connectors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Для подключения из R используется пакет <code>RPostgreSQL</code>. С помощью функции <code>dbConnect()</code>, куда аоргументами передаются параметры подключения, создается объект-коннектор.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="sql.html#cb79-1" tabindex="-1"></a><span class="fu">library</span>(RPostgreSQL)</span>
+<span id="cb79-2"><a href="sql.html#cb79-2" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(<span class="fu">PostgreSQL</span>(<span class="at">max.con =</span> <span class="dv">100</span>),</span>
+<span id="cb79-3"><a href="sql.html#cb79-3" tabindex="-1"></a>                     <span class="at">user =</span> <span class="st">&quot;student&quot;</span>,</span>
+<span id="cb79-4"><a href="sql.html#cb79-4" tabindex="-1"></a>                     <span class="at">password =</span> <span class="st">&quot;pmsar2018&quot;</span>,</span>
+<span id="cb79-5"><a href="sql.html#cb79-5" tabindex="-1"></a>                     <span class="at">dbname =</span> <span class="st">&quot;pmsar&quot;</span>,</span>
+<span id="cb79-6"><a href="sql.html#cb79-6" tabindex="-1"></a>                     <span class="at">host =</span> <span class="st">&quot;188.225.77.95&quot;</span>,</span>
+<span id="cb79-7"><a href="sql.html#cb79-7" tabindex="-1"></a>                     <span class="at">port =</span> <span class="dv">5432</span>)</span></code></pre></div>
+<p>Запросы же делаются с помощью функции <code>dbGetQuery()</code> (простая функция для селектов, есть также отдельные функции для операций над таблицами). Первый аргумент функции - объект-коннектор, второй - строковая запись запроса. Нередко удобнее строку запроса записывать в отдельный объект:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="sql.html#cb80-1" tabindex="-1"></a>query <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb80-2"><a href="sql.html#cb80-2" tabindex="-1"></a><span class="st">  select</span></span>
+<span id="cb80-3"><a href="sql.html#cb80-3" tabindex="-1"></a><span class="st">    name,</span></span>
+<span id="cb80-4"><a href="sql.html#cb80-4" tabindex="-1"></a><span class="st">    height,</span></span>
+<span id="cb80-5"><a href="sql.html#cb80-5" tabindex="-1"></a><span class="st">    planet_name</span></span>
+<span id="cb80-6"><a href="sql.html#cb80-6" tabindex="-1"></a><span class="st">  from public.chars</span></span>
+<span id="cb80-7"><a href="sql.html#cb80-7" tabindex="-1"></a><span class="st">  limit 3</span></span>
+<span id="cb80-8"><a href="sql.html#cb80-8" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb80-9"><a href="sql.html#cb80-9" tabindex="-1"></a></span>
+<span id="cb80-10"><a href="sql.html#cb80-10" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">dbGetQuery</span>(<span class="at">conn =</span> con, <span class="at">statement =</span> query)</span>
+<span id="cb80-11"><a href="sql.html#cb80-11" tabindex="-1"></a>res</span></code></pre></div>
+<pre><code>##             name height planet_name
+## 1 Luke Skywalker    172    Tatooine
+## 2          C-3PO    167    Tatooine
+## 3    Darth Vader    202    Tatooine</code></pre>
+<p>Результат выполнения выражения - объект класса data.frame. То есть, его в дальнейшем желательно переконвертировать в data.table:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="sql.html#cb82-1" tabindex="-1"></a><span class="fu">class</span>(res)</span></code></pre></div>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>После завершения работы (в идеале-после каждого запроса) соединение с базой надо закрывать:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="sql.html#cb84-1" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p><br></p>
+<div id="подключение-и-просмотр-бд-из-rstudio" class="section level3 unnumbered hasAnchor">
+<h3>Подключение и просмотр БД из RStudio<a href="sql.html#подключение-и-просмотр-бд-из-rstudio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>В последних версиях RStudio реализовано подключение к базам данных, просмотр таблиц и вызов чистых sql-запросов - аналогично DBeaver.</p>
+<p>Для этого необходимо установить пакет <code>odbc</code> и соответствующие драйверы подключений баз данных (подробнее см. <a href="https://db.rstudio.com/best-practices/drivers/">здесь</a>). Само создание подключения к PosgreSQL-базе данных выглядит аналогично подключению через пакет <code>RPostgreSQL</code>:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="sql.html#cb86-1" tabindex="-1"></a>con_odbc <span class="ot">&lt;-</span> DBI<span class="sc">::</span><span class="fu">dbConnect</span>(odbc<span class="sc">::</span><span class="fu">odbc</span>(),</span>
+<span id="cb86-2"><a href="sql.html#cb86-2" tabindex="-1"></a>                           <span class="co"># sudo apt-get install odbc-postgresql</span></span>
+<span id="cb86-3"><a href="sql.html#cb86-3" tabindex="-1"></a>                           <span class="at">Driver   =</span> <span class="st">&quot;PostgreSQL Unicode&quot;</span>,</span>
+<span id="cb86-4"><a href="sql.html#cb86-4" tabindex="-1"></a>                           <span class="at">Server   =</span> <span class="st">&quot;188.225.77.95&quot;</span>,</span>
+<span id="cb86-5"><a href="sql.html#cb86-5" tabindex="-1"></a>                           <span class="at">Database =</span> <span class="st">&quot;pmsar&quot;</span>,</span>
+<span id="cb86-6"><a href="sql.html#cb86-6" tabindex="-1"></a>                           <span class="at">UID      =</span> <span class="st">&quot;student&quot;</span>,</span>
+<span id="cb86-7"><a href="sql.html#cb86-7" tabindex="-1"></a>                           <span class="at">PWD      =</span> <span class="st">&quot;pmsar2018&quot;</span>,</span>
+<span id="cb86-8"><a href="sql.html#cb86-8" tabindex="-1"></a>                           <span class="at">Port     =</span> <span class="dv">5432</span>)</span></code></pre></div>
+<p>При этом в окне <code>Connections</code> (обычно в верхней правой части полей RStudio, где в <code>Environment</code> перечислены объекты в рабочем пространстве) появляются подключение и схемы базы данных, к которой совершено подключение. Схемы - раскрывающиеся списки, при клике выводятся все таблицы схемы.</p>
+<p>После того, как в RStudio произведено подключение таким образом, можно писать запросы в отдельных скриптах - для этого необходимо создать скрипт с расширением <code>sql</code> (например, File &gt; New file &gt; SQL script), а в первой строчке указать подключение, и потом нажать Preview или Ctrl+Shift+Enter:</p>
+<p><img src="pics/8_sql_odbc.png"></p>
+<p><br>
+<br></p>
+</div>
+</div>
+<div id="полезные-ссылки-1" class="section level2 unnumbered hasAnchor">
+<h2>Полезные ссылки<a href="sql.html#полезные-ссылки-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Гайды хорошего оформления sql-кода. Им необязательно следовать дословно, но все же желательно принимать во внимание. ТАк или иначе, самое главное - код должен быть лаконичным, опрятным и читабельным для коллег.</p>
+<ul>
+<li><p><a href="https://github.com/mattm/sql-style-guide">style guide</a> - я предпочитаю такой гайд, хотя он во многом может вызывать нарекания. В частности, операторы многие пишут заглавными буквами, так как это повышает их видимость в коде. Также в этом гайде критикуется разное выравнивание ключевых слов и названий таблиц (чтобы формировался “коридор”).</p></li>
+<li><p>второй <a href="https://www.sqlstyle.guide/ru/">гайд</a>, один из моих коллег старается ему следовать, например. Особенно осмысленно выглядит критика префиксов в названиях колонок.</p></li>
+<li><p>список <a href="https://www.datacamp.com/courses/tech:sql">онлайн-курсов по SQL</a> на DataCamp. Курсов, может быть, больше чем надо для реальной работы, но пройти базовые вполне можно.</p></li>
+<li><p>русскоязычный <a href="http://sql-ex.ru/">сайт-соревнование</a> по решению задачек на SQL, некоторые задачки могут быть достаточно хардкорны.</p></li>
+<li><p>еще один неплохой <a href="https://learndb.ru">ресурс</a> с задачками по PostgreSQL. На самом деле онлайн-учебников и курсов очень много.</p></li>
+</ul>
+<p><br></p>
+<!-- ## Домашнее задание -->
+<!-- Повторить предыдущие задания по отрисовке графиков и вычислению метрик вовлечения и монетизации. Только вместо импорта и процессинга таблиц из файлов использовать sql-запросы. В идеале решение должно быть из создания подключения, sql-запроса и кода отрисовка графика, без дополнительных операций в R. -->
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="c1_intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="dashboards.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sql-advanced.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
